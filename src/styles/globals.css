@@ -1,0 +1,53 @@
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; font-family: 'Inter', 'Helvetica Neue', sans-serif; }
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar              { width: 6px; }
+::-webkit-scrollbar-track        { background: transparent; }
+::-webkit-scrollbar-thumb        { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover  { background: #535353; }
+
+/* ── Spotify colour tokens ─────────────────────────────────── */
+:root {
+  --sp-black:    #000000;
+  --sp-dark:     #121212;
+  --sp-dark2:    #181818;
+  --sp-dark3:    #282828;
+  --sp-dark4:    #3e3e3e;
+  --sp-green:    #1DB954;
+  --sp-green-h:  #1ed760;
+  --sp-white:    #ffffff;
+  --sp-gray:     #a7a7a7;
+  --sp-gray2:    #535353;
+
+  --sidebar-w:   236px;
+  --playbar-h:   90px;
+  --topbar-h:    52px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+}
+
+/* ── Gradient helpers (used by project cards) ──────────────── */
+.grad-emerald { background: linear-gradient(135deg, #064e3b, #022c22); }
+.grad-blue    { background: linear-gradient(135deg, #1e3a5f, #0c1e34); }
+.grad-yellow  { background: linear-gradient(135deg, #713f12, #3d2200); }
+.grad-purple  { background: linear-gradient(135deg, #3b0764, #1e003a); }
+.grad-teal    { background: linear-gradient(135deg, #134e4a, #022c22); }
+.grad-zinc    { background: linear-gradient(135deg, #27272a, #09090b); }
+
+/* ── Typography ─────────────────────────────────────────────── */
+button, input, textarea, select { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* ── Equalizer bounce (Skills page) ────────────────────────── */
+@keyframes eqBounce {
+  0%, 100% { transform: scaleY(0.35); }
+  50%      { transform: scaleY(1); }
+}
+
+/* ── Soft pulse (Projects "in development" banner) ─────────── */
+@keyframes softPulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.6; transform: scale(1.06); }
+}
