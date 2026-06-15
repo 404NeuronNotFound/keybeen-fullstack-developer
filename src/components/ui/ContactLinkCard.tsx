@@ -1,4 +1,5 @@
 import type { IconType } from 'react-icons';
+import { ChevronRight } from 'lucide-react';
 
 export interface ContactLink {
   icon:  IconType;
@@ -62,7 +63,7 @@ export function ContactLinkCard({ link }: Props) {
         <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--sp-white)', marginBottom: 2 }}>{link.label}</div>
         <div style={{ fontSize: 12, color: 'var(--sp-gray)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{link.handle}</div>
       </div>
-      <span style={{ marginLeft: 'auto', color: 'var(--sp-gray)', fontSize: 16, flexShrink: 0 }}>→</span>
+      <ChevronRight size={18} color="var(--sp-gray)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
     </a>
   );
 }

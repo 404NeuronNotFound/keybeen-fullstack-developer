@@ -30,7 +30,7 @@ export function TeaserRow({ project, index }: Props) {
           </div>
         </div>
       </td>
-      <td style={{ padding: '10px 16px' }}>
+      <td className="hide-on-mobile" style={{ padding: '10px 16px' }}>
         <Tag>Coming soon</Tag>
       </td>
       <td style={{ padding: '10px 16px', textAlign: 'right' }}>

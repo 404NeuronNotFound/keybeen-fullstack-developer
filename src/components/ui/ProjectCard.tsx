@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Play, Pause } from 'lucide-react';
 import type { Project } from '../../types';
 import { Tag } from './Tag';
 
@@ -25,9 +26,11 @@ export function ProjectCard({ project, onPlay, isPlaying, isCurrent }: Props) {
         <button
           onClick={(e) => { e.stopPropagation(); onPlay(project); }}
           aria-label={`Play ${project.title}`}
-          style={{ position: 'absolute', bottom: 8, right: 8, width: 40, height: 40, background: 'var(--sp-green)', border: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', opacity: showPlay ? 1 : 0, transform: showPlay ? 'translateY(0)' : 'translateY(8px)', transition: 'opacity .2s, transform .2s', fontSize: 14, color: '#000' }}
+          style={{ position: 'absolute', bottom: 8, right: 8, width: 40, height: 40, background: 'var(--sp-green)', border: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', opacity: showPlay ? 1 : 0, transform: showPlay ? 'translateY(0)' : 'translateY(8px)', transition: 'opacity .2s, transform .2s', color: '#000' }}
         >
-          {isCurrent && isPlaying ? '⏸' : '▶'}
+          {isCurrent && isPlaying
+            ? <Pause size={16} fill="#000" color="#000" />
+            : <Play size={16} fill="#000" color="#000" style={{ marginLeft: 1 }} />}
         </button>
       </div>
       <div style={{ fontSize: 14, fontWeight: 700, color: isCurrent ? 'var(--sp-green)' : 'var(--sp-white)', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.title}</div>

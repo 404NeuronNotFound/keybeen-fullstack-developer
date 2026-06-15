@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Play, Volume2, Heart } from 'lucide-react';
 import type { Project } from '../../types';
 import { Tag } from './Tag';
 
@@ -23,7 +24,11 @@ export function TrackRow({ project, index, onPlay, isPlaying, isCurrent, isLiked
       style={{ background: hovered ? '#2a2a2a' : isCurrent ? '#1c1c1c' : 'transparent', cursor: 'pointer', transition: 'background .1s' }}
     >
       <td style={{ padding: '10px 16px', width: 40, textAlign: 'center', color: isCurrent ? 'var(--sp-green)' : 'var(--sp-gray)', fontSize: 13 }}>
-        {isCurrent && isPlaying ? '♫' : hovered ? '▶' : index}
+        {isCurrent && isPlaying
+          ? <Volume2 size={14} style={{ display: 'inline-block', verticalAlign: 'middle' }} />
+          : hovered
+            ? <Play size={13} fill="currentColor" style={{ display: 'inline-block', verticalAlign: 'middle' }} />
+            : index}
       </td>
       <td style={{ padding: '10px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -40,9 +45,9 @@ export function TrackRow({ project, index, onPlay, isPlaying, isCurrent, isLiked
           <button
             onClick={(e) => { e.stopPropagation(); onLike(project.id); }}
             aria-label={isLiked ? 'Unlike' : 'Like'}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: isLiked ? 'var(--sp-green)' : 'var(--sp-gray)', fontSize: 16, opacity: hovered || isLiked ? 1 : 0, transition: 'opacity .15s, color .15s, transform .1s', transform: isLiked ? 'scale(1.2)' : 'scale(1)', padding: 0, lineHeight: 1 }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: isLiked ? 'var(--sp-green)' : 'var(--sp-gray)', display: 'flex', opacity: hovered || isLiked ? 1 : 0, transition: 'opacity .15s, color .15s, transform .1s', transform: isLiked ? 'scale(1.2)' : 'scale(1)', padding: 0, lineHeight: 1 }}
           >
-            {isLiked ? '♥' : '♡'}
+            <Heart size={15} fill={isLiked ? 'var(--sp-green)' : 'none'} />
           </button>
           <span style={{ color: 'var(--sp-gray)', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>{project.duration}</span>
         </div>
