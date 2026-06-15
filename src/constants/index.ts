@@ -5,7 +5,7 @@ import type { SectionId, SiteConfig } from '../types';
 export const SITE: SiteConfig = {
   name:     'Keybeen',
   fullName: 'Keybeen',
-  role:     'Ai Assisted Full-Stack App & Web Developer',
+  role:     'AI Assisted Full-Stack App & Web Developer',
   tagline:  'Building things for the web & beyond',
   location: 'Cagayan De Oro, PH',
   email:    'keybeen.webdeveloper@gmail.com',
