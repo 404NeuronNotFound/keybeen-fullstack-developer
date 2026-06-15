@@ -15,11 +15,11 @@ export function ContactPage() {
   const [name, setName] = useState('');
   const [msg,  setMsg]  = useState('');
   const [sent, setSent] = useState(false);
-
+ 
   const canSend = name.trim().length > 0 && msg.trim().length > 0;
-
+ 
   return (
-    <div style={{ padding: '40px 32px' }}>
+    <div className="page">
       <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 10 }}>
         Contact
       </p>
@@ -29,18 +29,18 @@ export function ContactPage() {
       <p style={{ fontSize: 15, color: 'var(--sp-gray)', marginBottom: 32, maxWidth: 480 }}>
         Open to full-time roles, freelance projects, and interesting conversations. My DMs are always open.
       </p>
-
+ 
       {/* social links */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 36 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, marginBottom: 36 }}>
         {LINKS.map((link) => (
           <ContactLinkCard key={link.label} link={link} />
         ))}
       </div>
-
+ 
       {/* message form */}
       <div style={{ background: 'var(--sp-dark2)', borderRadius: 'var(--radius-md)', padding: 24, border: '1px solid var(--sp-dark3)' }}>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--sp-white)', marginBottom: 16 }}>Send a message</div>
-
+ 
         {sent ? (
           <div style={{ padding: '16px 20px', background: 'rgba(29,185,84,.1)', borderRadius: 'var(--radius-md)', border: '1px solid var(--sp-green)', color: 'var(--sp-green)', fontWeight: 700, fontSize: 14 }}>
             ✓ Sent! I'll get back to you soon.
