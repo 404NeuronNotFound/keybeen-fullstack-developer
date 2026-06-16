@@ -1,6 +1,7 @@
-import { Play, Pause, BadgeCheck } from 'lucide-react';
+import { useState } from 'react';
+import { Play, Pause, BadgeCheck, Share2 } from 'lucide-react';
 import { usePlayerStore, useNavStore } from '../../store';
-import { Button, Avatar }              from '../../components/ui';
+import { Button, Avatar, ShareCardModal } from '../../components/ui';
 import { useIsMobile }                 from '../../hooks';
 import { SITE }                        from '../../constants';
 
@@ -10,6 +11,7 @@ export function HeroSection() {
   const play         = usePlayerStore((s) => s.play);
   const navigate     = useNavStore((s) => s.navigate);
   const isMobile     = useIsMobile();
+  const [showCard, setShowCard] = useState(false);
 
   const avatarSize = isMobile ? 120 : 180;
 
@@ -150,7 +152,22 @@ export function HeroSection() {
         <Button variant="outline" rounded onClick={() => navigate('projects')}>
           View projects
         </Button>
+
+        {/* ── Share profile button ── */}
+        <button
+          onClick={() => setShowCard(true)}
+          aria-label="Share profile"
+          style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', borderRadius: 24, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(255,255,255,.05)', color: 'var(--sp-gray)', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.1)'; e.currentTarget.style.color = 'var(--sp-white)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.05)'; e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.15)'; }}
+        >
+          <Share2 size={14} />
+          Share
+        </button>
       </div>
+
+      {/* ── Share card modal ── */}
+      {showCard && <ShareCardModal onClose={() => setShowCard(false)} />}
     </div>
   );
 }

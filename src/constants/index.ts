@@ -13,7 +13,7 @@ export const SITE: SiteConfig = {
   githubUsername: '404NeuronNotFound',
   linkedin: 'https://linkedin.com/in/kxvxn',
   twitter:  'https://twitter.com/kxvxn',
-  website:  'https://kxvxn.dev',
+  website:  'https://keybeen-fullstack-developer.vercel.app/',
   instagram: 'https://instagram.com/kxvxn',
   tiktok: 'https://tiktok.com/@keybeen.creatives',
   initials: 'KR',
