@@ -104,7 +104,7 @@ export function ShareCardInner({ forExport = false }: CardProps) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 * scale, fontSize: 11 * scale, color: '#a7a7a7' }}>
             <FaInstagram size={13 * scale} />
-            @kxvxn
+            @kxvxn.js
           </div>
         </div>
         <div style={{ fontSize: 12 * scale, fontWeight: 700, color: '#1DB954' }}>{SITE.website}</div>
@@ -146,9 +146,25 @@ export function ShareCardModal({ onClose }: ShareCardModalProps) {
   return (
     <div
       onClick={onClose}
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.75)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 16 }}
+      style={{
+        position:             'fixed',
+        inset:                0,
+        background:           'rgba(0,0,0,.8)',
+        backdropFilter:       'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
+        zIndex:               9999,
+        overflowY:            'auto',
+        WebkitOverflowScrolling: 'touch',
+        display:              'flex',
+        alignItems:           'center',
+        justifyContent:       'center',
+        padding:              '24px 16px',
+      }}
     >
-      <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: 540, width: '100%' }}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ width: '100%', maxWidth: 480, margin: 'auto' }}
+      >
         {/* modal header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
@@ -167,7 +183,7 @@ export function ShareCardModal({ onClose }: ShareCardModalProps) {
         </div>
 
         {/* card preview + actions — same container so buttons align to card edges */}
-        <div style={{ width: '100%', maxWidth: 480 }}>
+        <div style={{ width: '100%' }}>
           <div ref={cardRef} style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 12 }}>
             <ShareCardInner />
           </div>
