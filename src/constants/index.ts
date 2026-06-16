@@ -14,7 +14,7 @@ export const SITE: SiteConfig = {
   linkedin: 'https://linkedin.com/in/kxvxn',
   twitter:  'https://twitter.com/kxvxn',
   website:  'https://keybeen-fullstack-developer.vercel.app/',
-  instagram: 'https://instagram.com/kxvxn',
+  instagram: 'https://instagram.com/kxvxn.js',
   tiktok: 'https://tiktok.com/@keybeen.creatives',
   initials: 'KR',
 
