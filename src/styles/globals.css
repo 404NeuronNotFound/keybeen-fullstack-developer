@@ -84,6 +84,11 @@ a { color: inherit; text-decoration: none; }
   .page-x { padding-left: 16px; padding-right: 16px; }
 }
 
+/* ── Timeline scroll-spy ────────────────────────────────────── */
+.timeline-line-fill {
+  transition: height .4s cubic-bezier(.4,0,.2,1);
+}
+
 /* ── Soft pulse (Projects "in development" banner) ─────────── */
 @keyframes softPulse {
   0%, 100% { opacity: 1;   transform: scale(1); }
