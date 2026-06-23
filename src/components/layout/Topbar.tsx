@@ -49,7 +49,7 @@ export function Topbar() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' }}>
         {/* theme toggle */}
-        <button
+        {/* <button
           onClick={toggleTheme}
           aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
           style={{
@@ -70,7 +70,7 @@ export function Topbar() {
           onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.transform = 'rotate(0)'; }}
         >
           {isLight ? <Moon size={16} /> : <Sun size={16} />}
-        </button>
+        </button> */}
 
         {/* user pill */}
         <div
