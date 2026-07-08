@@ -77,7 +77,17 @@ export function SkillRow({ skill, relatedProjects, onProjectClick }: Props) {
               onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-dark2)'; }}
             >
-              <span>{p.emoji}</span>
+              <img
+                src={p.image}
+                alt={p.title}
+                style={{
+                  width: 24,
+                  height: 24,
+                  objectFit: 'cover',
+                  borderRadius: 4,
+                  display: 'block',
+                }}
+              />
               {p.title}
             </button>
           ))}

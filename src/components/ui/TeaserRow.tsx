@@ -16,12 +16,27 @@ export function TeaserRow({ project, index }: Props) {
       </td>
       <td style={{ padding: '10px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div
-            className={`grad-${project.gradient}`}
-            style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, filter: 'grayscale(0.4)' }}
-          >
-            {project.emoji}
-          </div>
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 'var(--radius-sm)',
+            overflow: 'hidden',
+            flexShrink: 0,
+            filter: 'grayscale(0.4)',
+          }}
+        >
+          <img
+            src={project.image}
+            alt={project.title}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
           <div>
             <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--sp-gray)' }}>{project.title}</div>
             <div style={{ display: 'flex', gap: 4, marginTop: 3 }}>

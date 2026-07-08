@@ -22,7 +22,18 @@ export function ProjectCard({ project, onPlay, isPlaying, isCurrent }: Props) {
       style={{ background: hovered ? 'var(--sp-dark3)' : 'var(--sp-dark2)', borderRadius: 'var(--radius-md)', padding: 16, cursor: 'pointer', transition: 'background .2s', position: 'relative' }}
     >
       <div className={`grad-${project.gradient}`} style={{ width: '100%', paddingBottom: '100%', borderRadius: 'var(--radius-sm)', position: 'relative', marginBottom: 14, overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 42 }}>{project.emoji}</div>
+      <img
+        src={project.image}
+        alt={project.title}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          display: 'block',
+        }}
+      />
         <button
           onClick={(e) => { e.stopPropagation(); onPlay(project); }}
           aria-label={`Play ${project.title}`}

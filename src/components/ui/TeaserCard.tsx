@@ -22,9 +22,18 @@ export function TeaserCard({ project }: Props) {
         className={`grad-${project.gradient}`}
         style={{ width: '100%', paddingBottom: '100%', borderRadius: 'var(--radius-sm)', position: 'relative', marginBottom: 14, overflow: 'hidden', filter: 'grayscale(0.4)' }}
       >
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 42, opacity: 0.5 }}>
-          {project.emoji}
-        </div>
+        <img
+          src={project.image}
+          alt={project.title}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover', // fills the square
+            borderRadius: 'var(--radius-sm)',
+          }}
+        />
         {/* lock badge */}
         <div
           style={{

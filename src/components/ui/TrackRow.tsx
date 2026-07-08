@@ -32,7 +32,26 @@ export function TrackRow({ project, index, onPlay, isPlaying, isCurrent, isLiked
       </td>
       <td style={{ padding: '10px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div className={`grad-${project.gradient}`} style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>{project.emoji}</div>
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 'var(--radius-sm)',
+            overflow: 'hidden',
+            flexShrink: 0,
+          }}
+        >
+          <img
+            src={project.image}
+            alt={project.title}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
           <div>
             <div style={{ fontSize: 14, fontWeight: 600, color: isCurrent ? 'var(--sp-green)' : 'var(--sp-white)' }}>{project.title}</div>
             <div style={{ display: 'flex', gap: 4, marginTop: 3 }}>{project.tags.slice(0, 2).map((t) => <Tag key={t}>{t}</Tag>)}</div>
