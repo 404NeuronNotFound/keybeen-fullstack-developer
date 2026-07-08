@@ -35,9 +35,26 @@ export function Playbar() {
         </div>
 
         <div style={{ height: 'var(--playbar-h-mobile)', display: 'flex', alignItems: 'center', padding: '0 12px', gap: 10 }}>
-          <div className={`grad-${currentTrack.gradient}`} style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
-            {currentTrack.emoji}
-          </div>
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 'var(--radius-sm)',
+            overflow: 'hidden',
+            flexShrink: 0,
+          }}
+        >
+          <img
+            src={currentTrack.image}
+            alt={currentTrack.title}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
 
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--sp-white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -80,7 +97,26 @@ export function Playbar() {
 
       {/* track info */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: 220, minWidth: 0 }}>
-        <div className={`grad-${currentTrack.gradient}`} style={{ width: 54, height: 54, borderRadius: 'var(--radius-sm)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>{currentTrack.emoji}</div>
+       <div
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 'var(--radius-sm)',
+            overflow: 'hidden',
+            flexShrink: 0,
+          }}
+        >
+          <img
+            src={currentTrack.image}
+            alt={currentTrack.title}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
         <div style={{ minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--sp-white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentTrack.title}</div>
           <div style={{ fontSize: 11, color: 'var(--sp-gray)' }}>Full-Stack Dev</div>

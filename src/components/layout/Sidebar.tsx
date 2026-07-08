@@ -61,7 +61,27 @@ export function Sidebar() {
           onMouseEnter={(e) => { e.currentTarget.style.background = '#1a1a1a'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
         >
-          <div className={`grad-${p.gradient}`} style={{ width: 34, height: 34, borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, filter: 'grayscale(0.4)' }}>{p.emoji}</div>
+        <div
+          style={{
+            width: 34,
+            height: 34,
+            borderRadius: 'var(--radius-sm)',
+            overflow: 'hidden',
+            flexShrink: 0,
+            filter: 'grayscale(0.4)',
+          }}
+        >
+          <img
+            src={p.image}
+            alt={p.title}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--sp-gray)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</div>
             <div style={{ fontSize: 11, color: 'var(--sp-gray)' }}>Coming soon</div>
