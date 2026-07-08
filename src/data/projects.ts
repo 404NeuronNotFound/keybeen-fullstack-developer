@@ -36,6 +36,7 @@ export const projects: Project[] = [
   {
     id: 3,
     // emoji: '💰',
+    image: "/coming-soon.jpeg",
     title: 'Langgam-it - Financial Networth & Expense Tracker System',
     duration: '2:48',
     plays: '41K',
@@ -67,6 +68,7 @@ export const projects: Project[] = [
   {
     id: 5,
     // emoji: '🛒',
+    image: "/coming-soon.jpeg",
     title: 'PaLista - Simple Utang Management System for Sari-Sari Stores',
     duration: '3:37',
     plays: '55K',
@@ -82,6 +84,7 @@ export const projects: Project[] = [
   {
     id: 6,
     // emoji: '🎬',
+    image: "/coming-soon.jpeg",
     title: 'Video Editing Portfolio Website with Captcha-Protected Message Board',
     duration: '2:19',
     plays: '33K',
