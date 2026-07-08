@@ -3,7 +3,8 @@ import type { Project } from '../types';
 export const projects: Project[] = [
   {
     id: 1,
-    emoji: '🏫',
+    // emoji: '🏫',
+    image: "/gms.jpeg",
     title: 'Grades Management System for Initao National High School',
     duration: '6:24',
     plays: '128K',
@@ -18,7 +19,8 @@ export const projects: Project[] = [
   },
   {
     id: 2,
-    emoji: '🔍',
+    // emoji: '🔍',
+    image: "/findify.jpeg",
     title: 'Findify - Lost & Found App Management System with AI Assistance',
     duration: '4:11',
     plays: '94K',
@@ -33,7 +35,7 @@ export const projects: Project[] = [
   },
   {
     id: 3,
-    emoji: '💰',
+    // emoji: '💰',
     title: 'Langgam-it - Financial Networth & Expense Tracker System',
     duration: '2:48',
     plays: '41K',
@@ -48,7 +50,8 @@ export const projects: Project[] = [
   },
   {
     id: 4,
-    emoji: '📈',
+    // emoji: '📈',
+    image: "/coinfession.jpeg",
     title: 'CoinFession - Trader Portfolio Tracker with built-in AI-Powered Insights',
     duration: '5:02',
     plays: '77K',
@@ -63,7 +66,7 @@ export const projects: Project[] = [
   },
   {
     id: 5,
-    emoji: '🛒',
+    // emoji: '🛒',
     title: 'PaLista - Simple Utang Management System for Sari-Sari Stores',
     duration: '3:37',
     plays: '55K',
@@ -78,7 +81,7 @@ export const projects: Project[] = [
   },
   {
     id: 6,
-    emoji: '🎬',
+    // emoji: '🎬',
     title: 'Video Editing Portfolio Website with Captcha-Protected Message Board',
     duration: '2:19',
     plays: '33K',

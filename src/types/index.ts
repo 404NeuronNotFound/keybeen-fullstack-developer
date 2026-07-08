@@ -16,6 +16,7 @@ export interface Project {
   github: string;
   live: string;
   featured: boolean;
+  image?: string; // Optional property for image path
 }
 
 export interface Skill {
