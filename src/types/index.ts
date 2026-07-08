@@ -2,7 +2,6 @@
 
 export interface Project {
   id: number;
-  emoji: string;
   title: string;
   /** "m:ss" format, e.g. "4:11" */
   duration: string;
