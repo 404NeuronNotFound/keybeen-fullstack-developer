@@ -20,7 +20,7 @@ export const SITE: SiteConfig = {
 
   stats: [
     { value: '3+',  label: 'Years exp.'    },
-    { value: '6', label: 'Projects'      },
+    { value: '7', label: 'Projects'      },
     { value: '19',  label: 'Technologies'  },
   ],
 };

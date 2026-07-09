@@ -97,4 +97,20 @@ export const projects: Project[] = [
     live: '#',
     featured: false,
   },
+    {
+    id: 7,
+    // emoji: '🎬',
+    image: "/coming-soon.jpeg",
+    title: 'PowerAtomic - Gamified Habit Building & Personal Growth Platform for Students',
+    duration: '4:19',
+    plays: '33K',
+    gradient: 'zinc',
+    tags: ['Django', 'React-Native', 'Expo-Go', 'Typescript'],
+    description:
+      'PowerAtomic helps students build lasting positive habits and eliminate bad ones through proven behavioral science, daily consistency, and engaging gamification inspired by Atomic Habits.',
+    year: '2026',
+    github: 'https://github.com/404NeuronNotFound/video-editing-portfolio',
+    live: '#',
+    featured: false,
+  },
 ];
