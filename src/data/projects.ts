@@ -84,7 +84,7 @@ export const projects: Project[] = [
   {
     id: 6,
     // emoji: '🎬',
-    image: "/coming-soon.jpeg",
+    image: "/video-editor.jpeg",
     title: 'Video Editing Portfolio Website with Captcha-Protected Message Board',
     duration: '2:19',
     plays: '33K',
