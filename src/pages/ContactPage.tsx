@@ -4,6 +4,7 @@ import { FaGithub, FaInstagram, FaTiktok } from 'react-icons/fa';
 import { ContactLinkCard, type ContactLink } from '../components/ui';
 import { SITE } from '../constants';
 
+// contact links
 const LINKS: ContactLink[] = [
   { icon: FiMail,     label: 'Gmail',     handle: SITE.email,        color: '#1DB954', href: `mailto:${SITE.email}` },
   { icon: FaGithub,   label: 'GitHub',    handle: '@404NeuronNotFound', color: '#e0e0e0', href: SITE.github },
