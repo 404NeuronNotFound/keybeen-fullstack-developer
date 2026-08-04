@@ -37,7 +37,7 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
   const [hoverErrored, setHoverErrored] = useState(false);
   const [hov, setHov]                   = useState(false);
   const { playGlitch }   = useHoverSound();
-  const { containerId, playFrom, stop } = useYouTubeBackgroundAudio(GONE_GONE_GONE_VIDEO_ID);
+  const { playFrom, stop } = useYouTubeBackgroundAudio(GONE_GONE_GONE_VIDEO_ID);
   const playTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleEnter = () => {
@@ -220,10 +220,10 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
           mutates directly (that mismatch is what caused the insertBefore
           crash when it lived inline here, next to the AnimatePresence
           glitch overlay). */}
-      {createPortal(
+      {/* {createPortal(
         <div id={containerId} style={{ position: 'fixed', top: -9999, left: -9999, width: 1, height: 1 }} />,
         document.body
-      )}
+      )} */}
     </div>
   );
 }

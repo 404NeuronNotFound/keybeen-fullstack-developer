@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Play, Pause, BadgeCheck, Share2 } from 'lucide-react';
 import { usePlayerStore, useNavStore } from '../../store';
-import { Button, Avatar, ShareCardModal } from '../../components/ui';
+import { Button, ShareCardModal } from '../../components/ui';
+import { AvatarWithNote }              from '../../components/ui/AvatarWithNote';
 import { useIsMobile }                 from '../../hooks';
 import { SITE }                        from '../../constants';
 
@@ -43,7 +44,11 @@ export function HeroSection() {
             flexShrink:   0,
           }}
         >
-          <Avatar size={avatarSize} alt={`${SITE.fullName} photo`} />
+          <AvatarWithNote
+            size={avatarSize}
+            alt={`${SITE.fullName} photo`}
+            
+          />
         </div>
 
         {/* ── Text info ── */}

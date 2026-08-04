@@ -136,3 +136,22 @@ export function useHoverSound() {
 
   return { play, playGlitch };
 }
+
+// Auto-unlock audio on the very first real click/keypress ANYWHERE on the
+// page — not just the speaker button. Browsers still require some genuine
+// user gesture to unlock AudioContext each session, but there's no reason
+// that gesture has to specifically be the mute toggle: if someone's saved
+// preference is already "unmuted" from a previous visit, clicking a nav
+// link or a project card should be enough to make hover sounds actually
+// work, instead of silently doing nothing until they happen to click the
+// speaker icon specifically. This runs once at module load (same pattern
+// as the theme store's initial `applyTheme` call outside React).
+if (typeof window !== 'undefined') {
+  const unlockOnFirstInteraction = () => {
+    primeAudio();
+    window.removeEventListener('pointerdown', unlockOnFirstInteraction);
+    window.removeEventListener('keydown', unlockOnFirstInteraction);
+  };
+  window.addEventListener('pointerdown', unlockOnFirstInteraction, { once: true });
+  window.addEventListener('keydown', unlockOnFirstInteraction, { once: true });
+}
