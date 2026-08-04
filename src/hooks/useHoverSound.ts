@@ -4,14 +4,7 @@ import { useSoundStore } from '../store';
 let sharedCtx: AudioContext | null = null;
 
 function getCtx(): AudioContext {
-  if (!sharedCtx) {
-    sharedCtx = new AudioContext();
-    // TEMP DEBUG: exposes the app's real AudioContext on window so you can
-    // inspect it from DevTools console with `window.__hoverAudioCtx.state`
-    // instead of accidentally creating an unrelated context. Remove this
-    // line once sound is confirmed working.
-    (window as any).__hoverAudioCtx = sharedCtx;
-  }
+  if (!sharedCtx) sharedCtx = new AudioContext();
   return sharedCtx;
 }
 
@@ -30,15 +23,53 @@ export function primeAudio() {
   if (ctx.state === 'suspended') {
     ctx.resume();
   }
-  // Play a silent, near-zero-gain blip. On some browsers (notably iOS
-  // Safari) resume() alone isn't enough to fully unlock — actually
-  // starting a node during the gesture is what finishes the unlock.
   const osc  = ctx.createOscillator();
   const gain = ctx.createGain();
   gain.gain.value = 0.0001;
   osc.connect(gain).connect(ctx.destination);
   osc.start();
   osc.stop(ctx.currentTime + 0.01);
+}
+
+/**
+ * Plays a short synthesized digital-glitch burst: a noisy static hiss plus
+ * a few rapid, randomly-pitched square-wave "stutter" blips layered on top.
+ * Gated by the same muted/ctx-running checks as the hover tick.
+ */
+function playGlitchBurst(ctx: AudioContext) {
+  const t = ctx.currentTime;
+
+  // static/noise burst
+  const bufferSize = Math.floor(ctx.sampleRate * 0.18);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    const decay = 1 - i / bufferSize;
+    data[i] = (Math.random() * 2 - 1) * decay * 0.5;
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0.18, t);
+  noiseGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+  noise.connect(noiseGain).connect(ctx.destination);
+  noise.start(t);
+
+  // a handful of short, randomly-pitched digital stutter blips
+  const blipCount = 4;
+  for (let i = 0; i < blipCount; i++) {
+    const blipStart = t + i * 0.035 + Math.random() * 0.015;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.value = 200 + Math.random() * 900;
+    gain.gain.setValueAtTime(0, blipStart);
+    gain.gain.linearRampToValueAtTime(0.06, blipStart + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, blipStart + 0.03);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(blipStart);
+    osc.stop(blipStart + 0.04);
+  }
 }
 
 /**
@@ -50,19 +81,21 @@ export function useHoverSound() {
   const lastPlayed = useRef(0);
 
   const play = useCallback(
-    (variant: 'hover' | 'click' = 'hover') => {
+    (variant: 'hover' | 'click' | 'glitch' = 'hover') => {
       if (muted) return;
 
       const ctx = getCtx();
-      // If the context is still suspended here, the user hasn't clicked
-      // the unmute toggle yet this session (or is on a browser that needs
-      // it) — bail quietly rather than throwing.
       if (ctx.state !== 'running') return;
 
       // debounce — prevents a buzzy noise when rapidly hovering across a grid
       const now = performance.now();
       if (now - lastPlayed.current < 60) return;
       lastPlayed.current = now;
+
+      if (variant === 'glitch') {
+        playGlitchBurst(ctx);
+        return;
+      }
 
       const osc  = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -72,16 +105,12 @@ export function useHoverSound() {
 
       const t = ctx.currentTime;
       gain.gain.setValueAtTime(0, t);
-      // TEMP: bumped up from 0.08/0.05 to 0.35/0.25 and duration from
-      // 0.12/0.08 to 0.25/0.18 so it's unmistakable while testing. Once
-      // confirmed audible, dial these back down to taste — anything
-      // above ~0.1 will start to feel loud/annoying in normal use.
-      gain.gain.linearRampToValueAtTime(variant === 'click' ? 0.35 : 0.25, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + (variant === 'click' ? 0.25 : 0.18));
+      gain.gain.linearRampToValueAtTime(variant === 'click' ? 0.12 : 0.08, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + (variant === 'click' ? 0.16 : 0.11));
 
       osc.connect(gain).connect(ctx.destination);
       osc.start(t);
-      osc.stop(t + 0.3);
+      osc.stop(t + 0.2);
     },
     [muted]
   );

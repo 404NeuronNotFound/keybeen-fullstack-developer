@@ -12,4 +12,3 @@ export { Avatar } from './Avatar';
 export { ContributionHeatmap } from './ContributionHeatmap';
 export { ShareCardModal, ShareCardInner } from './ShareCard';
 export { ProjectPopover } from './ProjectPopover';
- 
