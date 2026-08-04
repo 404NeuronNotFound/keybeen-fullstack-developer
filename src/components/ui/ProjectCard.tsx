@@ -11,7 +11,7 @@ interface Props { project: Project; onPlay: (p: Project) => void; isPlaying: boo
 export function ProjectCard({ project, onPlay, isPlaying, isCurrent }: Props) {
   const [hov, setHov] = useState(false);
   const showPlay = hov || (isCurrent && isPlaying);
-  const playSound = useHoverSound();
+  const { play: playSound } = useHoverSound();
 
   return (
     <ProjectPopover project={project} onPlay={onPlay}>

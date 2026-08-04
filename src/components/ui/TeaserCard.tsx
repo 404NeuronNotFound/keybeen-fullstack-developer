@@ -6,7 +6,7 @@ import type { Project } from '../../types';
 import { useHoverSound } from '../../hooks/useHoverSound';
 
 export function TeaserCard({ project }: { project: Project }) {
-  const playSound = useHoverSound();
+  const { play: playSound } = useHoverSound();
 
   return (
     <ProjectPopover project={project} locked>

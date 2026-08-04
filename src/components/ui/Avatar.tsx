@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SITE } from '../../constants';
 import { useHoverSound } from '../../hooks/useHoverSound';
+import { useYouTubeBackgroundAudio } from '../../hooks/useYouTubeBackgroundAudio';
 
 interface Props {
   /** diameter in px */
@@ -14,31 +16,47 @@ interface Props {
   alt?: string;
 }
 
+const GONE_GONE_GONE_VIDEO_ID  = 'oozQ4yV__Vw'; // Phillip Phillips — Gone, Gone, Gone
+const GONE_GONE_GONE_START_SEC = 98;            // 1:38
+const GLITCH_DURATION_MS       = 320;           // matches the glitch overlay's on-screen duration below
+
 /**
  * Circular avatar. Drop your photo at `public/avatar.jpg` (or .png/.webp)
  * and it will be used automatically — falls back to initials if missing.
  *
- * On hover: a comic-print glitch effect (RGB channel split, halftone dot
- * screen, scanline flicker) plays over the normal photo while it dissolves
- * away, revealing `hoverSrc` (e.g. `public/avatar-spiderman.jpg`)
- * underneath — synced with a synthesized digital-glitch sound burst.
- * Reverses cleanly on mouse-leave.
+ * On hover: a synthesized digital-glitch sound plays immediately, a
+ * comic-print glitch effect (RGB channel split, halftone dot screen,
+ * scanline flicker) plays over the photo while it dissolves away to
+ * reveal `hoverSrc` underneath, and once the glitch finishes, music
+ * starts playing via a hidden YouTube embed (not a downloaded file —
+ * the audio stays on YouTube's platform, this just remote-controls
+ * their official player) seeked to 1:38. Music stops on mouse-leave.
  */
 export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-spiderman.jpeg', alt }: Props) {
   const [errored, setErrored]           = useState(false);
   const [hoverErrored, setHoverErrored] = useState(false);
   const [hov, setHov]                   = useState(false);
-  const playSound = useHoverSound();
+  const { playGlitch }   = useHoverSound();
+  const { containerId, playFrom, stop } = useYouTubeBackgroundAudio(GONE_GONE_GONE_VIDEO_ID);
+  const playTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleEnter = () => {
     setHov(true);
-    playSound('glitch');
+    playGlitch();
+    if (playTimer.current) clearTimeout(playTimer.current);
+    playTimer.current = window.setTimeout(() => playFrom(GONE_GONE_GONE_START_SEC), GLITCH_DURATION_MS);
+  };
+
+  const handleLeave = () => {
+    setHov(false);
+    if (playTimer.current) { clearTimeout(playTimer.current); playTimer.current = null; }
+    stop();
   };
 
   return (
     <div
       onMouseEnter={handleEnter}
-      onMouseLeave={() => setHov(false)}
+      onMouseLeave={handleLeave}
       style={{
         width:          size,
         height:         size,
@@ -111,13 +129,13 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
               src={src}
               alt=""
               aria-hidden="true"
-              animate={{ x: [-4, 3, -3, 4, -1, 0], y: [1, -2, 1, -1, 0, 0], opacity: [0.8, 0.8, 0.6, 0.4, 0.1, 0] }}
+              animate={{ x: [-4, 3, -3, 4, -1, 0], y: [1, -2, 1, -1, 0, 0], opacity: [0.75, 0.75, 0.6, 0.35, 0.08, 0] }}
               transition={{ duration: 0.3, ease: 'linear' }}
               style={{
                 position: 'absolute', inset: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center top',
-                mixBlendMode: 'screen',
-                filter: 'sepia(1) saturate(8) hue-rotate(-50deg) brightness(1.1)',
+                mixBlendMode: 'lighten',
+                filter: 'sepia(1) saturate(6.5) hue-rotate(-50deg) brightness(1)',
               }}
             />
             {/* cyan channel, offset the other way */}
@@ -125,13 +143,28 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
               src={src}
               alt=""
               aria-hidden="true"
-              animate={{ x: [4, -3, 3, -4, 1, 0], y: [-1, 2, -1, 1, 0, 0], opacity: [0.8, 0.8, 0.6, 0.4, 0.1, 0] }}
+              animate={{ x: [4, -3, 3, -4, 1, 0], y: [-1, 2, -1, 1, 0, 0], opacity: [0.75, 0.75, 0.6, 0.35, 0.08, 0] }}
               transition={{ duration: 0.3, ease: 'linear' }}
               style={{
                 position: 'absolute', inset: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center top',
-                mixBlendMode: 'screen',
-                filter: 'sepia(1) saturate(8) hue-rotate(140deg) brightness(1.1)',
+                mixBlendMode: 'lighten',
+                filter: 'sepia(1) saturate(6.5) hue-rotate(140deg) brightness(1)',
+              }}
+            />
+            {/* darkening pass — keeps the channel-split from washing out to white,
+                since red+cyan under an additive "screen" blend sum toward white */}
+            <motion.img
+              src={src}
+              alt=""
+              aria-hidden="true"
+              animate={{ opacity: [0.5, 0.5, 0.4, 0.25, 0.05, 0] }}
+              transition={{ duration: 0.3, ease: 'linear' }}
+              style={{
+                position: 'absolute', inset: 0, width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'center top',
+                mixBlendMode: 'multiply',
+                filter: 'brightness(0.6) saturate(1.2)',
               }}
             />
 
@@ -180,6 +213,16 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
         >
           {SITE.initials}
         </span>
+      )}
+
+      {/* hidden YouTube player — portaled to document.body so React never has
+          to reconcile DOM siblings around a node that YouTube's own script
+          mutates directly (that mismatch is what caused the insertBefore
+          crash when it lived inline here, next to the AnimatePresence
+          glitch overlay). */}
+      {createPortal(
+        <div id={containerId} style={{ position: 'fixed', top: -9999, left: -9999, width: 1, height: 1 }} />,
+        document.body
       )}
     </div>
   );

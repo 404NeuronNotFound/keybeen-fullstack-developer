@@ -39,38 +39,55 @@ export function primeAudio() {
 function playGlitchBurst(ctx: AudioContext) {
   const t = ctx.currentTime;
 
-  // static/noise burst
-  const bufferSize = Math.floor(ctx.sampleRate * 0.18);
+  // static/noise bed
+  const bufferSize = Math.floor(ctx.sampleRate * 0.32);
   const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
   const data = buffer.getChannelData(0);
   for (let i = 0; i < bufferSize; i++) {
     const decay = 1 - i / bufferSize;
-    data[i] = (Math.random() * 2 - 1) * decay * 0.5;
+    // stepped/quantized noise — reads more "digital" than smooth static
+    const stepped = Math.round(((Math.random() * 2 - 1) * 8)) / 8;
+    data[i] = stepped * decay * 0.55;
   }
   const noise = ctx.createBufferSource();
   noise.buffer = buffer;
   const noiseGain = ctx.createGain();
-  noiseGain.gain.setValueAtTime(0.18, t);
-  noiseGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+  noiseGain.gain.setValueAtTime(0.2, t);
+  noiseGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
   noise.connect(noiseGain).connect(ctx.destination);
   noise.start(t);
 
-  // a handful of short, randomly-pitched digital stutter blips
-  const blipCount = 4;
+  // rapid randomly-pitched digital stutter blips
+  const blipCount = 7;
   for (let i = 0; i < blipCount; i++) {
-    const blipStart = t + i * 0.035 + Math.random() * 0.015;
+    const blipStart = t + i * 0.03 + Math.random() * 0.015;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'square';
-    osc.frequency.value = 200 + Math.random() * 900;
+    osc.frequency.value = 180 + Math.random() * 1100;
     gain.gain.setValueAtTime(0, blipStart);
-    gain.gain.linearRampToValueAtTime(0.06, blipStart + 0.005);
+    gain.gain.linearRampToValueAtTime(0.07, blipStart + 0.005);
     gain.gain.exponentialRampToValueAtTime(0.0001, blipStart + 0.03);
     osc.connect(gain).connect(ctx.destination);
     osc.start(blipStart);
     osc.stop(blipStart + 0.04);
   }
+
+  // a short rising pitch-bend sweep at the tail, like a "power up" riser
+  const riserStart = t + 0.2;
+  const riser = ctx.createOscillator();
+  const riserGain = ctx.createGain();
+  riser.type = 'sawtooth';
+  riser.frequency.setValueAtTime(220, riserStart);
+  riser.frequency.exponentialRampToValueAtTime(1400, riserStart + 0.14);
+  riserGain.gain.setValueAtTime(0.0001, riserStart);
+  riserGain.gain.linearRampToValueAtTime(0.05, riserStart + 0.03);
+  riserGain.gain.exponentialRampToValueAtTime(0.0001, riserStart + 0.14);
+  riser.connect(riserGain).connect(ctx.destination);
+  riser.start(riserStart);
+  riser.stop(riserStart + 0.16);
 }
+
 
 /**
  * Plays a soft synthesized tick. `variant` lets different
@@ -81,7 +98,7 @@ export function useHoverSound() {
   const lastPlayed = useRef(0);
 
   const play = useCallback(
-    (variant: 'hover' | 'click' | 'glitch' = 'hover') => {
+    (variant: 'hover' | 'click' = 'hover') => {
       if (muted) return;
 
       const ctx = getCtx();
@@ -91,11 +108,6 @@ export function useHoverSound() {
       const now = performance.now();
       if (now - lastPlayed.current < 60) return;
       lastPlayed.current = now;
-
-      if (variant === 'glitch') {
-        playGlitchBurst(ctx);
-        return;
-      }
 
       const osc  = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -115,5 +127,12 @@ export function useHoverSound() {
     [muted]
   );
 
-  return play;
+  const playGlitch = useCallback(() => {
+    if (muted) return;
+    const ctx = getCtx();
+    if (ctx.state !== 'running') return;
+    playGlitchBurst(ctx);
+  }, [muted]);
+
+  return { play, playGlitch };
 }
