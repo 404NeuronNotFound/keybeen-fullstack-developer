@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SITE } from '../../constants';
 import { useHoverSound } from '../../hooks/useHoverSound';
