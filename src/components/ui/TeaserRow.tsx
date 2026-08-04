@@ -19,7 +19,7 @@ export function TeaserRow({ project, index }: Props) {
         <div
           style={{
             width: 40,
-            height: 40,
+            height: 40, 
             borderRadius: 'var(--radius-sm)',
             overflow: 'hidden',
             flexShrink: 0,

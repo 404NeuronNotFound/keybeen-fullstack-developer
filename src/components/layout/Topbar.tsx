@@ -1,5 +1,6 @@
-import { ChevronLeft, ChevronRight, ChevronDown} from 'lucide-react';
-import { useNavStore, useThemeStore }   from '../../store';
+import { ChevronLeft, ChevronRight, ChevronDown, Volume2, VolumeX } from 'lucide-react';
+import { useNavStore, useThemeStore, useSoundStore } from '../../store';
+import { primeAudio } from '../../hooks/useHoverSound';
 import { SITE }          from '../../constants';
 import { Avatar }        from '../../components/ui';
 import type { LucideIcon } from 'lucide-react';
@@ -34,6 +35,9 @@ export function Topbar() {
   const theme      = useThemeStore((s) => s.theme);
   // const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const isLight    = theme === 'light';
+
+  const muted       = useSoundStore((s) => s.muted);
+  const toggleMuted = useSoundStore((s) => s.toggleMuted);
 
   return (
     <div style={{ background: isLight ? 'rgba(246,246,246,.92)' : 'rgba(18,18,18,.92)', backdropFilter: 'blur(12px)', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${isLight ? '#d8d8d8' : '#1c1c1c'}`, flexShrink: 0, height: 'var(--topbar-h)', gap: 8 }}>
@@ -71,6 +75,32 @@ export function Topbar() {
         >
           {isLight ? <Moon size={16} /> : <Sun size={16} />}
         </button> */}
+
+        {/* sound toggle — the onClick here is a genuine user gesture,
+            which is what actually unlocks AudioContext in the browser.
+            Hover sounds will not play until this has been clicked once. */}
+        <button
+          onClick={() => { primeAudio(); toggleMuted(); }}
+          aria-label={muted ? 'Unmute hover sounds' : 'Mute hover sounds'}
+          style={{
+            width:          34,
+            height:         34,
+            borderRadius:   '50%',
+            border:         `1px solid var(--sp-dark3)`,
+            background:     'var(--sp-dark2)',
+            display:        'flex',
+            alignItems:     'center',
+            justifyContent: 'center',
+            cursor:         'pointer',
+            color:          'var(--sp-gray)',
+            transition:     'background .2s, color .2s, transform .15s',
+            flexShrink:     0,
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--sp-green)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--sp-gray)'; }}
+        >
+          {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+        </button>
 
         {/* user pill */}
         <div
