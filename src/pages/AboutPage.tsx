@@ -5,7 +5,7 @@ import { SITE }        from '../constants';
 const BIO_PARAGRAPHS = [
   `I'm a <b> AI Assisted Full-Stack App & Web Developer</b> who loves turning complex idea or problem into clean, elegant solutions. I've been shipping code for 3+ years, from scrappy <"Hello World!"> to scaling products used by me.`,
   `My stack spans both ends: <b>React & TypeScript</b> on the frontend, <b>Node.js, Django, & PostgreSQL</b> on the backend. I care deeply about performance, accessibility, and developer experience.`,
-  `When I'm not coding, I'm editing videos for international clients, or doing side quests around ${SITE.location} outdoors. I believe great software is made by people who give a damn.`,
+  `When I'm not coding, I'm editing videos for international clients, or doing side quests around ${SITE.location} outdoors. I'm also a student of <b>Stoicism</b>, it keeps me grounded when things is outside of my control like a deploy breaking at midnight. I believe great software is made by people who give a damn.`,
 ];
 
 export function AboutPage() {
