@@ -6,6 +6,7 @@ import { ContactLinkCard, type ContactLink } from '../components/ui';
 import { SITE } from '../constants';
 import { submitContactMessage } from '../utils/contactSubmission';
 import { toast } from '../store/toastStore';
+import { useEmailValidation } from '../hooks/useEmailValidation';
 
 const FIELD_STYLE: CSSProperties = {
   width: '100%', background: 'var(--sp-dark3)', border: '1px solid var(--sp-gray2)',
@@ -27,12 +28,13 @@ const LINKS: ContactLink[] = [
 
 export function ContactPage() {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const { email, updateEmail, check: emailCheck, validate: validateEmail, canUseEmail } = useEmailValidation();
   const [msg,  setMsg]  = useState('');
   const [status, setStatus] = useState<'idle' | 'sending'>('idle');
   const inFlight = useRef(false);
   const feedbackId = useRef<number | null>(null);
   const isSending = status === 'sending';
+  const canSend = !isSending && canUseEmail && name.trim().length > 0 && msg.trim().length > 0;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,6 +43,10 @@ export function ContactPage() {
     const form = event.currentTarget;
     if (feedbackId.current !== null) toast.dismiss(feedbackId.current);
     if (!form.reportValidity()) return;
+    if (!canUseEmail) {
+      void validateEmail();
+      return;
+    }
     if (!name.trim() || !email.trim() || !msg.trim()) {
       feedbackId.current = toast.error({
         title: 'A little more detail, please',
@@ -62,7 +68,7 @@ export function ContactPage() {
         description: "Thanks for reaching out. I'll get back to you by email.",
       });
       setName('');
-      setEmail('');
+      updateEmail('');
       setMsg('');
       form.reset();
     } catch (submissionError) {
@@ -122,14 +128,30 @@ export function ContactPage() {
               required
               maxLength={254}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => updateEmail(e.target.value)}
+              onBlur={() => { void validateEmail(); }}
               placeholder="you@example.com"
-              aria-describedby="contact-email-help"
-              style={FIELD_STYLE}
+              aria-describedby="contact-email-help contact-email-status"
+              aria-invalid={emailCheck.status === 'invalid' || emailCheck.status === 'typo'}
+              aria-busy={emailCheck.status === 'checking'}
+              style={{ ...FIELD_STYLE, borderColor: emailCheck.status === 'valid' ? 'var(--sp-green)' : emailCheck.status === 'invalid' || emailCheck.status === 'typo' ? '#f59e0b' : 'var(--sp-gray2)' }}
             />
             <p id="contact-email-help" style={{ color: 'var(--sp-gray)', fontSize: 12, margin: '6px 0 16px' }}>
-              I'll use this address to reply to your message.
+              I'll reply here. Your email is checked automatically after a short pause or when you leave this field.
             </p>
+            <div id="contact-email-status" role="status" aria-live="polite" style={{ fontSize: 13, marginBottom: 16, color: emailCheck.status === 'valid' ? 'var(--sp-green)' : 'var(--sp-gray)', overflowWrap: 'anywhere' }}>
+              {emailCheck.message}
+            </div>
+            {emailCheck.status === 'typo' && emailCheck.suggestion && (
+              <button type="button" onClick={() => { updateEmail(emailCheck.suggestion!); void validateEmail(); }} style={{ padding: '10px 14px', marginBottom: 16, border: '1px solid var(--sp-green)', borderRadius: 20, background: 'transparent', color: 'var(--sp-white)', cursor: 'pointer', maxWidth: '100%', overflowWrap: 'anywhere' }}>
+                Use {emailCheck.suggestion}
+              </button>
+            )}
+            {emailCheck.status === 'error' && (
+              <button type="button" onClick={() => { void validateEmail(); }} style={{ padding: '10px 14px', marginBottom: 16, border: '1px solid var(--sp-gray)', borderRadius: 20, background: 'transparent', color: 'var(--sp-white)', cursor: 'pointer' }}>
+                Retry email check
+              </button>
+            )}
             <label htmlFor="contact-message" style={LABEL_STYLE}>Your message</label>
             <textarea
               id="contact-message"
@@ -148,10 +170,11 @@ export function ContactPage() {
             </p>
             <button
               type="submit"
-              disabled={isSending}
-              style={{ padding: '10px 28px', background: 'var(--sp-green)', border: 'none', borderRadius: 24, color: '#000', fontSize: 14, fontWeight: 700, cursor: isSending ? 'wait' : 'pointer', opacity: isSending ? 0.6 : 1, transition: 'opacity .15s' }}
+              disabled={!canSend}
+              aria-describedby="contact-email-status"
+              style={{ padding: '10px 28px', background: 'var(--sp-green)', border: 'none', borderRadius: 24, color: '#000', fontSize: 14, fontWeight: 700, cursor: isSending ? 'wait' : canSend ? 'pointer' : 'not-allowed', opacity: canSend ? 1 : 0.5, transition: 'opacity .15s' }}
             >
-              {isSending ? 'Sending…' : 'Send message'}
+              {isSending ? 'Sending…' : emailCheck.status === 'checking' ? 'Checking email…' : 'Send message'}
             </button>
           </fieldset>
           <div role="status" aria-live="polite" aria-atomic="true" style={{ marginTop: 16, color: 'var(--sp-green)', fontSize: 14 }}>
