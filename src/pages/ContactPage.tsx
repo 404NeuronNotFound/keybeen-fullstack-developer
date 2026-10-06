@@ -1,8 +1,21 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import type { CSSProperties, FormEvent } from 'react';
 import { FiMail } from 'react-icons/fi';
 import { FaGithub, FaInstagram, FaTiktok } from 'react-icons/fa';
 import { ContactLinkCard, type ContactLink } from '../components/ui';
 import { SITE } from '../constants';
+import { submitContactMessage } from '../utils/contactSubmission';
+import { toast } from '../store/toastStore';
+
+const FIELD_STYLE: CSSProperties = {
+  width: '100%', background: 'var(--sp-dark3)', border: '1px solid var(--sp-gray2)',
+  borderRadius: 'var(--radius-sm)', padding: '10px 14px', color: 'var(--sp-white)',
+  fontSize: 14, boxSizing: 'border-box',
+};
+
+const LABEL_STYLE: CSSProperties = {
+  display: 'block', marginBottom: 6, fontSize: 13, fontWeight: 600, color: 'var(--sp-white)',
+};
 
 // contact links
 const LINKS: ContactLink[] = [
@@ -14,10 +27,54 @@ const LINKS: ContactLink[] = [
 
 export function ContactPage() {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [msg,  setMsg]  = useState('');
-  const [sent, setSent] = useState(false);
- 
-  const canSend = name.trim().length > 0 && msg.trim().length > 0;
+  const [status, setStatus] = useState<'idle' | 'sending'>('idle');
+  const inFlight = useRef(false);
+  const feedbackId = useRef<number | null>(null);
+  const isSending = status === 'sending';
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (inFlight.current) return;
+
+    const form = event.currentTarget;
+    if (feedbackId.current !== null) toast.dismiss(feedbackId.current);
+    if (!form.reportValidity()) return;
+    if (!name.trim() || !email.trim() || !msg.trim()) {
+      feedbackId.current = toast.error({
+        title: 'A little more detail, please',
+        description: 'Enter your name, email, and a message. Blank spaces do not count.',
+      });
+      return;
+    }
+
+    const formData = new FormData(form);
+    inFlight.current = true;
+    setStatus('sending');
+
+    try {
+      await submitContactMessage(import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? '', {
+        name, email, message: msg, botcheck: formData.has('botcheck'),
+      });
+      feedbackId.current = toast.success({
+        title: 'Message sent!',
+        description: "Thanks for reaching out. I'll get back to you by email.",
+      });
+      setName('');
+      setEmail('');
+      setMsg('');
+      form.reset();
+    } catch (submissionError) {
+      feedbackId.current = toast.error({
+        title: "Couldn't send your message",
+        description: `${submissionError instanceof Error ? submissionError.message : 'Please try again.'} Your message is still in the form.`,
+      });
+    } finally {
+      inFlight.current = false;
+      setStatus('idle');
+    }
+  }
  
   return (
     <div className="page">
@@ -42,40 +99,65 @@ export function ContactPage() {
       <div style={{ background: 'var(--sp-dark2)', borderRadius: 'var(--radius-md)', padding: 24, border: '1px solid var(--sp-dark3)' }}>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--sp-white)', marginBottom: 16 }}>Send a message</div>
  
-        {sent ? (
-          <div style={{ padding: '16px 20px', background: 'rgba(29,185,84,.1)', borderRadius: 'var(--radius-md)', border: '1px solid var(--sp-green)', color: 'var(--sp-green)', fontWeight: 700, fontSize: 14 }}>
-            ✓ Sent! I'll get back to you soon.
-          </div>
-        ) : (
-          <>
+        <form onSubmit={handleSubmit} aria-busy={isSending}>
+          <fieldset disabled={isSending} style={{ border: 'none', padding: 0, margin: 0, minWidth: 0 }}>
+            <label htmlFor="contact-name" style={LABEL_STYLE}>Your name</label>
             <input
+              id="contact-name"
+              name="name"
+              autoComplete="name"
+              required
+              maxLength={100}
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
-              style={{ width: '100%', marginBottom: 10, background: '#252525', border: '1px solid #333', borderRadius: 'var(--radius-sm)', padding: '10px 14px', color: 'var(--sp-white)', fontSize: 14, outline: 'none', boxSizing: 'border-box', transition: 'border-color .15s' }}
-              onFocus={(e) => { e.target.style.borderColor = 'var(--sp-green)'; }}
-              onBlur={(e)  => { e.target.style.borderColor = '#333'; }}
+              style={{ ...FIELD_STYLE, marginBottom: 16 }}
             />
+            <label htmlFor="contact-email" style={LABEL_STYLE}>Your email</label>
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              maxLength={254}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              aria-describedby="contact-email-help"
+              style={FIELD_STYLE}
+            />
+            <p id="contact-email-help" style={{ color: 'var(--sp-gray)', fontSize: 12, margin: '6px 0 16px' }}>
+              I'll use this address to reply to your message.
+            </p>
+            <label htmlFor="contact-message" style={LABEL_STYLE}>Your message</label>
             <textarea
+              id="contact-message"
+              name="message"
+              required
+              maxLength={5000}
               value={msg}
               onChange={(e) => setMsg(e.target.value)}
               placeholder="Hey, I'd love to work on something together..."
               rows={4}
-              style={{ width: '100%', background: '#252525', border: '1px solid #333', borderRadius: 'var(--radius-sm)', padding: '10px 14px', color: 'var(--sp-white)', fontSize: 14, fontFamily: 'inherit', resize: 'vertical', outline: 'none', boxSizing: 'border-box', marginBottom: 12, transition: 'border-color .15s' }}
-              onFocus={(e) => { e.target.style.borderColor = 'var(--sp-green)'; }}
-              onBlur={(e)  => { e.target.style.borderColor = '#333'; }}
+              style={{ ...FIELD_STYLE, resize: 'vertical', marginBottom: 12 }}
             />
+            <input type="checkbox" name="botcheck" tabIndex={-1} aria-hidden="true" style={{ display: 'none' }} />
+            <p style={{ fontSize: 12, color: 'var(--sp-gray)', marginBottom: 16 }}>
+              Your details help me reply to your message.
+            </p>
             <button
-              onClick={() => canSend && setSent(true)}
-              disabled={!canSend}
-              style={{ padding: '10px 28px', background: canSend ? 'var(--sp-green)' : '#333', border: 'none', borderRadius: 24, color: canSend ? '#000' : '#666', fontSize: 14, fontWeight: 700, cursor: canSend ? 'pointer' : 'default', transition: 'all .15s' }}
-              onMouseEnter={(e) => { if (canSend) e.currentTarget.style.background = 'var(--sp-green-h)'; }}
-              onMouseLeave={(e) => { if (canSend) e.currentTarget.style.background = 'var(--sp-green)'; }}
+              type="submit"
+              disabled={isSending}
+              style={{ padding: '10px 28px', background: 'var(--sp-green)', border: 'none', borderRadius: 24, color: '#000', fontSize: 14, fontWeight: 700, cursor: isSending ? 'wait' : 'pointer', opacity: isSending ? 0.6 : 1, transition: 'opacity .15s' }}
             >
-              Send
+              {isSending ? 'Sending…' : 'Send message'}
             </button>
-          </>
-        )}
+          </fieldset>
+          <div role="status" aria-live="polite" aria-atomic="true" style={{ marginTop: 16, color: 'var(--sp-green)', fontSize: 14 }}>
+            {isSending && 'Sending your message…'}
+          </div>
+        </form>
       </div>
     </div>
   );

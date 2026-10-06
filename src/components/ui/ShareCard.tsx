@@ -5,6 +5,7 @@ import { FaGithub, FaInstagram } from 'react-icons/fa';
 import { Avatar } from '../../components/ui';
 import { SITE }   from '../../constants';
 import { skills } from '../../data';
+import { toast } from '../../store/toastStore';
 
 // Top 6 skills by level for the card
 const TOP_SKILLS = Object.values(skills)
@@ -127,20 +128,26 @@ export function ShareCardModal({ onClose }: ShareCardModalProps) {
       await navigator.clipboard.writeText(SITE.website);
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
+      toast.success({ title: 'Link copied!', description: 'Your clipboard has the profile link, ready to share.' });
     } catch {
-      // fallback: select input
+      toast.error({ title: "Couldn't copy the link", description: 'Please copy the website address from the card instead.' });
     }
   }, []);
 
   const downloadPNG = useCallback(async () => {
-    const { default: html2canvas } = await import('html2canvas');
-    const node = document.getElementById('share-card-inner');
-    if (!node) return;
-    const canvas = await html2canvas(node, { backgroundColor: null, scale: 2 });
-    const link = document.createElement('a');
-    link.download = 'keybeen-card.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    try {
+      const { default: html2canvas } = await import('html2canvas');
+      const node = cardRef.current;
+      if (!node) throw new Error('Card preview unavailable');
+      const canvas = await html2canvas(node, { backgroundColor: null, scale: 2 });
+      const link = document.createElement('a');
+      link.download = 'keybeen-card.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      toast.success({ title: 'Your card is ready', description: 'The download was requested. Check your browser’s downloads.' });
+    } catch {
+      toast.error({ title: "Couldn't create your card", description: 'Please try again, or copy the profile link to share it.' });
+    }
   }, []);
 
   return (
