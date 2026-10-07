@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { Play, Lock, ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import type { Project } from '../../types';
+import { getProjectUrl } from '../../utils';
 
 interface Props {
   project:  Project;
@@ -37,6 +38,8 @@ function calcPosition(card: HTMLElement): PopoverPosition {
 }
 
 export function ProjectPopover({ project, locked = false, children, onPlay }: Props) {
+  const githubUrl = getProjectUrl(project.github);
+  const liveUrl = getProjectUrl(project.live);
   const [visible, setVisible] = useState(false);
   const [pos,     setPos]     = useState<PopoverPosition | null>(null);
   const wrapRef  = useRef<HTMLDivElement>(null);
@@ -155,14 +158,14 @@ export function ProjectPopover({ project, locked = false, children, onPlay }: Pr
                 )}
 
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  {githubUrl && <a href={githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`View repository for ${project.title}`}
                     style={{ color: 'var(--sp-gray)', display: 'flex', padding: 4, transition: 'color .15s' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--sp-white)'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--sp-gray)'; }}>
                     <FaGithub size={16} />
-                  </a>
-                  {!locked && (
-                    <a href={project.live} target="_blank" rel="noopener noreferrer"
+                  </a>}
+                  {!locked && liveUrl && (
+                    <a href={liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open demo for ${project.title}`}
                       style={{ color: 'var(--sp-gray)', display: 'flex', padding: 4, transition: 'color .15s' }}
                       onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--sp-white)'; }}
                       onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--sp-gray)'; }}>

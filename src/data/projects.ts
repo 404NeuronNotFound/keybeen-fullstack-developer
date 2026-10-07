@@ -14,7 +14,6 @@ export const projects: Project[] = [
       'A digital grading and records management platform designed for teachers and administrators. Streamlines grade computation, student records, report generation, and academic tracking.',
     year: '2022',
     github: 'https://github.com/404NeuronNotFound/grades-management-system',
-    live: '#',
     featured: true,
   },
   {
@@ -30,7 +29,6 @@ export const projects: Project[] = [
       'An AI-assisted lost and found platform that helps users report, search, and recover missing items through smart matching, image recognition, and centralized management.',
     year: '2026',
     github: 'https://github.com/404NeuronNotFound/findify',
-    live: '#',
     featured: true,
   },
   {
@@ -46,7 +44,6 @@ export const projects: Project[] = [
       'A personal finance management system that tracks expenses, income, savings, and net worth growth through intuitive dashboards and financial insights.',
     year: '2026',
     github: 'https://github.com/404NeuronNotFound/langgam-it',
-    live: '#',
     featured: false,
   },
   {
@@ -62,7 +59,6 @@ export const projects: Project[] = [
       'A portfolio tracking platform for traders and investors featuring AI-powered market analysis, performance monitoring, profit-loss tracking, and investment insights.',
     year: '2026',
     github: 'https://github.com/404NeuronNotFound/coinfession',
-    live: '#',
     featured: true,
   },
   {
@@ -78,7 +74,6 @@ export const projects: Project[] = [
       'A mobile-first credit ledger application that helps sari-sari store owners track customer debts, payment history, balances, and collection records.',
     year: '2026',
     github: 'https://github.com/404NeuronNotFound/palista',
-    live: '#',
     featured: false,
   },
   {
@@ -94,7 +89,6 @@ export const projects: Project[] = [
       'A professional portfolio website showcasing video editing projects, client work, and creative services, featuring a secure CAPTCHA-protected contact and message system.',
     year: '2026',
     github: 'https://github.com/404NeuronNotFound/video-editing-portfolio',
-    live: '#',
     featured: false,
   },
     {
@@ -109,8 +103,6 @@ export const projects: Project[] = [
     description:
       'PowerAtomic helps students build lasting positive habits and eliminate bad ones through proven behavioral science, daily consistency, and engaging gamification inspired by Atomic Habits.',
     year: '2026',
-    github: 'https://github.com/404NeuronNotFound/video-editing-portfolio',
-    live: '#',
     featured: false,
   },
 ];

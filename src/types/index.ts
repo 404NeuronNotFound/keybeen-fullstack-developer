@@ -12,8 +12,8 @@ export interface Project {
   tags: string[];
   description: string;
   year: string;
-  github: string;
-  live: string;
+  github?: string;
+  live?: string;
   featured: boolean;
   image?: string; // Optional property for image path
 }

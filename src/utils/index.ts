@@ -23,6 +23,18 @@ export function clamp(value: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, value));
 }
 
+/** Return an absolute web URL, or omit an unavailable/placeholder project link. */
+export function getProjectUrl(value?: string): string | undefined {
+  if (!value?.trim()) return undefined;
+  try {
+    const url = new URL(value.trim());
+    if (url.protocol === 'https:' || url.protocol === 'http:') return url.href;
+  } catch {
+    // Missing URLs and placeholders should not become visitor actions.
+  }
+  return undefined;
+}
+
 /** Merge class names (tiny clsx alternative) */
 export function cn(...classes: (string | undefined | false)[]): string {
   return classes.filter(Boolean).join(' ');
