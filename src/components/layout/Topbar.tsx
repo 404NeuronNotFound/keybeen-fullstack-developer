@@ -19,9 +19,8 @@ function ArrowBtn({ label, onClick, enabled, Icon }: ArrowBtnProps) {
       onClick={onClick}
       aria-label={label}
       disabled={!enabled}
-      style={{ width: 32, height: 32, background: 'var(--sp-control)', border: 'none', borderRadius: '50%', color: enabled ? 'var(--sp-white)' : 'var(--sp-gray2)', cursor: enabled ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s' }}
-      onMouseEnter={(e) => { if (enabled) e.currentTarget.style.background = 'var(--sp-dark3)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-control)'; }}
+      className="icon-button history-button"
+      type="button"
     >
       <Icon size={18} />
     </button>
@@ -54,7 +53,7 @@ export function Topbar() {
 
   return (
     <header className="topbar">
-      <div style={{ display: 'flex', gap: 8 }} className="hide-on-mobile">
+      <div className="topbar-history hide-on-mobile">
         <ArrowBtn label="Go back"    onClick={back}    enabled={canBack}    Icon={ChevronLeft} />
         <ArrowBtn label="Go forward" onClick={forward} enabled={canForward} Icon={ChevronRight} />
       </div>
@@ -63,29 +62,15 @@ export function Topbar() {
         {pageTitle}
       </span>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' }}>
+      <div className="topbar-actions">
         {/* theme toggle */}
         <button
           type="button"
-          className="theme-toggle"
+          className="icon-button theme-toggle"
           onClick={toggleTheme}
-          aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
-          style={{
-            width:          44,
-            height:         44,
-            borderRadius:   '50%',
-            border:         `1px solid var(--sp-dark3)`,
-            background:     'var(--sp-dark2)',
-            display:        'flex',
-            alignItems:     'center',
-            justifyContent: 'center',
-            cursor:         'pointer',
-            color:          'var(--sp-gray)',
-            transition:     'background .2s, color .2s, transform .15s',
-            flexShrink:     0,
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--sp-green)'; e.currentTarget.style.transform = 'rotate(12deg)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.transform = 'rotate(0)'; }}
+          aria-label="Light mode"
+          title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
+          aria-pressed={isLight}
         >
           {isLight ? <Moon size={16} /> : <Sun size={16} />}
         </button>
@@ -95,23 +80,11 @@ export function Topbar() {
             Hover sounds will not play until this has been clicked once. */}
         <button
           onClick={toggleSound}
-          aria-label={muted ? 'Unmute sounds and avatar music' : 'Mute sounds and avatar music'}
-          style={{
-            width:          44,
-            height:         44,
-            borderRadius:   '50%',
-            border:         `1px solid var(--sp-dark3)`,
-            background:     'var(--sp-dark2)',
-            display:        'flex',
-            alignItems:     'center',
-            justifyContent: 'center',
-            cursor:         'pointer',
-            color:          'var(--sp-gray)',
-            transition:     'background .2s, color .2s, transform .15s',
-            flexShrink:     0,
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--sp-green)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--sp-gray)'; }}
+          aria-label="Sounds and avatar music"
+          title={muted ? 'Unmute sounds and avatar music' : 'Mute sounds and avatar music'}
+          type="button"
+          className="icon-button"
+          aria-pressed={!muted}
         >
           {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
         </button>

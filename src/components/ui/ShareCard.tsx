@@ -214,9 +214,7 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
             autoFocus
             onClick={onClose}
             aria-label="Close share dialog"
-            style={{ background: 'var(--sp-overlay)', border: 'none', borderRadius: '50%', width: 44, height: 44, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--sp-gray)', transition: 'background .15s' }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-overlay)'; }}
+            className="icon-button"
           >
             <X size={16} />
           </button>
@@ -229,13 +227,12 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
           </div>
 
           {/* actions */}
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <div className="share-actions">
             <button
               type="button"
               onClick={copyLink}
-              style={{ flex: '1 1 150px', minWidth: 0, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px', background: copied ? 'rgba(29,185,84,.15)' : 'var(--sp-overlay)', border: '1px solid', borderColor: copied ? 'var(--sp-green)' : 'var(--sp-line)', borderRadius: 8, color: copied ? 'var(--sp-green)' : 'var(--sp-white)', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all .2s', whiteSpace: 'normal' }}
-              onMouseEnter={(e) => { if (!copied) e.currentTarget.style.background = 'var(--sp-dark3)'; }}
-              onMouseLeave={(e) => { if (!copied) e.currentTarget.style.background = 'var(--sp-overlay)'; }}
+              className="ui-button ui-button--outline share-action"
+              data-copied={copied}
             >
               {copied ? <Check size={15} /> : <Link size={15} />}
               {copied ? 'Copied!' : 'Copy link'}
@@ -244,9 +241,7 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
             <button
               type="button"
               onClick={downloadPNG}
-              style={{ flex: '1 1 150px', minWidth: 0, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px', background: 'var(--sp-green)', border: 'none', borderRadius: 8, color: 'var(--sp-on-green)', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'background .15s', whiteSpace: 'normal' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-green-h)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-green)'; }}
+              className="ui-button ui-button--primary share-action"
             >
               <Download size={15} />
               Download card

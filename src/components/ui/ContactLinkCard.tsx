@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { IconType } from 'react-icons';
 import { ChevronRight } from 'lucide-react';
 
@@ -22,28 +23,8 @@ export function ContactLinkCard({ link }: Props) {
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      style={{
-        background:     'var(--sp-dark2)',
-        borderRadius:   'var(--radius-md)',
-        padding:        '16px 18px',
-        display:        'flex',
-        alignItems:     'center',
-        gap:            14,
-        cursor:         'pointer',
-        border:         '1px solid var(--sp-dark3)',
-        transition:     'background .15s, border-color .15s, transform .15s',
-        textDecoration: 'none',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background  = 'var(--sp-dark3)';
-        e.currentTarget.style.borderColor = link.color;
-        e.currentTarget.style.transform   = 'translateY(-2px)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background  = 'var(--sp-dark2)';
-        e.currentTarget.style.borderColor = 'var(--sp-dark3)';
-        e.currentTarget.style.transform   = 'translateY(0)';
-      }}
+      className="surface-card contact-link-card"
+      style={{ '--contact-accent': link.color } as CSSProperties}
     >
       <div
         style={{
@@ -61,7 +42,7 @@ export function ContactLinkCard({ link }: Props) {
       </div>
       <div style={{ minWidth: 0 }}>
         <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--sp-white)', marginBottom: 2 }}>{link.label}</div>
-        <div style={{ fontSize: 12, color: 'var(--sp-gray)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{link.handle}</div>
+        <div className="contact-link-handle">{link.handle}</div>
       </div>
       <ChevronRight size={18} color="var(--sp-gray)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
     </a>

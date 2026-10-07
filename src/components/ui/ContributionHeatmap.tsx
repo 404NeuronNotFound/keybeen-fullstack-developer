@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useIsMobile } from '../../hooks';
 import type { ContributionDay } from '../../hooks';
 
@@ -56,6 +57,8 @@ function formatTooltipDate(dateStr: string): string {
 
 export function ContributionHeatmap({ days, loading }: Props) {
   const isMobile = useIsMobile();
+  const [selectedDate, setSelectedDate] = useState('');
+  const selectedDay = days.find(day => day.date === selectedDate) ?? days.at(-1);
   const weeks       = buildWeeks(days);
   const monthLabels = buildMonthLabels(weeks);
   const colCount    = Math.max(weeks.length, 1);
@@ -109,6 +112,19 @@ export function ContributionHeatmap({ days, loading }: Props) {
     </div>
   );
 
+  const dateLookup = !loading && selectedDay && (
+    <details className="contribution-date-lookup">
+      <summary>Explore daily contributions</summary>
+      <label>
+        <span>Contribution date</span>
+        <select value={selectedDay.date} onChange={event => setSelectedDate(event.target.value)}>
+          {days.map(day => <option key={day.date} value={day.date}>{formatTooltipDate(day.date)}</option>)}
+        </select>
+      </label>
+      <p role="status">{selectedDay.count} {selectedDay.count === 1 ? 'contribution' : 'contributions'} on {formatTooltipDate(selectedDay.date)}</p>
+    </details>
+  );
+
   const weekdayColumn = (
     <div style={{ display: 'grid', gridTemplateRows: `16px repeat(7, 1fr)`, gap: GAP, flexShrink: 0, width: 28 }}>
       <div />
@@ -122,20 +138,20 @@ export function ContributionHeatmap({ days, loading }: Props) {
 
   if (isMobile) {
     return (
-      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: 4 }}>
+      <><div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: 4 }}>
         <div style={{ display: 'inline-flex', gap: 8, minWidth: colCount * (CELL_MOBILE + GAP) + 28 }}>
           {weekdayColumn}
           {grid}
         </div>
-      </div>
+      </div>{dateLookup}</>
     );
   }
 
   // ── Desktop: fluid grid that fills the card width ──────────────────────
   return (
-    <div style={{ display: 'flex', gap: 8 }}>
+    <><div style={{ display: 'flex', gap: 8 }}>
       {weekdayColumn}
       {grid}
-    </div>
+    </div>{dateLookup}</>
   );
 }

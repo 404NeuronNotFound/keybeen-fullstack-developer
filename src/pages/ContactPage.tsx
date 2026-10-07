@@ -90,10 +90,10 @@ export function ContactPage() {
  
   return (
     <div className="page">
-      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 10 }}>
+      <p className="discography-eyebrow">
         Contact
       </p>
-      <h1 style={{ fontSize: 36, fontWeight: 900, color: 'var(--sp-white)', letterSpacing: '-1px', marginBottom: 12 }}>
+      <h1 className="discography-title">
         Let's collab
       </h1>
       <p style={{ fontSize: 15, color: 'var(--sp-gray)', marginBottom: 32, maxWidth: 480 }}>
@@ -164,7 +164,8 @@ export function ContactPage() {
               type="submit"
               disabled={!canSend}
               aria-describedby={remaining > 0 ? "contact-cooldown" : "contact-email-status"}
-              style={{ padding: '10px 28px', background: 'var(--sp-green)', border: 'none', borderRadius: 24, color: 'var(--sp-on-green)', fontSize: 14, fontWeight: 700, cursor: isSending ? 'wait' : canSend ? 'pointer' : 'not-allowed', opacity: canSend ? 1 : 0.5, transition: 'opacity .15s' }}
+              className="ui-button ui-button--primary ui-button--rounded contact-submit"
+              aria-busy={isSending}
             >
               {isSending ? 'Checking email and sending...' : remaining > 0 ? 'Please wait' : 'Send message'}
             </button>

@@ -14,13 +14,11 @@ export function FeaturedProjects() {
       {/* ── featured teaser cards ─────────────────────────────────────── */}
       <div className="featured-project-heading">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 }}>
-          <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--sp-white)' }}>Featured projects</h2>
+          <h2 className="section-title">Featured projects</h2>
         </div>
         <button
           onClick={() => navigate('projects')}
-          style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--sp-gray)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .1s', flexShrink: 0, minHeight: 44 }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--sp-white)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--sp-gray)'; }}
+          className="ui-button ui-button--ghost ui-button--sm"
         >
           See all
         </button>

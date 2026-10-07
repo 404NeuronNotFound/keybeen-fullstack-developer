@@ -1,5 +1,7 @@
 import { useNavStore }                                 from './store';
 import { subscribeToBrowserNavigation } from './store/navStore';
+import { focusPageHeading } from './utils/pageFocus';
+import { MotionConfig } from 'framer-motion';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useIsMobile }                                 from './hooks';
 import { Sidebar, Topbar, ProjectBar, BottomNav }      from './components/layout';
@@ -32,47 +34,49 @@ export default function App() {
   const active   = useNavStore((s) => s.active);
   const isMobile = useIsMobile();
   const mainRef = useRef<HTMLElement>(null);
+  const previousPage = useRef(active);
 
   useEffect(subscribeToBrowserNavigation, []);
   useLayoutEffect(() => {
-    if (mainRef.current) mainRef.current.scrollTop = useNavStore.getState().getScrollPosition(active);
+    if (mainRef.current) {
+      mainRef.current.scrollTop = useNavStore.getState().getScrollPosition(active);
+      if (previousPage.current !== active) focusPageHeading(mainRef.current);
+    }
+    previousPage.current = active;
   }, [active]);
 
   return (
-    <div
-      className="app-shell"
-      style={{
-        background:  'var(--sp-black)',
-        color:       'var(--sp-white)',
-        display:     'flex',
-        overflow:    'hidden',
-        fontSize:    14,
-        lineHeight:  1.5,
-      }}
-    >
-      {/* ── left sidebar — desktop / tablet only ── */}
-      {!isMobile && <Sidebar />}
+    <MotionConfig reducedMotion="user">
+      <div className="app-shell">
+        <a className="skip-link" href="#main-content" onClick={event => {
+          event.preventDefault();
+          if (mainRef.current) focusPageHeading(mainRef.current, false);
+        }}>Skip to content</a>
+        {/* ── left sidebar — desktop / tablet only ── */}
+        {!isMobile && <Sidebar />}
 
-      {/* ── right column: topbar · scrollable content · playbar · bottom nav ── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <Topbar />
+        {/* ── right column: topbar · scrollable content · playbar · bottom nav ── */}
+        <div className="app-column">
+          <Topbar />
 
-        <main
-          ref={mainRef}
-          onScroll={event => useNavStore.getState().recordScroll(active, event.currentTarget.scrollTop)}
-          role="main"
-          style={{ flex: 1, overflowY: 'auto', background: 'var(--sp-dark)', WebkitOverflowScrolling: 'touch' }}
-        >
-          {PAGE_MAP[active] ?? <HomePage />}
-        </main>
+          <main
+            ref={mainRef}
+            id="main-content"
+            tabIndex={-1}
+            className="app-content"
+            onScroll={event => useNavStore.getState().recordScroll(active, event.currentTarget.scrollTop)}
+          >
+            {PAGE_MAP[active] ?? <HomePage />}
+          </main>
 
-        <ProjectBar />
+          <ProjectBar />
 
-        {/* ── bottom tab bar — mobile only ── */}
-        {isMobile && <BottomNav />}
+          {/* ── bottom tab bar — mobile only ── */}
+          {isMobile && <BottomNav />}
+        </div>
+        <ToastViewport />
+        <ProjectOverview />
       </div>
-      <ToastViewport />
-      <ProjectOverview />
-    </div>
+    </MotionConfig>
   );
 }

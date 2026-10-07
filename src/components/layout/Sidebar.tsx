@@ -23,7 +23,7 @@ export function Sidebar() {
       </div>
 
       {/* nav */}
-      <nav style={{ marginBottom: 4 }}>
+      <nav className="sidebar-nav" aria-label="Main navigation">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = active === item.id;
@@ -31,9 +31,9 @@ export function Sidebar() {
             <button
               key={item.id}
               onClick={() => navigate(item.id as SectionId)}
-              style={{ display: 'flex', alignItems: 'center', gap: 13, padding: '10px 10px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', color: isActive ? 'var(--sp-white)' : 'var(--sp-gray)', background: isActive ? 'var(--sp-dark3)' : 'transparent', border: 'none', width: '100%', textAlign: 'left', fontSize: 14, fontWeight: 700, transition: 'color .1s, background .1s' }}
-              onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--sp-white)'; }}
-              onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--sp-gray)'; }}
+              type="button"
+              className="sidebar-nav-button"
+              aria-current={isActive ? 'page' : undefined}
             >
               <Icon
                 size={22}

@@ -1,19 +1,5 @@
 import type { ReactNode } from 'react';
 
-interface Props {
-  children: ReactNode;
-  variant?: 'default' | 'green';
-}
-
-const VARIANTS = {
-  default: { background: 'var(--sp-dark3)',             color: 'var(--sp-gray)' },
-  green:   { background: 'rgba(29,185,84,0.15)',      color: 'var(--sp-green)' },
-} as const;
-
-export function Tag({ children, variant = 'default' }: Props) {
-  return (
-    <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 7px', borderRadius: 'var(--radius-sm)', ...VARIANTS[variant] }}>
-      {children}
-    </span>
-  );
+export function Tag({ children, variant = 'default' }: { children: ReactNode; variant?: 'default' | 'green' }) {
+  return <span className={`ui-tag ui-tag--${variant}`}>{children}</span>;
 }

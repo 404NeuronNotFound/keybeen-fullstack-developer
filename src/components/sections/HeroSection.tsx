@@ -78,15 +78,7 @@ export function HeroSection() {
             </span>
           </div>
 
-          <h1
-            style={{
-              fontSize:      'clamp(36px, 9vw, 64px)',
-              fontWeight:    900,
-              letterSpacing: '-2px',
-              color:         'var(--sp-white)',
-              lineHeight:    1,
-              marginBottom:  12,
-            }}
+          <h1 className="artist-title"
           >
             {SITE.fullName}
           </h1>
@@ -122,13 +114,10 @@ export function HeroSection() {
       <div className="hero-actions">
         {/* project overview */}
         <button
-          className="hero-primary-action"
+          className="ui-button ui-button--primary ui-button--rounded hero-primary-action"
           onClick={() => openProject()}
           aria-label="Open project overview"
           title="Read project overview"
-          style={{ background: 'var(--sp-green)', color: 'var(--sp-on-green)', border: 'none', borderRadius: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: 'var(--sp-accent-shadow)', transition: 'transform .12s, background .15s' }}
-          onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.07)'; e.currentTarget.style.background = 'var(--sp-green-h)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'var(--sp-green)'; }}
         >
           <BookOpen size={18} color="var(--sp-on-green)" style={{ flexShrink: 0 }} />
           <span>Read projects</span>
@@ -139,16 +128,13 @@ export function HeroSection() {
 
         {/* share */}
         <button
-          className="hero-share-action"
+          className="ui-button ui-button--ghost ui-button--rounded hero-share-action"
           ref={shareButtonRef}
           onClick={() => setShowCard(true)}
           aria-label="Share profile"
           aria-haspopup="dialog"
           aria-controls="share-profile-dialog"
           aria-expanded={showCard}
-          style={{ display: 'flex', alignItems: 'center', gap: 7, borderRadius: 24, border: '1px solid var(--sp-line)', background: 'var(--sp-overlay)', color: 'var(--sp-gray)', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; e.currentTarget.style.color = 'var(--sp-white)'; e.currentTarget.style.borderColor = 'var(--sp-gray2)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-overlay)'; e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.borderColor = 'var(--sp-line)'; }}
         >
           <Share2 size={15} />
           <span className="hero-share-label">Share</span>
