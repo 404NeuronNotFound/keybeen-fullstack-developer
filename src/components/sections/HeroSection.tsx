@@ -47,6 +47,7 @@ export function HeroSection() {
         >
           <AvatarWithNote
             size={avatarSize}
+            priority
             alt={`${SITE.fullName} photo`}
             
           />

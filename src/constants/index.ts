@@ -47,5 +47,3 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'projects',   icon: LayoutGrid,  label: 'Projects'   },
   { id: 'contact',    icon: Mail,        label: 'Contact'    },
 ];
-
-export const NOW_CODING_INTERVAL = 3_800; // ms

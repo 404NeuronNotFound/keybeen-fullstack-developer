@@ -614,7 +614,7 @@ a { color: inherit; text-decoration: none; }
 .about-intro-panel h1 { font-size: clamp(30px, 4vw, 46px); line-height: 1.12; letter-spacing: -1.2px; }
 .about-intro-copy p:last-child { margin-bottom: 0; }
 .about-portrait { margin: 0; min-width: 0; }
-.about-portrait img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
+.about-portrait img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
 .about-portrait figcaption { padding-top: 14px; display: flex; flex-direction: column; gap: 8px; }
 .about-portrait figcaption > span:first-child { font-size: 16px; font-weight: 700; }
 .about-portrait figcaption > span:last-child { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--sp-gray); }
@@ -882,3 +882,8 @@ a { color: inherit; text-decoration: none; }
   .hero-primary-action { padding: 12px; font-size: 13px; }
   .hero-share-action { width: 48px; padding: 0; }
 }
+
+.share-export-surface { position: fixed; left: -10000px; top: 0; width: 960px; pointer-events: none; }
+.github-retry { margin-top: 16px; }
+.github-refresh-feedback { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; color: var(--sp-gray); font-size: 13px; }
+.github-empty-note { padding: 12px 0 20px; color: var(--sp-gray); font-size: 13px; }

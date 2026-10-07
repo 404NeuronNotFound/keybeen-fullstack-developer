@@ -1,7 +1,7 @@
+import { ResponsiveImage } from '../ui/ResponsiveImage';
 import { Play } from 'lucide-react';
 import { useNavStore, useProjectReaderStore } from '../../store';
 import { projectStatusLabel } from '../../constants/projects';
-import { useNowCoding }                from '../../hooks';
 import { projects }                    from '../../data';
 import { NAV_ITEMS }                   from '../../constants';
 import type { SectionId }              from '../../types';
@@ -10,7 +10,7 @@ export function Sidebar() {
   const navigate     = useNavStore((s) => s.navigate);
   const active       = useNavStore((s) => s.active);
   const openProject = useProjectReaderStore(s => s.openProject);
-  const nowCoding    = useNowCoding();
+  const spotlight = projects.find(project => project.id === 3) ?? projects[0];
 
   return (
     <aside style={{ width: 'var(--sidebar-w)', background: 'var(--sp-black)', display: 'flex', flexDirection: 'column', padding: '18px 8px 0', flexShrink: 0, overflowY: 'auto' }}>
@@ -72,8 +72,9 @@ export function Sidebar() {
 
           }}
         >
-          <img
+          <ResponsiveImage
             src={p.image}
+            sizes="34px"
             alt={p.title}
             style={{
               width: '100%',
@@ -92,9 +93,9 @@ export function Sidebar() {
 
       {/* now coding widget */}
       <div style={{ marginTop: 'auto', padding: '10px 8px', background: 'linear-gradient(to top, rgba(29,185,84,.1), transparent)', borderRadius: 'var(--radius-sm)', marginBottom: 10 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 4, padding: '0 2px' }}>Now coding</div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--sp-white)', padding: '0 2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{nowCoding}</div>
-        <div style={{ fontSize: 11, color: 'var(--sp-gray)', padding: '0 2px', marginBottom: 6 }}>Full-Stack · TypeScript</div>
+        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 4, padding: '0 2px' }}>Project spotlight</div>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--sp-white)', padding: '0 2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{spotlight.shortTitle}</div>
+        <div style={{ fontSize: 11, color: 'var(--sp-gray)', padding: '0 2px', marginBottom: 6 }}>{projectStatusLabel(spotlight.status)}</div>
       </div>
     </aside>
   );

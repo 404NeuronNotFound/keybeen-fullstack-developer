@@ -1,6 +1,7 @@
 import { useNavStore }                                 from './store';
 import { subscribeToBrowserNavigation } from './store/navStore';
 import { focusPageHeading } from './utils/pageFocus';
+import { NAV_ITEMS, SITE } from './constants';
 import { MotionConfig } from 'framer-motion';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useIsMobile }                                 from './hooks';
@@ -37,6 +38,10 @@ export default function App() {
   const previousPage = useRef(active);
 
   useEffect(subscribeToBrowserNavigation, []);
+  useEffect(() => {
+    const label = NAV_ITEMS.find(item => item.id === active)?.label ?? 'Home';
+    document.title = active === 'home' ? `${SITE.name} · Full-Stack Developer` : `${label} · ${SITE.name}`;
+  }, [active]);
   useLayoutEffect(() => {
     if (mainRef.current) {
       mainRef.current.scrollTop = useNavStore.getState().getScrollPosition(active);

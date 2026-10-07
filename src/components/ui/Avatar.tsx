@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { imageAttributes } from '../../utils/imageAssets';
 import { SITE } from '../../constants';
 import { useHoverSound } from '../../hooks/useHoverSound';
 import { useYouTubeBackgroundAudio } from '../../hooks/useYouTubeBackgroundAudio';
@@ -15,6 +16,7 @@ interface Props {
   alt?: string;
   /** Optional controlled reveal for the hero's keyboard/touch button. */
   revealed?: boolean;
+  priority?: boolean;
 }
 
 const GONE_GONE_GONE_VIDEO_ID  = 'oozQ4yV__Vw'; // Phillip Phillips — Gone, Gone, Gone
@@ -33,7 +35,7 @@ const GLITCH_DURATION_MS       = 320;           // matches the glitch overlay's 
  * the audio stays on YouTube's platform, this just remote-controls
  * their official player) seeked to 1:38. Music stops on mouse-leave.
  */
-export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-spiderman.jpeg', alt, revealed }: Props) {
+export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-spiderman.jpeg', alt, revealed, priority = false }: Props) {
   const [errored, setErrored]           = useState(false);
   const [hoverErrored, setHoverErrored] = useState(false);
   const [hov, setHov]                   = useState(false);
@@ -69,10 +71,11 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
         cursor:         'default',
       }}
     >
-      {/* base layer — the reveal image, always mounted underneath */}
-      {!hoverErrored && (
+      {/* Reveal artwork is requested only when the Easter egg is used. */}
+      {isRevealed && !hoverErrored && (
         <img
-          src={hoverSrc}
+          {...imageAttributes(hoverSrc, `${size}px`)}
+          loading="eager" decoding="async"
           alt="Alter ego"
           onError={() => setHoverErrored(true)}
           style={{
@@ -91,7 +94,8 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
         {!errored && (
           <motion.img
             key="primary"
-            src={src}
+            {...imageAttributes(src, `${size}px`)}
+            loading={priority ? 'eager' : 'lazy'} decoding="async" fetchPriority={priority ? 'high' : 'auto'}
             alt={alt ?? `${SITE.fullName} avatar`}
             onError={() => setErrored(true)}
             initial={false}
@@ -123,7 +127,8 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
           >
             {/* red channel, offset + jittering */}
             <motion.img
-              src={src}
+              {...imageAttributes(src, `${size}px`)}
+              loading="eager" decoding="async"
               alt=""
               aria-hidden="true"
               animate={{ x: [-4, 3, -3, 4, -1, 0], y: [1, -2, 1, -1, 0, 0], opacity: [0.75, 0.75, 0.6, 0.35, 0.08, 0] }}
@@ -137,7 +142,8 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
             />
             {/* cyan channel, offset the other way */}
             <motion.img
-              src={src}
+              {...imageAttributes(src, `${size}px`)}
+              loading="eager" decoding="async"
               alt=""
               aria-hidden="true"
               animate={{ x: [4, -3, 3, -4, 1, 0], y: [-1, 2, -1, 1, 0, 0], opacity: [0.75, 0.75, 0.6, 0.35, 0.08, 0] }}
@@ -152,7 +158,8 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
             {/* darkening pass — keeps the channel-split from washing out to white,
                 since red+cyan under an additive "screen" blend sum toward white */}
             <motion.img
-              src={src}
+              {...imageAttributes(src, `${size}px`)}
+              loading="eager" decoding="async"
               alt=""
               aria-hidden="true"
               animate={{ opacity: [0.5, 0.5, 0.4, 0.25, 0.05, 0] }}
@@ -196,8 +203,8 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
         )}
       </AnimatePresence>
 
-      {/* initials fallback — only shown if BOTH images are missing */}
-      {errored && hoverErrored && (
+      {/* Initials keep the portrait usable when the displayed image is missing. */}
+      {errored && (!isRevealed || hoverErrored) && (
         <span
           style={{
             fontSize:      size * 0.32,

@@ -48,7 +48,7 @@ function StatPill({ icon, label, value, sub }: StatPillProps) {
 }
 
 export function GithubActivitySection() {
-  const { days, total, loading, error } = useGithubContributions(SITE.githubUsername);
+  const { days, total, loading, error, retry } = useGithubContributions(SITE.githubUsername);
   const stats = computeContributionStats(days);
 
   return (
@@ -125,12 +125,15 @@ export function GithubActivitySection() {
 
       {/* ── body ───────────────────────────────────────────────────── */}
       <div style={{ padding: '16px 20px 14px' }}>
-        {error ? (
+        {error && days.length === 0 ? (
           <div style={{ padding: '32px 0', textAlign: 'center', fontSize: 13, color: 'var(--sp-gray)' }}>
-            Couldn't reach GitHub — check back later.
+            <p role="status">Couldn't load contribution activity.</p>
+            <button type="button" className="ui-button ui-button--outline github-retry" disabled={loading} onClick={retry}>Retry</button>
           </div>
         ) : (
           <>
+            {error && <div className="github-refresh-feedback" role="status"><p>Refresh failed. Showing previously loaded activity.</p><button type="button" className="ui-button ui-button--outline" disabled={loading} onClick={retry}>Retry</button></div>}
+            {!loading && !error && total === 0 && <p className="github-empty-note" role="status">No public contributions in this period.</p>}
             {/* heatmap */}
             <ContributionHeatmap days={days} loading={loading} />
 

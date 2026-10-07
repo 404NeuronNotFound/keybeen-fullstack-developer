@@ -3,7 +3,8 @@ import type { RefObject } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { X, Download, Link, Check } from 'lucide-react';
 import { FaGithub, FaInstagram } from 'react-icons/fa';
-import { Avatar } from '../../components/ui';
+import { ResponsiveImage } from './ResponsiveImage';
+import { waitForExportAssets } from '../../utils/shareExport';
 import { SITE }   from '../../constants';
 import { CORE_SKILL_NAMES } from '../../data/skills';
 import { toast } from '../../store/toastStore';
@@ -21,7 +22,7 @@ export function ShareCardInner({ forExport = false }: CardProps) {
 
   return (
     <div
-      id="share-card-inner"
+      className="share-card-inner"
       style={{
         width:          forExport ? 480 * scale : '100%',
         background:     'linear-gradient(145deg, var(--sp-dark) 0%, var(--sp-dark2) 60%, rgba(29,185,84,.08) 100%)',
@@ -51,7 +52,7 @@ export function ShareCardInner({ forExport = false }: CardProps) {
       {/* avatar + name row */}
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 18 * scale, marginBottom: 22 * scale }}>
         <div style={{ flexShrink: 0, borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(29,185,84,.4)', width: 64 * scale, height: 64 * scale }}>
-          <Avatar size={64 * scale} />
+          <ResponsiveImage src="/avatar.jpeg" alt={`${SITE.fullName} portrait`} sizes={`${64 * scale}px`} loading="eager" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
         </div>
         <div style={{ flex: `1 1 ${200 * scale}px`, minWidth: 0, overflowWrap: 'anywhere' }}>
           <div style={{ fontSize: 22 * scale, fontWeight: 900, letterSpacing: -1, lineHeight: 1, marginBottom: 4 * scale }}>{SITE.fullName}</div>
@@ -119,7 +120,9 @@ interface ShareCardModalProps {
 export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps) {
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState('');
-  const cardRef = useRef<HTMLDivElement>(null);
+  const exportRef = useRef<HTMLDivElement>(null);
+  const exportInFlight = useRef(false);
+  const [downloading, setDownloading] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -153,20 +156,26 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
   }, []);
 
   const downloadPNG = useCallback(async () => {
+    if (exportInFlight.current) return;
+    exportInFlight.current = true;
+    setDownloading(true);
     setFeedback('Preparing your card download…');
     try {
       const { default: html2canvas } = await import('html2canvas');
-      const node = cardRef.current;
-      if (!node) throw new Error('Card preview unavailable');
+      const node = exportRef.current;
+      if (!node) throw new Error('Card export unavailable');
+      await waitForExportAssets(node);
       const canvas = await html2canvas(node, {
         backgroundColor: null,
-        scale: 2,
+        scale: 1,
         windowWidth: 1024,
-        onclone: (_document, clonedCard) => {
-          // Export a stable 480px layout regardless of the visitor's phone width.
-          clonedCard.style.width = '480px';
-          const inner = clonedCard.querySelector<HTMLElement>('#share-card-inner');
-          if (inner) inner.style.padding = '32px';
+        width: 960,
+        useCORS: true,
+        logging: false,
+        onclone: (clonedDocument, clonedExport) => {
+          // Capture the export independently of the preview dialog's clipping.
+          clonedDocument.body.appendChild(clonedExport);
+          Object.assign(clonedExport.style, { position: 'relative', left: '0', top: '0' });
         },
       });
       const link = document.createElement('a');
@@ -178,6 +187,9 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
     } catch {
       setFeedback("Couldn't create your card. Please try again, or copy the profile link to share it.");
       toast.error({ title: "Couldn't create your card", description: 'Please try again, or copy the profile link to share it.' });
+    } finally {
+      exportInFlight.current = false;
+      setDownloading(false);
     }
   }, []);
 
@@ -200,6 +212,9 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose();
       }}
     >
+      <div ref={exportRef} className="share-export-surface" aria-hidden="true" inert>
+        <ShareCardInner forExport />
+      </div>
       <div
         style={{ width: '100%' }}
       >
@@ -222,7 +237,7 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
 
         {/* card preview + actions — same container so buttons align to card edges */}
         <div style={{ width: '100%' }}>
-          <div ref={cardRef} style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 12 }}>
+          <div style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 12 }}>
             <ShareCardInner />
           </div>
 
@@ -241,10 +256,12 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
             <button
               type="button"
               onClick={downloadPNG}
+              disabled={downloading}
+              aria-busy={downloading}
               className="ui-button ui-button--primary share-action"
             >
               <Download size={15} />
-              Download card
+              {downloading ? 'Preparing card...' : 'Download card'}
             </button>
           </div>
           <p role="status" aria-live="polite" aria-atomic="true" style={{ fontSize: 13, color: 'var(--sp-gray)', lineHeight: 1.5, marginTop: feedback ? 12 : 0 }}>{feedback}</p>

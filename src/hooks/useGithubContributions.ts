@@ -1,59 +1,33 @@
-import { useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
+import { cachedContributions, fetchContributions } from '../utils/githubContributions';
 
 export interface ContributionDay {
-  date:  string; // "YYYY-MM-DD"
+  date: string;
   count: number;
-  /** 0 (none) – 4 (most active), as classified by the API */
   level: 0 | 1 | 2 | 3 | 4;
 }
 
-interface UseGithubContributionsResult {
-  days:    ContributionDay[];
-  total:   number;
-  loading: boolean;
-  /** true if the request failed or the user has no public contributions */
-  error:   boolean;
-}
-
-/**
- * Fetches the last 12 months of GitHub contribution data for `username`
- * via the public github-contributions-api (no auth/token required).
- */
-export function useGithubContributions(username: string): UseGithubContributionsResult {
-  const [days, setDays]       = useState<ContributionDay[]>([]);
-  const [total, setTotal]     = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState(false);
-
+export function useGithubContributions(username: string) {
+  const [attempt, setAttempt] = useState(0);
+  const [result, setResult] = useState(() => {
+    const cached = cachedContributions(username);
+    return { username, days: cached?.days ?? [], total: cached?.total ?? 0, loading: !cached, error: false };
+  });
+  const retry = useCallback(() => setAttempt(value => value + 1), []);
   useEffect(() => {
-    let cancelled = false;
-
+    const controller = new AbortController();
     async function load() {
-      setLoading(true);
-      setError(false);
-
+      setResult(previous => ({ ...previous, username, loading: true, error: false, ...(previous.username !== username ? { days: [], total: 0 } : {}) }));
       try {
-        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-
-        const data = await res.json();
-        const contributions: ContributionDay[] = data?.contributions ?? [];
-        const totalCount: number = data?.total?.lastYear ?? contributions.reduce((sum, d) => sum + d.count, 0);
-
-        if (!cancelled) {
-          setDays(contributions);
-          setTotal(totalCount);
-        }
+        const data = await fetchContributions(username, controller.signal, attempt > 0);
+        if (!controller.signal.aborted) setResult({ username, ...data, loading: false, error: false });
       } catch {
-        if (!cancelled) setError(true);
-      } finally {
-        if (!cancelled) setLoading(false);
+        if (!controller.signal.aborted) setResult(previous => ({ ...previous, loading: false, error: true }));
       }
     }
-
-    load();
-    return () => { cancelled = true; };
-  }, [username]);
-
-  return { days, total, loading, error };
+    void load();
+    return () => controller.abort();
+  }, [username, attempt]);
+  const current = result.username === username ? result : { days: [], total: 0, loading: true, error: false };
+  return { ...current, retry };
 }

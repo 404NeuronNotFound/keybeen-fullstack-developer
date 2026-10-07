@@ -1,4 +1,5 @@
 import { MapPin, Film, Car, Coffee, MessageCircle, Sparkles, Code2 } from 'lucide-react';
+import { ResponsiveImage } from '../components/ui/ResponsiveImage';
 import { SITE } from '../constants';
 import { PageNextStep } from '../components/ui/PageNextStep';
 
@@ -7,7 +8,7 @@ export function AboutPage() {
     <div className="page about-page">
       <section className="about-intro-panel">
         <figure className="about-portrait">
-          <img src="/avatar.jpeg" alt="Keybeen" />
+          <ResponsiveImage src="/avatar.jpeg" alt="Keybeen" sizes="(max-width: 600px) 88px, 240px" />
           <figcaption><span>Keybeen</span><span><MapPin size={13} aria-hidden="true" />{SITE.location}</span></figcaption>
         </figure>
         <div className="about-intro-copy">

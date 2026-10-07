@@ -4,6 +4,7 @@ import { NoteBubble } from './NoteBubble';
 
 interface Props {
   size?: number;
+  priority?: boolean;
   src?: string;
   hoverSrc?: string;
   alt?: string;
@@ -21,6 +22,7 @@ interface Props {
  */
 export function AvatarWithNote({
   size = 96,
+  priority = false,
   src,
   hoverSrc,
   alt,
@@ -50,7 +52,7 @@ export function AvatarWithNote({
       style={{ position: 'relative', display: 'block', overflow: 'visible', border: 'none', borderRadius: '50%', padding: 0, background: 'transparent', cursor: 'pointer' }}
     >
       <NoteBubble show={revealed} text={note} />
-      <Avatar size={size} src={src} hoverSrc={hoverSrc} alt={alt} revealed={revealed} />
+      <Avatar priority={priority} size={size} src={src} hoverSrc={hoverSrc} alt={alt} revealed={revealed} />
     </button>
   );
 }
