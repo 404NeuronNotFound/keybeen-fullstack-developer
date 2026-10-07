@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, ChevronDown, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, Moon, Sun, Volume2, VolumeX } from 'lucide-react';
 import { useNavStore, useThemeStore, useSoundStore } from '../../store';
 import { primeAudio } from '../../hooks/useHoverSound';
 import { SITE }          from '../../constants';
@@ -33,7 +33,7 @@ export function Topbar() {
   const canBack    = useNavStore((s) => s.histIdx > 0);
   const canForward = useNavStore((s) => s.histIdx < s.history.length - 1);
   const theme      = useThemeStore((s) => s.theme);
-  // const toggleTheme = useThemeStore((s) => s.toggleTheme);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const isLight    = theme === 'light';
 
   const muted       = useSoundStore((s) => s.muted || !s.musicOptedIn);
@@ -53,12 +53,14 @@ export function Topbar() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' }}>
         {/* theme toggle */}
-        {/* <button
+        <button
+          type="button"
+          className="theme-toggle"
           onClick={toggleTheme}
           aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
           style={{
-            width:          34,
-            height:         34,
+            width:          44,
+            height:         44,
             borderRadius:   '50%',
             border:         `1px solid var(--sp-dark3)`,
             background:     'var(--sp-dark2)',
@@ -74,7 +76,7 @@ export function Topbar() {
           onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.transform = 'rotate(0)'; }}
         >
           {isLight ? <Moon size={16} /> : <Sun size={16} />}
-        </button> */}
+        </button>
 
         {/* sound toggle — the onClick here is a genuine user gesture,
             which is what actually unlocks AudioContext in the browser.
