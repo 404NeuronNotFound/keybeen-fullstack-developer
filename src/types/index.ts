@@ -68,6 +68,9 @@ export interface SiteConfig {
   fullName: string;
   role: string;
   tagline: string;
+  intro: string;
+  personalNote: string;
+  resumeUrl?: string;
   location: string;
   email: string;
   github: string;

@@ -54,7 +54,7 @@ export function HeroSection() {
 
         {/* ── Text info ── */}
         <div style={{ flex: 1, minWidth: isMobile ? '100%' : 240 }}>
-          {/* verified badge — just like Spotify */}
+          {/* independent developer badge — just like Spotify */}
           <div
             style={{
               display:        'flex',
@@ -64,7 +64,7 @@ export function HeroSection() {
               marginBottom:   10,
             }}
           >
-            <BadgeCheck size={18} fill="var(--sp-green)" color="var(--sp-on-green)" />
+            <BadgeCheck size={18} fill="var(--sp-green)" color="var(--sp-on-green)" aria-hidden="true" />
             <span
               style={{
                 fontSize:      11,
@@ -74,7 +74,7 @@ export function HeroSection() {
                 color:         'var(--sp-white)',
               }}
             >
-              Verified Developer
+              Independent developer
             </span>
           </div>
 
@@ -91,9 +91,9 @@ export function HeroSection() {
             {SITE.fullName}
           </h1>
 
-          <p style={{ fontSize: 'clamp(13px, 2.5vw, 16px)', color: 'var(--sp-gray)', marginBottom: 0 }}>
-            {SITE.tagline} · {SITE.location}
-          </p>
+          <p className="hero-role">{SITE.role}</p>
+          <p className="hero-intro">{SITE.intro}</p>
+          <p className="hero-personal-note">{SITE.personalNote}</p>
         </div>
       </div>
 

@@ -1,7 +1,8 @@
-import { ChevronLeft, ChevronRight, Moon, Sun, Volume2, VolumeX } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight, ChevronDown, Moon, Sun, Volume2, VolumeX, User, Mail, FileDown } from 'lucide-react';
 import { useNavStore, useThemeStore, useSoundStore } from '../../store';
 import { primeAudio } from '../../hooks/useHoverSound';
-import { SITE }          from '../../constants';
+import { SITE, NAV_ITEMS } from '../../constants';
 import { Avatar }        from '../../components/ui';
 import type { LucideIcon } from 'lucide-react';
 
@@ -28,6 +29,12 @@ function ArrowBtn({ label, onClick, enabled, Icon }: ArrowBtnProps) {
 }
 
 export function Topbar() {
+  const active = useNavStore((s) => s.active);
+  const navigate = useNavStore((s) => s.navigate);
+  const pageTitle = NAV_ITEMS.find(item => item.id === active)?.label ?? 'Home';
+  const profileRef = useRef<HTMLDivElement>(null);
+  const profileTriggerRef = useRef<HTMLButtonElement>(null);
+  const [profileOpen, setProfileOpen] = useState(false);
   const back       = useNavStore((s) => s.back);
   const forward    = useNavStore((s) => s.forward);
   const canBack    = useNavStore((s) => s.histIdx > 0);
@@ -38,17 +45,22 @@ export function Topbar() {
 
   const muted       = useSoundStore((s) => s.muted || !s.musicOptedIn);
   const toggleMuted = useSoundStore((s) => s.toggleMuted);
+  const toggleSound = () => { toggleMuted(); primeAudio(); };
+  const goTo = (section: 'about' | 'contact') => {
+    profileRef.current?.hidePopover();
+    profileTriggerRef.current?.focus({ preventScroll: true });
+    navigate(section);
+  };
 
   return (
-    <div style={{ background: 'var(--sp-topbar)', backdropFilter: 'blur(12px)', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--sp-dark3)', flexShrink: 0, height: 'var(--topbar-h)', gap: 8 }}>
+    <header className="topbar">
       <div style={{ display: 'flex', gap: 8 }} className="hide-on-mobile">
         <ArrowBtn label="Go back"    onClick={back}    enabled={canBack}    Icon={ChevronLeft} />
         <ArrowBtn label="Go forward" onClick={forward} enabled={canForward} Icon={ChevronRight} />
       </div>
 
-      {/* mobile brand mark */}
-      <span className="hide-on-desktop" style={{ fontSize: 15, fontWeight: 900, color: 'var(--sp-white)', letterSpacing: '-.3px' }}>
-        Keybeen
+      <span className="topbar-page-title" aria-live="polite" aria-atomic="true">
+        {pageTitle}
       </span>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' }}>
@@ -82,11 +94,11 @@ export function Topbar() {
             which is what actually unlocks AudioContext in the browser.
             Hover sounds will not play until this has been clicked once. */}
         <button
-          onClick={() => { toggleMuted(); primeAudio(); }}
+          onClick={toggleSound}
           aria-label={muted ? 'Unmute sounds and avatar music' : 'Mute sounds and avatar music'}
           style={{
-            width:          34,
-            height:         34,
+            width:          44,
+            height:         44,
             borderRadius:   '50%',
             border:         `1px solid var(--sp-dark3)`,
             background:     'var(--sp-dark2)',
@@ -104,14 +116,33 @@ export function Topbar() {
           {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
         </button>
 
-        {/* user pill */}
-        <div
-          style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--sp-dark3)', padding: '4px 10px 4px 4px', borderRadius: 24 }}
+        <button
+          type="button"
+          id="profile-menu-trigger"
+          ref={profileTriggerRef}
+          className="profile-menu-trigger"
+          popoverTarget="profile-menu"
+          aria-controls="profile-menu"
+          aria-expanded={profileOpen}
+          aria-label={profileOpen ? 'Close profile options' : 'Open profile options'}
         >
-          <Avatar size={28} />
-          <span className="hide-on-mobile" style={{ fontSize: 13, fontWeight: 700, color: 'var(--sp-white)' }}>{SITE.role}</span>
-        </div>
+          <span aria-hidden="true" style={{ pointerEvents: 'none' }}><Avatar size={28} /></span>
+          <span className="hide-on-mobile">{SITE.name}</span>
+          <ChevronDown size={14} aria-hidden="true" className="hide-on-mobile" />
+        </button>
       </div>
-    </div>
+
+      <div id="profile-menu" ref={profileRef} className="profile-menu" popover="auto" role="group" aria-labelledby="profile-menu-title" onToggle={event => setProfileOpen(event.newState === 'open')}>
+        <p id="profile-menu-title" className="profile-menu-title">{SITE.name}</p>
+        <button type="button" onClick={() => goTo('about')}><User size={16} aria-hidden="true" />About me</button>
+        <button type="button" onClick={() => goTo('contact')}><Mail size={16} aria-hidden="true" />Contact</button>
+        {SITE.resumeUrl ? (
+          <a href={SITE.resumeUrl} download onClick={() => profileRef.current?.hidePopover()}><FileDown size={16} aria-hidden="true" />Download resume</a>
+        ) : (
+          <button type="button" onClick={() => goTo('contact')}><FileDown size={16} aria-hidden="true" />Request resume</button>
+        )}
+        <button type="button" onClick={toggleSound} aria-pressed={!muted}>{muted ? <VolumeX size={16} aria-hidden="true" /> : <Volume2 size={16} aria-hidden="true" />}{muted ? 'Sounds off · enable' : 'Sounds on · mute'}</button>
+      </div>
+    </header>
   );
 }

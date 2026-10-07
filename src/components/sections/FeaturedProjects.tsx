@@ -1,5 +1,5 @@
 import { Clock } from 'lucide-react';
-import { useNavStore }       from '../../store';
+import { useNavStore } from '../../store';
 import { TeaserCard, TeaserRow, Tag } from '../../components/ui';
 import { GithubActivitySection } from './GithubActivitySection';
 import { projects }          from '../../data';
@@ -53,6 +53,7 @@ export function FeaturedProjects() {
           ))}
         </tbody>
       </table>
+
     </div>
   );
 }

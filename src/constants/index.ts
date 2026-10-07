@@ -11,6 +11,8 @@ export const SITE: SiteConfig = {
   fullName: 'Keybeen',
   role:     'AI Assisted Full-Stack App & Web Developer',
   tagline:  'Building things for the web & beyond',
+  intro: 'I build practical web and mobile apps for schools, small shops, and everyday problems.',
+  personalNote: 'Based in Cagayan de Oro. My coding journey started with a simple “Hello, World!”',
   location: 'Cagayan De Oro, PH',
   email:    'keybeen.webdeveloper@gmail.com',
   github:   `https://github.com/${GITHUB_USERNAME}`,

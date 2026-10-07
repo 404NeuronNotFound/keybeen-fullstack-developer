@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface Props {
   show: boolean;
@@ -13,18 +13,22 @@ interface Props {
  * renders in front of the photo via z-index instead.
  */
 export function NoteBubble({ show, text }: Props) {
+  const reducedMotion = useReducedMotion() ?? true;
   return (
     <AnimatePresence>
       {show && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.4, y: 8 }}
+        <motion.span
+          className="portrait-note"
+          initial={reducedMotion ? false : { opacity: 0, scale: 0.4, y: 8 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.5, y: 6, transition: { duration: 0.15 } }}
-          transition={{ type: 'spring', stiffness: 380, damping: 22 }}
+          exit={reducedMotion ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0, scale: 0.5, y: 6, transition: { duration: 0.15 } }}
+          transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 22 }}
           style={{
             position: 'absolute',
             bottom: '74%',
-            left: '32%',
+            width: 'max-content',
+            maxWidth: 'min(260px, calc(100vw - 40px))',
+            pointerEvents: 'none',
             zIndex: 60, // above Avatar's own internal layers (glitch overlay maxes at 3)
             transformOrigin: 'bottom left',
             filter: 'drop-shadow(0 10px 22px rgba(0,0,0,.5))', // shadow follows the COMBINED bubble+tail silhouette
@@ -44,26 +48,27 @@ export function NoteBubble({ show, text }: Props) {
             />
           </svg>
 
-          <div
+          <span
             style={{
               position: 'relative',
+              display: 'block',
               background: 'var(--sp-green)',
-              color: '#04140a',
+              color: 'var(--sp-on-green)',
               fontSize: 15,
               fontWeight: 800,
               lineHeight: 1.3,
               padding: '18px 24px',
               borderRadius: 28,
               maxWidth: 260,
-              width: 'max-content',
+              width: '100%',
               whiteSpace: 'normal',
               textAlign: 'left',
               boxShadow: '0 0 0 1px rgba(255,255,255,.08)',
             }}
           >
             {text}
-          </div>
-        </motion.div>
+          </span>
+        </motion.span>
       )}
     </AnimatePresence>
   );

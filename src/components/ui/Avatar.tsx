@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { SITE } from '../../constants';
 import { useHoverSound } from '../../hooks/useHoverSound';
 import { useYouTubeBackgroundAudio } from '../../hooks/useYouTubeBackgroundAudio';
@@ -13,6 +13,8 @@ interface Props {
    *  Drop your own image here — this component won't source one for you. */
   hoverSrc?: string;
   alt?: string;
+  /** Optional controlled reveal for the hero's keyboard/touch button. */
+  revealed?: boolean;
 }
 
 const GONE_GONE_GONE_VIDEO_ID  = 'oozQ4yV__Vw'; // Phillip Phillips — Gone, Gone, Gone
@@ -31,28 +33,27 @@ const GLITCH_DURATION_MS       = 320;           // matches the glitch overlay's 
  * the audio stays on YouTube's platform, this just remote-controls
  * their official player) seeked to 1:38. Music stops on mouse-leave.
  */
-export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-spiderman.jpeg', alt }: Props) {
+export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-spiderman.jpeg', alt, revealed }: Props) {
   const [errored, setErrored]           = useState(false);
   const [hoverErrored, setHoverErrored] = useState(false);
   const [hov, setHov]                   = useState(false);
+  const reducedMotion = useReducedMotion() ?? true;
+  const isRevealed = revealed ?? hov;
   const { playGlitch }   = useHoverSound();
   const { playFrom, stop } = useYouTubeBackgroundAudio(GONE_GONE_GONE_VIDEO_ID);
 
-  const handleEnter = () => {
-    setHov(true);
-    playGlitch();
-    playFrom(GONE_GONE_GONE_START_SEC, GLITCH_DURATION_MS);
-  };
-
-  const handleLeave = () => {
-    setHov(false);
-    stop();
-  };
+  useEffect(() => {
+    if (isRevealed) {
+      if (!reducedMotion) playGlitch();
+      playFrom(GONE_GONE_GONE_START_SEC, reducedMotion ? 0 : GLITCH_DURATION_MS);
+    } else stop();
+    return stop;
+  }, [isRevealed, reducedMotion, playGlitch, playFrom, stop]);
 
   return (
-    <div
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
+    <span
+      onMouseEnter={() => { if (revealed === undefined) setHov(true); }}
+      onMouseLeave={() => { if (revealed === undefined) setHov(false); }}
       style={{
         width:          size,
         height:         size,
@@ -94,8 +95,8 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
             alt={alt ?? `${SITE.fullName} avatar`}
             onError={() => setErrored(true)}
             initial={false}
-            animate={{ opacity: hov ? 0 : 1 }}
-            transition={{ duration: 0.32, delay: hov ? 0.22 : 0 }}
+            animate={{ opacity: isRevealed ? 0 : 1 }}
+            transition={{ duration: reducedMotion ? 0 : 0.32, delay: isRevealed && !reducedMotion ? 0.22 : 0 }}
             style={{
               position:       'absolute',
               inset:          0,
@@ -111,8 +112,8 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
 
       {/* glitch overlay — plays only during the transition burst on hover */}
       <AnimatePresence>
-        {hov && !errored && (
-          <motion.div
+        {isRevealed && !errored && !reducedMotion && (
+          <motion.span
             key="glitch"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -165,7 +166,7 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
             />
 
             {/* halftone dot screen — mimics comic-print dot patterning */}
-            <motion.div
+            <motion.span
               animate={{ opacity: [0.55, 0.55, 0.3, 0.15, 0] }}
               transition={{ duration: 0.3 }}
               style={{
@@ -179,7 +180,7 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
             />
 
             {/* scanline flicker */}
-            <motion.div
+            <motion.span
               animate={{ opacity: [0.3, 0.1, 0.35, 0.05, 0] }}
               transition={{ duration: 0.3 }}
               style={{
@@ -191,7 +192,7 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
                 mixBlendMode: 'overlay',
               }}
             />
-          </motion.div>
+          </motion.span>
         )}
       </AnimatePresence>
 
@@ -211,6 +212,6 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
         </span>
       )}
 
-    </div>
+    </span>
   );
 }
