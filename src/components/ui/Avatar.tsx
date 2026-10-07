@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SITE } from '../../constants';
 import { useHoverSound } from '../../hooks/useHoverSound';
@@ -27,7 +27,7 @@ const GLITCH_DURATION_MS       = 320;           // matches the glitch overlay's 
  * comic-print glitch effect (RGB channel split, halftone dot screen,
  * scanline flicker) plays over the photo while it dissolves away to
  * reveal `hoverSrc` underneath, and once the glitch finishes, music
- * starts playing via a hidden YouTube embed (not a downloaded file —
+ * starts playing after sound opt-in via a shared hidden YouTube embed (not a downloaded file —
  * the audio stays on YouTube's platform, this just remote-controls
  * their official player) seeked to 1:38. Music stops on mouse-leave.
  */
@@ -37,18 +37,15 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
   const [hov, setHov]                   = useState(false);
   const { playGlitch }   = useHoverSound();
   const { playFrom, stop } = useYouTubeBackgroundAudio(GONE_GONE_GONE_VIDEO_ID);
-  const playTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleEnter = () => {
     setHov(true);
     playGlitch();
-    if (playTimer.current) clearTimeout(playTimer.current);
-    playTimer.current = window.setTimeout(() => playFrom(GONE_GONE_GONE_START_SEC), GLITCH_DURATION_MS);
+    playFrom(GONE_GONE_GONE_START_SEC, GLITCH_DURATION_MS);
   };
 
   const handleLeave = () => {
     setHov(false);
-    if (playTimer.current) { clearTimeout(playTimer.current); playTimer.current = null; }
     stop();
   };
 
@@ -214,15 +211,6 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
         </span>
       )}
 
-      {/* hidden YouTube player — portaled to document.body so React never has
-          to reconcile DOM siblings around a node that YouTube's own script
-          mutates directly (that mismatch is what caused the insertBefore
-          crash when it lived inline here, next to the AnimatePresence
-          glitch overlay). */}
-      {/* {createPortal(
-        <div id={containerId} style={{ position: 'fixed', top: -9999, left: -9999, width: 1, height: 1 }} />,
-        document.body
-      )} */}
     </div>
   );
 }

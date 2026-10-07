@@ -19,6 +19,8 @@ function getCtx(): AudioContext {
  * the session. After that, hover sounds will play normally.
  */
 export function primeAudio() {
+  const { muted, musicOptedIn } = useSoundStore.getState();
+  if (muted || !musicOptedIn) return;
   const ctx = getCtx();
   if (ctx.state === 'suspended') {
     ctx.resume();
@@ -94,7 +96,7 @@ function playGlitchBurst(ctx: AudioContext) {
  * interactions have a subtly different pitch/character.
  */
 export function useHoverSound() {
-  const muted = useSoundStore((s) => s.muted);
+  const muted = useSoundStore((s) => s.muted || !s.musicOptedIn);
   const lastPlayed = useRef(0);
 
   const play = useCallback(
@@ -137,15 +139,8 @@ export function useHoverSound() {
   return { play, playGlitch };
 }
 
-// Auto-unlock audio on the very first real click/keypress ANYWHERE on the
-// page — not just the speaker button. Browsers still require some genuine
-// user gesture to unlock AudioContext each session, but there's no reason
-// that gesture has to specifically be the mute toggle: if someone's saved
-// preference is already "unmuted" from a previous visit, clicking a nav
-// link or a project card should be enough to make hover sounds actually
-// work, instead of silently doing nothing until they happen to click the
-// speaker icon specifically. This runs once at module load (same pattern
-// as the theme store's initial `applyTheme` call outside React).
+// A real gesture can unlock the context only after this visit's sound opt-in.
+// The speaker button also primes it directly when enabling sound.
 if (typeof window !== 'undefined') {
   const unlockOnFirstInteraction = () => {
     primeAudio();

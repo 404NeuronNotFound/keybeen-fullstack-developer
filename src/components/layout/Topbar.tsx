@@ -36,7 +36,7 @@ export function Topbar() {
   // const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const isLight    = theme === 'light';
 
-  const muted       = useSoundStore((s) => s.muted);
+  const muted       = useSoundStore((s) => s.muted || !s.musicOptedIn);
   const toggleMuted = useSoundStore((s) => s.toggleMuted);
 
   return (
@@ -80,8 +80,8 @@ export function Topbar() {
             which is what actually unlocks AudioContext in the browser.
             Hover sounds will not play until this has been clicked once. */}
         <button
-          onClick={() => { primeAudio(); toggleMuted(); }}
-          aria-label={muted ? 'Unmute hover sounds' : 'Mute hover sounds'}
+          onClick={() => { toggleMuted(); primeAudio(); }}
+          aria-label={muted ? 'Unmute sounds and avatar music' : 'Mute sounds and avatar music'}
           style={{
             width:          34,
             height:         34,
