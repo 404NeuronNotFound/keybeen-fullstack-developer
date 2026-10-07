@@ -30,8 +30,8 @@ function ArrowBtn({ label, onClick, enabled, Icon }: ArrowBtnProps) {
 export function Topbar() {
   const back       = useNavStore((s) => s.back);
   const forward    = useNavStore((s) => s.forward);
-  const canBack    = useNavStore((s) => s.canBack)();
-  const canForward = useNavStore((s) => s.canForward)();
+  const canBack    = useNavStore((s) => s.histIdx > 0);
+  const canForward = useNavStore((s) => s.histIdx < s.history.length - 1);
   const theme      = useThemeStore((s) => s.theme);
   // const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const isLight    = theme === 'light';
