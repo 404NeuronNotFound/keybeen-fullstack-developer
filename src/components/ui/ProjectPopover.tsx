@@ -1,4 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Play, Lock, ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import type { Project } from '../../types';
@@ -11,108 +12,120 @@ interface Props {
   onPlay?:  (p: Project) => void;
 }
 
-interface PopoverPosition {
-  top:   number;
-  left:  number;
-  above: boolean;
-}
-
 const DELAY_MS  = 280;
+const CLOSE_DELAY_MS = 240;
 const POPOVER_W = 260;
-const POPOVER_H = 330;
 const GAP       = 12;
 
-function calcPosition(card: HTMLElement): PopoverPosition {
+function positionPreview(card: HTMLElement, preview: HTMLElement) {
   const rect = card.getBoundingClientRect();
-
-  // center horizontally over card, clamp to viewport
-  const idealLeft = rect.left + rect.width / 2 - POPOVER_W / 2;
-  const left = Math.max(8, Math.min(idealLeft, window.innerWidth - POPOVER_W - 8));
-
-  // prefer above card, fall back to below
-  const above = rect.top >= POPOVER_H + GAP;
-  const rawTop = above ? rect.top - POPOVER_H - GAP : rect.bottom + GAP;
-  const top = Math.max(8, rawTop);
-
-  return { top, left, above };
+  const { width, height } = preview.getBoundingClientRect();
+  const idealLeft = rect.left + rect.width / 2 - width / 2;
+  const left = Math.max(8, Math.min(idealLeft, window.innerWidth - width - 8));
+  const aboveSpace = rect.top - GAP - 8;
+  const belowSpace = window.innerHeight - rect.bottom - GAP - 8;
+  const above = aboveSpace >= height || (belowSpace < height && aboveSpace > belowSpace);
+  const rawTop = above ? rect.top - height - GAP : rect.bottom + GAP;
+  const top = Math.max(8, Math.min(rawTop, window.innerHeight - height - 8));
+  preview.style.top = `${top}px`;
+  preview.style.left = `${left}px`;
+  preview.style.visibility = 'visible';
 }
 
 export function ProjectPopover({ project, locked = false, children, onPlay }: Props) {
   const githubUrl = getProjectUrl(project.github);
   const liveUrl = getProjectUrl(project.live);
   const [visible, setVisible] = useState(false);
-  const [pos,     setPos]     = useState<PopoverPosition | null>(null);
   const wrapRef  = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelTimers = useCallback(() => {
+    if (openTimer.current !== null) clearTimeout(openTimer.current);
+    if (closeTimer.current !== null) clearTimeout(closeTimer.current);
+    openTimer.current = closeTimer.current = null;
+  }, []);
 
   const show = useCallback(() => {
-    timerRef.current = setTimeout(() => {
-      if (wrapRef.current) {
-        setPos(calcPosition(wrapRef.current));
-        setVisible(true);
-      }
+    cancelTimers();
+    if (visible) return;
+    openTimer.current = setTimeout(() => {
+      openTimer.current = null;
+      setVisible(true);
     }, DELAY_MS);
-  }, []);
+  }, [cancelTimers, visible]);
 
   const hide = useCallback(() => {
-    if (timerRef.current) clearTimeout(timerRef.current);
+    cancelTimers();
     setVisible(false);
-  }, []);
+  }, [cancelTimers]);
+
+  const scheduleHide = useCallback(() => {
+    cancelTimers();
+    closeTimer.current = setTimeout(() => {
+      closeTimer.current = null;
+      // Keep links available while a keyboard user is interacting with them.
+      if (!previewRef.current?.contains(document.activeElement)) setVisible(false);
+    }, CLOSE_DELAY_MS);
+  }, [cancelTimers]);
+
+  useEffect(() => cancelTimers, [cancelTimers]);
+
+  useLayoutEffect(() => {
+    if (!visible) return;
+    const card = wrapRef.current;
+    const preview = previewRef.current;
+    if (!card || !preview) return;
+    const reposition = () => positionPreview(card, preview);
+    reposition();
+    const observer = new ResizeObserver(reposition);
+    observer.observe(preview);
+    window.addEventListener('resize', reposition);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', reposition);
+    };
+  }, [visible]);
 
   // hide when main scrolls so popover never drifts
   useEffect(() => {
     const el = document.querySelector('main');
-    if (!el) return;
-    el.addEventListener('scroll', hide, { passive: true });
-    return () => el.removeEventListener('scroll', hide);
+    el?.addEventListener('scroll', hide, { passive: true });
+    window.addEventListener('scroll', hide, { passive: true });
+    return () => {
+      el?.removeEventListener('scroll', hide);
+      window.removeEventListener('scroll', hide);
+    };
   }, [hide]);
 
   return (
-    <div ref={wrapRef} className="project-card-shell" onMouseEnter={show} onMouseLeave={hide} style={{ position: 'relative' }}>
+    <div ref={wrapRef} className="project-card-shell" onMouseEnter={show} onMouseLeave={scheduleHide} style={{ position: 'relative' }}>
       {children}
 
-      {visible && pos && (
+      {visible && createPortal(
         <div
+          ref={previewRef}
           className="popover-enter"
-          onMouseEnter={show}
-          onMouseLeave={hide}
+          onMouseEnter={cancelTimers}
+          onMouseLeave={scheduleHide}
+          onFocus={cancelTimers}
+          onBlur={scheduleHide}
+          onKeyDown={e => { if (e.key === 'Escape') hide(); }}
           style={{
             position:        'fixed',
-            top:             pos.top,
-            left:            pos.left,
+            visibility:      'hidden',
             width:           POPOVER_W,
+            maxWidth:        'calc(100vw - 16px)',
+            maxHeight:       'calc(100dvh - 16px)',
             background:      'var(--sp-dark2)',
             border:          '1px solid var(--sp-dark3)',
             borderRadius:    'var(--radius-md)',
             boxShadow:       'var(--sp-modal-shadow)',
             zIndex:          9998,
-            overflow:        'visible',
-            transformOrigin: pos.above ? 'bottom center' : 'top center',
+            overflow:        'auto',
           }}
         >
-          {/* border arrow */}
-          <div style={{
-            position:  'absolute',
-            left:      '50%',
-            transform: 'translateX(-50%)',
-            width:     0,
-            height:    0,
-            ...(pos.above
-              ? { bottom: -7, borderTop: '7px solid var(--sp-dark3)', borderLeft: '7px solid transparent', borderRight: '7px solid transparent' }
-              : { top:    -7, borderBottom: '7px solid var(--sp-dark3)', borderLeft: '7px solid transparent', borderRight: '7px solid transparent' }),
-          }} />
-          {/* fill arrow */}
-          <div style={{
-            position:  'absolute',
-            left:      '50%',
-            transform: 'translateX(-50%)',
-            width:     0,
-            height:    0,
-            zIndex:    1,
-            ...(pos.above
-              ? { bottom: -5, borderTop: '6px solid var(--sp-dark2)', borderLeft: '6px solid transparent', borderRight: '6px solid transparent' }
-              : { top:    -5, borderBottom: '6px solid var(--sp-dark2)', borderLeft: '6px solid transparent', borderRight: '6px solid transparent' }),
-          }} />
 
           {/* rounded inner clip */}
           <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
@@ -192,7 +205,7 @@ export function ProjectPopover({ project, locked = false, children, onPlay }: Pr
 
           </div>
         </div>
-      )}
+      , document.body)}
     </div>
   );
 }
