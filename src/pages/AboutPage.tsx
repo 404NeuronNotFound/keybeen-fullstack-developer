@@ -15,9 +15,9 @@ export function AboutPage() {
         <p>On projects such as Findify and CoinFession, I handle the planning, coding, review, testing, and debugging. I use AI as an assistant throughout that process, while keeping responsibility for the work and the decisions.</p>
       </section>
       <section className="about-note-section">
-        <h2>Outside the editor</h2>
-        <p>Outside development, I edit videos for international clients and enjoy exploring outdoors around {SITE.location}. Working with video gives me another way to tell stories and make something people can connect with.</p>
-        <p>I'm also a student of <strong>Stoicism</strong>. It keeps me grounded when things are outside my control, including a deploy breaking at midnight.</p>
+        <h2>Outside of technology</h2>
+        <p><strong>Video editing is my passion.</strong> I love shaping footage into stories, and I also edit videos for international clients. Cars and motorcycles are another hobby of mine.</p>
+        <p>I like caffeine and philosophical conversations about life. I'm drawn to questions about how we live, what matters to us, and how we make sense of it all.</p>
       </section>
       {SITE.resumeUrl && <a className="project-reader-button" href={SITE.resumeUrl} download>Download resume</a>}
       <PageNextStep title="Let's build something" description="Have a practical problem or an idea you want to talk through?" page="contact" label="Get in touch" />
