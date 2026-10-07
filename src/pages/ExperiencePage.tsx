@@ -1,100 +1,49 @@
 import { useState } from 'react';
-import { GraduationCap, Monitor, Sparkles, ChevronDown, CpuIcon  } from 'lucide-react';
+import { GraduationCap, Monitor, Sparkles, ChevronDown, Cpu, ListMusic, ArrowUpRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ExperienceItem } from '../types';
 import { Tag } from '../components/ui';
 import { PageNextStep } from '../components/ui/PageNextStep';
 import { experience } from '../data';
 
-/** One icon + gradient per entry, keeping the Spotify "cover art" feel */
 const ICONS: Record<ExperienceItem['icon'], LucideIcon> = {
-  cpu: CpuIcon,
-  monitor: Monitor,
-  graduation: GraduationCap,
-  sparkles: Sparkles,
+  cpu: Cpu, monitor: Monitor, graduation: GraduationCap, sparkles: Sparkles,
 };
-const GRADIENTS = ['emerald', 'blue', 'purple'];
 
 export function ExperiencePage() {
   const [openId, setOpenId] = useState<number | null>(experience[0]?.id ?? null);
-  const toggle = (id: number) => setOpenId((prev) => (prev === id ? null : id));
-
-  return (
-    <div className="page">
-      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 10 }}>
-        Experience
-      </p>
-      <h1 style={{ fontSize: 36, fontWeight: 900, color: 'var(--sp-white)', letterSpacing: '-1px', marginBottom: 4 }}>
-        My journey
-      </h1>
-      <p style={{ fontSize: 14, color: 'var(--sp-gray)', marginBottom: 36 }}>
-        From "Hello, World!" to shipping full-stack projects.
-      </p>
-
-      {/* ── vertical timeline ─────────────────────────────────────────── */}
-      <div style={{ maxWidth: 640, position: 'relative' }}>
-        {experience.map((job, i) => {
-          const isOpen = openId === job.id;
-          const Icon = ICONS[job.icon];
-          const gradient = GRADIENTS[i % GRADIENTS.length];
-          const isLast = i === experience.length - 1;
-
-          return (
-            <div key={job.id} style={{ display: 'flex', gap: 20 }}>
-              {/* connector column */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-                <div
-                  className={`grad-${gradient}`}
-                  style={{ width: 48, height: 48, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isOpen ? '0 0 0 3px var(--sp-dark), 0 0 0 5px var(--sp-green)' : '0 0 0 3px var(--sp-dark)', transition: 'box-shadow .2s' }}
-                >
-                  <Icon size={20} color="var(--sp-art-text)" strokeWidth={2} />
-                </div>
-                {!isLast && (
-                  <div style={{ flex: 1, width: 2, background: 'var(--sp-dark3)', marginTop: 6, marginBottom: 6, minHeight: 24 }} />
-                )}
-              </div>
-
-              {/* content */}
-              <button
-                onClick={() => toggle(job.id)}
-                aria-expanded={isOpen}
-                aria-controls={`experience-detail-${job.id}`}
-                style={{ flex: 1, minWidth: 0, textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', paddingBottom: isLast ? 0 : 28, color: 'inherit', font: 'inherit' }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 4 }}>
-                      {job.period} · {job.type}
-                    </div>
-                    <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--sp-white)', marginBottom: 2 }}>
-                      {job.role}
-                    </div>
-                    <div style={{ fontSize: 13, color: 'var(--sp-gray)' }}>{job.company}</div>
-                  </div>
-                  <ChevronDown
-                    size={18}
-                    style={{ color: 'var(--sp-gray)', flexShrink: 0, marginTop: 4, transition: 'transform .2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0)' }}
-                  />
-                </div>
-
-                {/* expandable detail */}
-                <div
-                  id={`experience-detail-${job.id}`}
-                  hidden={!isOpen}
-                >
-                  <p style={{ fontSize: 14, color: 'var(--sp-gray)', lineHeight: 1.7, margin: '14px 0 12px' }}>
-                    {job.description}
-                  </p>
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                    {job.tags.map((t) => <Tag key={t} variant="green">{t}</Tag>)}
-                  </div>
-                </div>
-              </button>
-            </div>
-          );
-        })}
+  return <div className="page experience-page">
+    <header className="experience-page-heading">
+      <div className="experience-playlist-art" aria-hidden="true"><span className="experience-art-lines" /><ListMusic size={44} strokeWidth={1.4} /><span>MY JOURNEY</span></div>
+      <div className="experience-heading-copy">
+        <p className="discography-eyebrow">Experience</p>
+        <h1>My journey</h1>
+        <p className="experience-intro">From "Hello, World!" to building practical web and mobile projects.</p>
+        <p className="experience-collection-note">{experience.length} chapters <span aria-hidden="true">/</span> Personal projects, internship & learning</p>
       </div>
-      <PageNextStep title="Explore my work" description="See the projects behind this development journey." page="projects" label="View projects" />
+    </header>
+    <div className="experience-section-heading"><h2>The chapters</h2><span>Latest first</span></div>
+    <div className="experience-chapter-grid">
+      {experience.map((job, index) => {
+        const Icon = ICONS[job.icon];
+        const isOpen = openId === job.id;
+        return <article key={job.id} className="experience-chapter" data-expanded={isOpen}>
+          <div className="experience-chapter-meta"><span className="experience-type">{job.type}</span><span>{job.period}</span></div>
+          <div className="experience-chapter-identity">
+            <div className="experience-chapter-art" data-kind={job.icon} aria-hidden="true"><Icon size={30} strokeWidth={1.5} /><span>{String(index + 1).padStart(2, '0')}</span></div>
+            <div><h3 id={'experience-title-' + job.id}>{job.role}</h3><p>{job.company}</p></div>
+          </div>
+          <button type="button" className="experience-chapter-toggle" aria-expanded={isOpen} aria-controls={'experience-detail-' + job.id} aria-label={(isOpen ? 'Hide contributions: ' : 'Read contributions: ') + job.role} onClick={() => setOpenId(isOpen ? null : job.id)}>
+            <span>{isOpen ? 'Close chapter' : 'Read chapter'}</span><ChevronDown size={16} aria-hidden="true" />
+          </button>
+          <div id={'experience-detail-' + job.id} className="experience-chapter-detail" hidden={!isOpen}>
+            <p>{job.description}</p>
+            <div className="experience-chapter-tags">{job.tags.map(tag => <Tag key={tag}>{tag}</Tag>)}</div>
+          </div>
+        </article>;
+      })}
     </div>
-  );
+    <div className="experience-end-note"><ArrowUpRight size={16} aria-hidden="true" /><p>Each chapter adds something to the way I build today.</p></div>
+    <PageNextStep title="Explore my work" description="See the projects behind this development journey." page="projects" label="View projects" />
+  </div>;
 }
