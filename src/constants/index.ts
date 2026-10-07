@@ -41,5 +41,3 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const NOW_CODING_INTERVAL = 3_800; // ms
-export const PLAYER_TICK         = 300;   // ms per progress tick
-export const PLAYER_STEP         = 0.25;  // progress % per tick

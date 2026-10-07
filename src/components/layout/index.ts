@@ -1,4 +1,4 @@
 export { Sidebar } from './Sidebar';
 export { Topbar }  from './Topbar';
-export { Playbar } from './Playbar';
+export { ProjectBar } from './ProjectBar';
 export { BottomNav } from './BottomNav';

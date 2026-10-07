@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { Play, Pause, BadgeCheck, Share2 } from 'lucide-react';
-import { usePlayerStore, useNavStore } from '../../store';
+import { BookOpen, BadgeCheck, Share2 } from 'lucide-react';
+import { useProjectReaderStore, useNavStore } from '../../store';
 import { Button, ShareCardModal } from '../../components/ui';
 import { AvatarWithNote }              from '../../components/ui/AvatarWithNote';
 import { useIsMobile }                 from '../../hooks';
 import { SITE }                        from '../../constants';
 
 export function HeroSection() {
-  const isPlaying    = usePlayerStore((s) => s.isPlaying);
-  const toggle       = usePlayerStore((s) => s.toggle);
+  const openProject  = useProjectReaderStore((s) => s.openProject);
   const navigate     = useNavStore((s) => s.navigate);
   const isMobile     = useIsMobile();
   const [showCard, setShowCard] = useState(false);
@@ -117,15 +116,16 @@ export function HeroSection() {
 
       {/* ── CTA buttons — all on one row ── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'nowrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
-        {/* play */}
+        {/* project overview */}
         <button
-          onClick={toggle}
-          aria-label={isPlaying ? 'Pause' : 'Play'}
+          onClick={() => openProject()}
+          aria-label="Open project overview"
+          title="Read project overview"
           style={{ width: 54, height: 54, background: 'var(--sp-green)', border: 'none', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(29,185,84,.45)', transition: 'transform .12s, background .15s', flexShrink: 0 }}
           onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.07)'; e.currentTarget.style.background = 'var(--sp-green-h)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'var(--sp-green)'; }}
         >
-          {isPlaying ? <Pause size={22} fill="#000" color="#000" /> : <Play size={22} fill="#000" color="#000" style={{ marginLeft: 2 }} />}
+          <BookOpen size={22} color="#000" />
         </button>
 
         <Button variant="outline" rounded onClick={() => navigate('contact')}>Get in touch</Button>

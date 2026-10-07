@@ -1,6 +1,7 @@
 import { useNavStore }                                 from './store';
 import { useIsMobile }                                 from './hooks';
-import { Sidebar, Topbar, Playbar, BottomNav }         from './components/layout';
+import { Sidebar, Topbar, ProjectBar, BottomNav }      from './components/layout';
+import { ProjectOverview } from './components/ui/ProjectOverview';
 import { ToastViewport } from './components/ui/ToastViewport';
 import {
   HomePage,
@@ -55,12 +56,13 @@ export default function App() {
           {PAGE_MAP[active] ?? <HomePage />}
         </main>
 
-        <Playbar />
+        <ProjectBar />
 
         {/* ── bottom tab bar — mobile only ── */}
         {isMobile && <BottomNav />}
       </div>
       <ToastViewport />
+      <ProjectOverview />
     </div>
   );
 }

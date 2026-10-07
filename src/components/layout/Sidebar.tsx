@@ -1,5 +1,5 @@
 import { Lock, Play } from 'lucide-react';
-import { usePlayerStore, useNavStore } from '../../store';
+import { useNavStore } from '../../store';
 import { useNowCoding }                from '../../hooks';
 import { projects }                    from '../../data';
 import { NAV_ITEMS }                   from '../../constants';
@@ -8,7 +8,6 @@ import type { SectionId }              from '../../types';
 export function Sidebar() {
   const navigate     = useNavStore((s) => s.navigate);
   const active       = useNavStore((s) => s.active);
-  const progress     = usePlayerStore((s) => s.progress);
   const nowCoding    = useNowCoding();
 
   return (
@@ -94,9 +93,6 @@ export function Sidebar() {
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 4, padding: '0 2px' }}>Now coding</div>
         <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--sp-white)', padding: '0 2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{nowCoding}</div>
         <div style={{ fontSize: 11, color: 'var(--sp-gray)', padding: '0 2px', marginBottom: 6 }}>Full-Stack · TypeScript</div>
-        <div style={{ height: 2, background: '#333', borderRadius: 1, overflow: 'hidden' }}>
-          <div style={{ height: '100%', background: 'var(--sp-green)', borderRadius: 1, width: `${progress}%`, transition: 'width .3s linear' }} />
-        </div>
       </div>
     </aside>
   );
