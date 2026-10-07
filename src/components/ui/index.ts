@@ -1,4 +1,3 @@
-export { ProgressBar }   from './ProgressBar';
 export { Tag }           from './Tag';
 export { Button }        from './Button';
 export { EqualizerBars }  from './EqualizerBars';
