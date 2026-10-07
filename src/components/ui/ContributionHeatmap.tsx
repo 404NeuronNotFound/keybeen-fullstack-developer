@@ -25,7 +25,8 @@ type Cell = ContributionDay | null;
 function buildWeeks(days: ContributionDay[]): Cell[][] {
   if (days.length === 0) return [];
 
-  const firstDay = new Date(days[0].date).getDay(); // 0 = Sun
+  // Date-only GitHub values represent calendar days, independent of visitor timezone.
+  const firstDay = new Date(days[0].date).getUTCDay(); // 0 = Sun
   const cells: Cell[] = [...Array(firstDay).fill(null), ...days];
   while (cells.length % 7 !== 0) cells.push(null);
 
@@ -40,7 +41,7 @@ function buildMonthLabels(weeks: Cell[][]): (string | null)[] {
   return weeks.map((week) => {
     const firstReal = week.find((d) => d !== null);
     if (!firstReal) return null;
-    const month = new Date(firstReal.date).getMonth();
+    const month = new Date(firstReal.date).getUTCMonth();
     if (month !== lastMonth) {
       lastMonth = month;
       return MONTHS[month];
@@ -50,7 +51,7 @@ function buildMonthLabels(weeks: Cell[][]): (string | null)[] {
 }
 
 function formatTooltipDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 }
 
 export function ContributionHeatmap({ days, loading }: Props) {

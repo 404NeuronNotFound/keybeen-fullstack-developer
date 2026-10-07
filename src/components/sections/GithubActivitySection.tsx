@@ -92,7 +92,7 @@ export function GithubActivitySection() {
               <strong style={{ color: 'var(--sp-green)', fontWeight: 700 }}>
                 {total.toLocaleString()}
               </strong>
-              &nbsp;this year
+              &nbsp;in the last 12 months
             </span>
           )}
           {loading && (
@@ -159,7 +159,7 @@ export function GithubActivitySection() {
                   icon={<TrendingUp size={15} color="var(--sp-green)" />}
                   label="Total"
                   value={total.toLocaleString()}
-                  sub="contributions"
+                  sub="contributions · last 12 months"
                 />
                 <StatPill
                   icon={<Flame size={15} color="var(--sp-green)" />}
@@ -171,7 +171,7 @@ export function GithubActivitySection() {
                   icon={<TrendingUp size={15} color="var(--sp-green)" />}
                   label="Longest streak"
                   value={`${stats.longestStreak}d`}
-                  sub="personal best"
+                  sub="in this period"
                 />
                 {stats.bestDay && (
                   <StatPill

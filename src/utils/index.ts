@@ -83,7 +83,7 @@ export function computeContributionStats(days: ContributionLike[]): Contribution
   };
 }
 
-/** Format an ISO date ("YYYY-MM-DD") as "Mon D" */
+/** Format a calendar date ("YYYY-MM-DD") as "Mon D" without timezone shifts. */
 export function formatShortDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
 }
