@@ -1,4 +1,5 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
+import type { RefObject } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { X, Download, Link, Check } from 'lucide-react';
 import { FaGithub, FaInstagram } from 'react-icons/fa';
@@ -117,24 +118,47 @@ export function ShareCardInner({ forExport = false }: CardProps) {
 // ── Modal wrapper ────────────────────────────────────────────────────────
 interface ShareCardModalProps {
   onClose: () => void;
+  returnFocusRef?: RefObject<HTMLButtonElement | null>;
 }
 
-export function ShareCardModal({ onClose }: ShareCardModalProps) {
+export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps) {
   const [copied, setCopied] = useState(false);
+  const [feedback, setFeedback] = useState('');
   const cardRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const trigger = returnFocusRef?.current ?? document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    if (!dialog.open) dialog.showModal();
+    return () => {
+      if (copyTimerRef.current !== null) clearTimeout(copyTimerRef.current);
+      if (dialog.open) dialog.close();
+      document.body.style.overflow = previousOverflow;
+      if (trigger instanceof HTMLElement && trigger.isConnected) trigger.focus({ preventScroll: true });
+    };
+  }, [returnFocusRef]);
 
   const copyLink = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(SITE.website);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2200);
+      setFeedback('Profile link copied to your clipboard.');
+      if (copyTimerRef.current !== null) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = setTimeout(() => setCopied(false), 2200);
       toast.success({ title: 'Link copied!', description: 'Your clipboard has the profile link, ready to share.' });
     } catch {
+      setFeedback("Couldn't copy the link. Please copy the website address from the card instead.");
       toast.error({ title: "Couldn't copy the link", description: 'Please copy the website address from the card instead.' });
     }
   }, []);
 
   const downloadPNG = useCallback(async () => {
+    setFeedback('Preparing your card download…');
     try {
       const { default: html2canvas } = await import('html2canvas');
       const node = cardRef.current;
@@ -144,44 +168,48 @@ export function ShareCardModal({ onClose }: ShareCardModalProps) {
       link.download = 'keybeen-card.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
+      setFeedback('Your card download was requested. Check your browser’s downloads.');
       toast.success({ title: 'Your card is ready', description: 'The download was requested. Check your browser’s downloads.' });
     } catch {
+      setFeedback("Couldn't create your card. Please try again, or copy the profile link to share it.");
       toast.error({ title: "Couldn't create your card", description: 'Please try again, or copy the profile link to share it.' });
     }
   }, []);
 
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position:             'fixed',
-        inset:                0,
-        background:           'rgba(0,0,0,.8)',
-        backdropFilter:       'blur(6px)',
-        WebkitBackdropFilter: 'blur(6px)',
-        zIndex:               9999,
-        overflowY:            'auto',
-        WebkitOverflowScrolling: 'touch',
-        display:              'flex',
-        alignItems:           'center',
-        justifyContent:       'center',
-        padding:              '24px 16px',
+    <dialog
+      ref={dialogRef}
+      id="share-profile-dialog"
+      className="share-card-modal"
+      aria-labelledby="share-dialog-title"
+      aria-describedby="share-dialog-description"
+      onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onClose={(event) => {
+        // Strict Mode can queue a close event during cleanup, then reopen the
+        // dialog before that event arrives. Only dismiss a still-closed dialog.
+        if (!event.currentTarget.open) onClose();
+      }}
+      onClick={(event) => {
+        if (event.target !== event.currentTarget) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose();
       }}
     >
       <div
-        onClick={(e) => e.stopPropagation()}
-        style={{ width: '100%', maxWidth: 480, margin: 'auto' }}
+        style={{ width: '100%' }}
       >
         {/* modal header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
-            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#fff', marginBottom: 2 }}>Share profile</h2>
-            <p style={{ fontSize: 13, color: '#a7a7a7' }}>My developer card, share it or download as PNG</p>
+            <h2 id="share-dialog-title" style={{ fontSize: 18, fontWeight: 800, color: '#fff', marginBottom: 2 }}>Share profile</h2>
+            <p id="share-dialog-description" style={{ fontSize: 13, color: '#a7a7a7' }}>My developer card, share it or download as PNG</p>
           </div>
           <button
+            type="button"
+            autoFocus
             onClick={onClose}
-            aria-label="Close"
-            style={{ background: 'rgba(255,255,255,.08)', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#a7a7a7', transition: 'background .15s' }}
+            aria-label="Close share dialog"
+            style={{ background: 'rgba(255,255,255,.08)', border: 'none', borderRadius: '50%', width: 44, height: 44, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#a7a7a7', transition: 'background .15s' }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.15)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.08)'; }}
           >
@@ -198,6 +226,7 @@ export function ShareCardModal({ onClose }: ShareCardModalProps) {
           {/* actions */}
           <div style={{ display: 'flex', gap: 10, flexWrap: 'nowrap' }}>
             <button
+              type="button"
               onClick={copyLink}
               style={{ flex: '1 1 0', minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px 0', background: copied ? 'rgba(29,185,84,.15)' : 'rgba(255,255,255,.06)', border: '1px solid', borderColor: copied ? 'var(--sp-green)' : 'rgba(255,255,255,.12)', borderRadius: 8, color: copied ? '#1DB954' : '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all .2s', whiteSpace: 'nowrap' }}
               onMouseEnter={(e) => { if (!copied) e.currentTarget.style.background = 'rgba(255,255,255,.1)'; }}
@@ -208,6 +237,7 @@ export function ShareCardModal({ onClose }: ShareCardModalProps) {
             </button>
 
             <button
+              type="button"
               onClick={downloadPNG}
               style={{ flex: '1 1 0', minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px 0', background: '#1DB954', border: 'none', borderRadius: 8, color: '#000', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'background .15s', whiteSpace: 'nowrap' }}
               onMouseEnter={(e) => { e.currentTarget.style.background = '#1ed760'; }}
@@ -217,8 +247,9 @@ export function ShareCardModal({ onClose }: ShareCardModalProps) {
               Download card
             </button>
           </div>
+          <p role="status" aria-live="polite" aria-atomic="true" style={{ fontSize: 13, color: '#a7a7a7', lineHeight: 1.5, marginTop: feedback ? 12 : 0 }}>{feedback}</p>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

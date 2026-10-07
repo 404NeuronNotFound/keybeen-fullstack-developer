@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BookOpen, BadgeCheck, Share2 } from 'lucide-react';
 import { useProjectReaderStore, useNavStore } from '../../store';
 import { Button, ShareCardModal } from '../../components/ui';
@@ -11,6 +11,7 @@ export function HeroSection() {
   const navigate     = useNavStore((s) => s.navigate);
   const isMobile     = useIsMobile();
   const [showCard, setShowCard] = useState(false);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
 
   const avatarSize = isMobile ? 120 : 180;
 
@@ -133,8 +134,12 @@ export function HeroSection() {
 
         {/* share */}
         <button
+          ref={shareButtonRef}
           onClick={() => setShowCard(true)}
           aria-label="Share profile"
+          aria-haspopup="dialog"
+          aria-controls="share-profile-dialog"
+          aria-expanded={showCard}
           style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', borderRadius: 24, border: '1px solid rgba(255,255,255,.18)', background: 'rgba(255,255,255,.06)', color: 'var(--sp-gray)', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0 }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.12)'; e.currentTarget.style.color = 'var(--sp-white)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.35)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.06)'; e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.18)'; }}
@@ -145,7 +150,7 @@ export function HeroSection() {
       </div>
 
       {/* ── Share card modal ── */}
-      {showCard && <ShareCardModal onClose={() => setShowCard(false)} />}
+      {showCard && <ShareCardModal onClose={() => setShowCard(false)} returnFocusRef={shareButtonRef} />}
     </div>
   );
 }
