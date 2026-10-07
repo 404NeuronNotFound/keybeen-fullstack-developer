@@ -1,6 +1,6 @@
 import { isEmailFormatValid } from './emailFormat';
-import { verifyContactEmail } from './verifyContactEmail';
-import { beginContactCooldown, formatContactCooldown, getContactCooldownSeconds } from './contactCooldown';
+import { ContactEmailValidationError, verifyContactEmail } from './verifyContactEmail';
+import { allowContactEmailRetry, beginContactCooldown, formatContactCooldown, getContactCooldownSeconds } from './contactCooldown';
 
 interface ContactMessage {
   name: string;
@@ -21,7 +21,17 @@ export async function submitContactMessage(accessKey: string, message: ContactMe
     throw new Error(`Please wait ${formatContactCooldown(getContactCooldownSeconds())} before sending another message.`);
   }
 
-  await verifyContactEmail(message.email);
+  try {
+    await verifyContactEmail(message.email);
+  } catch (error) {
+    if (error instanceof ContactEmailValidationError) {
+      error.retryAvailable = allowContactEmailRetry();
+      error.message += error.retryAvailable
+        ? ' You have one more try. If your email fails validation again, you must wait 600 seconds (10 minutes).'
+        : ' Your email failed validation again. Please wait 600 seconds (10 minutes) before trying again.';
+    }
+    throw error;
+  }
 
   let response: Response;
   let result: unknown;

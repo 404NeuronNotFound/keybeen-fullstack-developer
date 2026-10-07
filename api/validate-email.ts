@@ -4,7 +4,7 @@ type ApiRequest = IncomingMessage & { body?: unknown };
 type Verdict = { status: 'valid' | 'invalid' | 'typo' | 'unknown'; suggestion?: string };
 
 const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const attempts = new Map<string, number>();
+const attempts = new Map<string, { expires: number; allowRetry: boolean }>();
 const cache = new Map<string, { verdict: Verdict; expires: number }>();
 
 function flag(value: unknown): boolean | undefined {
@@ -90,19 +90,26 @@ export async function handleEmailValidation(req: ApiRequest, res: ServerResponse
   const clientIp = req.headers['x-vercel-forwarded-for'] ?? req.socket?.remoteAddress ?? 'local';
   const client = Array.isArray(clientIp) ? clientIp[0] : clientIp;
   const now = Date.now();
-  if ((attempts.get(client) ?? 0) > now) {
-    res.setHeader('Retry-After', String(Math.ceil((attempts.get(client)! - now) / 1000)));
+  const previousAttempt = attempts.get(client);
+  const isRetry = !!previousAttempt && previousAttempt.expires > now && previousAttempt.allowRetry;
+  if (previousAttempt && previousAttempt.expires > now && !previousAttempt.allowRetry) {
+    res.setHeader('Retry-After', String(Math.ceil((previousAttempt.expires - now) / 1000)));
     respond(429, { error: 'Please wait before checking another email.' });
     return;
   }
-  for (const [key, expires] of attempts) if (expires <= now) attempts.delete(key);
+  for (const [key, attempt] of attempts) if (attempt.expires <= now) attempts.delete(key);
   if (attempts.size >= 1024) {
     respond(429, { error: 'Email checking is busy. Please try later.' });
     return;
   }
-  attempts.set(client, now + 600_000);
+  const attempt = { expires: now + 600_000, allowRetry: false };
+  attempts.set(client, attempt);
+  const allowInvalidEmailRetry = (verdict: Verdict) => {
+    if (!isRetry && (verdict.status === 'invalid' || verdict.status === 'typo')) attempt.allowRetry = true;
+  };
   const cached = cache.get(email.toLowerCase());
   if (cached && cached.expires > Date.now()) {
+    allowInvalidEmailRetry(cached.verdict);
     respond(200, { email, ...cached.verdict });
     return;
   }
@@ -122,6 +129,7 @@ export async function handleEmailValidation(req: ApiRequest, res: ServerResponse
       return;
     }
     const verdict = classify(data as Record<string, unknown>, email);
+    allowInvalidEmailRetry(verdict);
     if (verdict.status !== 'unknown') {
       if (cache.size >= 256) cache.delete(cache.keys().next().value!);
       cache.set(email.toLowerCase(), { verdict, expires: Date.now() + 10 * 60_000 });

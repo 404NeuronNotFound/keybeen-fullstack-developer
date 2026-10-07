@@ -10,6 +10,7 @@ import { SITE } from '../constants';
 import { submitContactMessage } from '../utils/contactSubmission';
 import { toast } from '../store/toastStore';
 import { useEmailValidation } from '../hooks/useEmailValidation';
+import { ContactEmailValidationError } from '../utils/verifyContactEmail';
 
 const FIELD_STYLE: CSSProperties = {
   width: '100%', background: 'var(--sp-dark2)', border: '1px solid var(--sp-gray2)',
@@ -35,6 +36,7 @@ export function ContactPage() {
   const { email, updateEmail, check: emailCheck, validate: validateEmail, canUseEmail } = useEmailValidation();
   const [msg,  setMsg]  = useState('');
   const [status, setStatus] = useState<'idle' | 'sending'>('idle');
+  const [emailRetryWarning, setEmailRetryWarning] = useState('');
   const inFlight = useRef(false);
   const feedbackId = useRef<number | null>(null);
   const isSending = status === 'sending';
@@ -76,13 +78,18 @@ export function ContactPage() {
       setName('');
       updateEmail('');
       setMsg('');
+      setEmailRetryWarning('');
       form.reset();
     } catch (submissionError) {
+      setEmailRetryWarning(submissionError instanceof ContactEmailValidationError && submissionError.retryAvailable
+        ? 'You have one more try. If your email fails validation again, you must wait 600 seconds (10 minutes).'
+        : '');
       feedbackId.current = toast.error({
         title: "Couldn't send your message",
         description: `${submissionError instanceof Error ? submissionError.message : 'Please try again.'} Your message is still in the form.`,
       });
     } finally {
+      refreshCooldown();
       inFlight.current = false;
       setStatus('idle');
     }
@@ -171,6 +178,7 @@ export function ContactPage() {
             </button>
           </fieldset>
           {remaining > 0 && <p id="contact-cooldown" className="contact-cooldown">You can send another message in <span role="timer" aria-live="off">{formatContactCooldown(remaining)}</span>.</p>}
+          {emailRetryWarning && remaining === 0 && <p role="alert" style={{ fontSize: 13, color: 'var(--sp-warning)', marginTop: 16 }}>{emailRetryWarning}</p>}
           <div role="status" aria-live="polite" aria-atomic="true" style={{ marginTop: 16, color: 'var(--sp-green)', fontSize: 14 }}>
             {isSending && 'Checking your email before sending your message...'}
           </div>
