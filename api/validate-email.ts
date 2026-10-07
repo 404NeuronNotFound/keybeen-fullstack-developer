@@ -4,6 +4,7 @@ type ApiRequest = IncomingMessage & { body?: unknown };
 type Verdict = { status: 'valid' | 'invalid' | 'typo' | 'unknown'; suggestion?: string };
 
 const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const attempts = new Map<string, number>();
 const cache = new Map<string, { verdict: Verdict; expires: number }>();
 
 function flag(value: unknown): boolean | undefined {
@@ -86,6 +87,20 @@ export async function handleEmailValidation(req: ApiRequest, res: ServerResponse
     respond(503, { error: 'Email checking is temporarily unavailable.' });
     return;
   }
+  const clientIp = req.headers['x-vercel-forwarded-for'] ?? req.socket?.remoteAddress ?? 'local';
+  const client = Array.isArray(clientIp) ? clientIp[0] : clientIp;
+  const now = Date.now();
+  if ((attempts.get(client) ?? 0) > now) {
+    res.setHeader('Retry-After', String(Math.ceil((attempts.get(client)! - now) / 1000)));
+    respond(429, { error: 'Please wait before checking another email.' });
+    return;
+  }
+  for (const [key, expires] of attempts) if (expires <= now) attempts.delete(key);
+  if (attempts.size >= 1024) {
+    respond(429, { error: 'Email checking is busy. Please try later.' });
+    return;
+  }
+  attempts.set(client, now + 600_000);
   const cached = cache.get(email.toLowerCase());
   if (cached && cached.expires > Date.now()) {
     respond(200, { email, ...cached.verdict });

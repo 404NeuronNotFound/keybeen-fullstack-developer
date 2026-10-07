@@ -596,14 +596,8 @@ a { color: inherit; text-decoration: none; }
 .skill-evidence-row .skill-context { margin-top: 8px; font-size: 12px; }
 .skill-project-links { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 8px; }
 .skill-project-link { min-height: 44px; padding: 8px 14px; border: 1px solid var(--sp-dark4); border-radius: 20px; color: var(--sp-white); background: var(--sp-dark2); font-size: 12px; cursor: pointer; }
-.contact-email-actions { margin-bottom: 28px; }
-.contact-email-actions label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 10px; }
-.contact-email-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.contact-email-row input { min-height: 44px; flex: 1 1 280px; min-width: 0; max-width: 360px; border: 1px solid var(--sp-dark4); border-radius: 8px; padding: 10px 12px; color: var(--sp-white); background: var(--sp-dark2); font-size: 13px; }
-.contact-email-row :is(button, a) { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-.contact-email-actions p { color: var(--sp-gray); font-size: 12px; line-height: 1.6; margin-top: 8px; }
-:is(.skill-evidence-row summary, .skill-project-link, .top-skill-evidence, .skill-tab, .contact-email-row input, .contact-email-row button, .contact-email-row a, .page-next-step button):focus-visible { outline: 2px solid var(--sp-green); outline-offset: 3px; }
-@media (max-width: 400px) { .top-skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .contact-email-row input { max-width: none; } }
+:is(.skill-evidence-row summary, .skill-project-link, .top-skill-evidence, .skill-tab, .page-next-step button):focus-visible { outline: 2px solid var(--sp-green); outline-offset: 3px; }
+@media (max-width: 400px) { .top-skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* Personal About layout and record-inspired skill library */
 .about-page, .skills-page { width: 100%; max-width: 1600px; margin-inline: 0; }
@@ -726,3 +720,6 @@ a { color: inherit; text-decoration: none; }
 
 .tool-brand-mark { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; }
 .skill-brand-mark { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; }
+
+.contact-cooldown { margin-top: 16px; font-size: 13px; line-height: 1.6; color: var(--sp-gray); }
+.contact-cooldown [role="timer"] { color: var(--sp-white); font-weight: 600; font-variant-numeric: tabular-nums; }

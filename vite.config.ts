@@ -23,7 +23,5 @@ function emailValidationApi(apiKey: string | undefined): Plugin {
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  return {
-    plugins: [react(), emailValidationApi(process.env.ABSTRACT_EMAIL_VALIDATION_API_KEY ?? env.ABSTRACT_EMAIL_VALIDATION_API_KEY)],
-  };
+  return { plugins: [react(), emailValidationApi(process.env.ABSTRACT_EMAIL_VALIDATION_API_KEY ?? env.ABSTRACT_EMAIL_VALIDATION_API_KEY)] };
 })
