@@ -131,14 +131,11 @@ export function ContactPage() {
               onChange={(e) => updateEmail(e.target.value)}
               onBlur={() => { void validateEmail(); }}
               placeholder="you@example.com"
-              aria-describedby="contact-email-help contact-email-status"
+              aria-describedby="contact-email-status"
               aria-invalid={emailCheck.status === 'invalid' || emailCheck.status === 'typo'}
               aria-busy={emailCheck.status === 'checking'}
               style={{ ...FIELD_STYLE, borderColor: emailCheck.status === 'valid' ? 'var(--sp-green)' : emailCheck.status === 'invalid' || emailCheck.status === 'typo' ? '#f59e0b' : 'var(--sp-gray2)' }}
             />
-            <p id="contact-email-help" style={{ color: 'var(--sp-gray)', fontSize: 12, margin: '6px 0 16px' }}>
-              I'll reply here. Your email is checked automatically after a short pause or when you leave this field.
-            </p>
             <div id="contact-email-status" role="status" aria-live="polite" style={{ fontSize: 13, marginBottom: 16, color: emailCheck.status === 'valid' ? 'var(--sp-green)' : 'var(--sp-gray)', overflowWrap: 'anywhere' }}>
               {emailCheck.message}
             </div>
