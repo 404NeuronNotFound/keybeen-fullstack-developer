@@ -326,6 +326,19 @@ a { color: inherit; text-decoration: none; }
   margin-top: 16px;
   width: 100%;
 }
+.project-card-shell {
+  display: flex;
+  min-width: 0;
+}
+.project-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.project-card > * { flex-shrink: 0; }
+.project-card-tags { margin-bottom: 16px; }
+.project-card .project-details-button { margin-top: auto; }
 .project-title-button {
   display: block;
   min-height: 44px;

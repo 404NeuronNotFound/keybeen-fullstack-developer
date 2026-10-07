@@ -68,7 +68,7 @@ export function ProjectPopover({ project, locked = false, children, onPlay }: Pr
   }, [hide]);
 
   return (
-    <div ref={wrapRef} onMouseEnter={show} onMouseLeave={hide} style={{ position: 'relative' }}>
+    <div ref={wrapRef} className="project-card-shell" onMouseEnter={show} onMouseLeave={hide} style={{ position: 'relative' }}>
       {children}
 
       {visible && pos && (

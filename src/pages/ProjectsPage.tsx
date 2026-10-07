@@ -78,7 +78,7 @@ export function ProjectsPage() {
 
       {/* ── teaser grid — locked previews of what's coming ─────────────── */}
       <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--sp-white)', marginBottom: 16 }}>Up next</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(175px, 1fr))', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(175px, 1fr))', gridAutoRows: '1fr', gap: 16 }}>
         {projects.map((p) => (
           <TeaserCard key={p.id} project={p} />
         ))}

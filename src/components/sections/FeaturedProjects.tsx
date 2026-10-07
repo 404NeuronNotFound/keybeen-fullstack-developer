@@ -28,7 +28,7 @@ export function FeaturedProjects() {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(175px, 1fr))', gap: 16, marginBottom: 40 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(175px, 1fr))', gridAutoRows: '1fr', gap: 16, marginBottom: 40 }}>
         {projects.filter((p) => p.featured).map((p) => (
           <TeaserCard key={p.id} project={p} />
         ))}

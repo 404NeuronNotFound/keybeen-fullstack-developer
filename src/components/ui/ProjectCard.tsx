@@ -18,6 +18,7 @@ export function ProjectCard({ project, onPlay, isPlaying, isCurrent }: Props) {
   return (
     <ProjectPopover project={project} onPlay={onPlay}>
       <motion.div
+        className="project-card"
         onMouseEnter={() => { setHov(true); playSound('hover'); }}
         onMouseLeave={() => setHov(false)}
         onClick={() => onPlay(project)}
@@ -55,7 +56,7 @@ export function ProjectCard({ project, onPlay, isPlaying, isCurrent }: Props) {
         </div>
         <div style={{ fontSize: 14, fontWeight: 700, color: isCurrent ? 'var(--sp-green)' : 'var(--sp-white)', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.title}</div>
         <div style={{ fontSize: 12, color: 'var(--sp-gray)', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', marginBottom: 8 }}>{project.description}</div>
-        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>{project.tags.map((t) => <Tag key={t}>{t}</Tag>)}</div>
+        <div className="project-card-tags" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>{project.tags.map((t) => <Tag key={t}>{t}</Tag>)}</div>
         <button type="button" className="project-reader-button project-details-button" aria-label={`View details for ${project.title}`} aria-haspopup="dialog" aria-controls="project-overview" onClick={(event) => { event.stopPropagation(); openProject(project); }}>View details</button>
       </motion.div>
     </ProjectPopover>

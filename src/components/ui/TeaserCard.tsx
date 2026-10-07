@@ -13,6 +13,7 @@ export function TeaserCard({ project }: { project: Project }) {
   return (
     <ProjectPopover project={project} locked>
       <motion.div
+        className="project-card"
         onMouseEnter={() => playSound('hover')}
         initial={false}
         whileHover={{ y: -2, opacity: 0.8 }}
@@ -27,7 +28,7 @@ export function TeaserCard({ project }: { project: Project }) {
         </div>
         <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--sp-gray)', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.title}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}><Tag>Coming soon</Tag></div>
-        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>{project.tags.map((t) => <Tag key={t}>{t}</Tag>)}</div>
+        <div className="project-card-tags" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>{project.tags.map((t) => <Tag key={t}>{t}</Tag>)}</div>
         <button type="button" className="project-reader-button project-details-button" aria-label={`View details for ${project.title}`} aria-haspopup="dialog" aria-controls="project-overview" onClick={() => openProject(project)}>View details</button>
       </motion.div>
     </ProjectPopover>
