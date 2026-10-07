@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Code2, Server, Cloud, Disc3 } from 'lucide-react';
+import { Code2, Server, Cloud } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { TopSkillCard } from '../components/ui';
 import { SkillRow } from '../components/ui/SkillRow';
@@ -23,7 +23,7 @@ export function SkillsPage() {
     <p className="discography-eyebrow">Tech stack</p>
     <h1 className="discography-title">Tools of the trade</h1>
     <p className="skill-page-intro">The tools I reach for, with projects to show how I use them.</p>
-    </div><Disc3 className="skills-heading-record" size={84} strokeWidth={1} aria-hidden="true" /></header>
+    </div><div className="skills-heading-record" aria-hidden="true"><span className="skills-record-label"><span>SIDE A</span><span>33⅓</span></span></div></header>
     <div className="skills-section-heading"><h2 className="skill-section-title">Most played</h2><span>Core stack</span></div>
     <p className="skill-section-caption">Core tools behind my web and mobile projects.</p>
     <div className="top-skills-grid">{topSkills.map((skill, index) => <TopSkillCard key={skill.name} skill={skill} track={index + 1} />)}</div>
