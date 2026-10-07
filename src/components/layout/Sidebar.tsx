@@ -15,7 +15,7 @@ export function Sidebar() {
       {/* logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 10px', marginBottom: 22 }}>
         <div style={{ width: 30, height: 30, background: 'var(--sp-green)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Play size={14} fill="#000" color="#000" style={{ marginLeft: 1 }} />
+          <Play size={14} fill="var(--sp-on-green)" color="var(--sp-on-green)" style={{ marginLeft: 1 }} />
         </div>
         <span style={{ fontSize: 15, fontWeight: 900, letterSpacing: '-.3px', color: 'var(--sp-white)' }}>Keybeen</span>
       </div>
@@ -55,9 +55,10 @@ export function Sidebar() {
       {projects.filter((p) => p.featured).map((p) => (
         <button
           key={p.id}
+          className="pinned-project"
           onClick={() => navigate('projects')}
           style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 8px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', background: 'transparent', border: 'none', color: 'inherit', width: '100%', transition: 'background .1s', opacity: 0.6 }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = '#1a1a1a'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
         >
         <div

@@ -14,9 +14,9 @@ const WEEKDAY_LABELS: Record<number, string> = { 1: 'Mon', 3: 'Wed', 5: 'Fri' };
 /** level 0 = no activity → level 4 = most active, mapped to Spotify green shades */
 const LEVEL_COLORS: Record<number, string> = {
   0: 'var(--sp-dark3)',
-  1: 'rgba(29,185,84,0.25)',
-  2: 'rgba(29,185,84,0.5)',
-  3: 'rgba(29,185,84,0.75)',
+  1: 'var(--sp-heat-1)',
+  2: 'var(--sp-heat-2)',
+  3: 'var(--sp-heat-3)',
   4: 'var(--sp-green)',
 };
 

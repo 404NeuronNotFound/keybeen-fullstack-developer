@@ -9,7 +9,7 @@ import { toast } from '../store/toastStore';
 import { useEmailValidation } from '../hooks/useEmailValidation';
 
 const FIELD_STYLE: CSSProperties = {
-  width: '100%', background: 'var(--sp-dark3)', border: '1px solid var(--sp-gray2)',
+  width: '100%', background: 'var(--sp-dark2)', border: '1px solid var(--sp-gray2)',
   borderRadius: 'var(--radius-sm)', padding: '10px 14px', color: 'var(--sp-white)',
   fontSize: 14, boxSizing: 'border-box',
 };
@@ -20,10 +20,10 @@ const LABEL_STYLE: CSSProperties = {
 
 // contact links
 const LINKS: ContactLink[] = [
-  { icon: FiMail,     label: 'Gmail',     handle: SITE.email,        color: '#1DB954', href: `mailto:${SITE.email}` },
-  { icon: FaGithub,   label: 'GitHub',    handle: '@404NeuronNotFound', color: '#e0e0e0', href: SITE.github },
-  { icon: FaInstagram, label: 'Instagram', handle: '@kxvxn',          color: '#E1306C', href: SITE.instagram },
-  { icon: FaTiktok,   label: 'TikTok',    handle: '@keybeen.creatives', color: '#69C9D0', href: SITE.tiktok },
+  { icon: FiMail,     label: 'Gmail',     handle: SITE.email,        color: 'var(--sp-green)', href: `mailto:${SITE.email}` },
+  { icon: FaGithub,   label: 'GitHub',    handle: '@404NeuronNotFound', color: 'var(--sp-white)', href: SITE.github },
+  { icon: FaInstagram, label: 'Instagram', handle: '@kxvxn',          color: 'var(--sp-instagram)', href: SITE.instagram },
+  { icon: FaTiktok,   label: 'TikTok',    handle: '@keybeen.creatives', color: 'var(--sp-tiktok)', href: SITE.tiktok },
 ];
 
 export function ContactPage() {
@@ -134,7 +134,7 @@ export function ContactPage() {
               aria-describedby="contact-email-status"
               aria-invalid={emailCheck.status === 'invalid' || emailCheck.status === 'typo'}
               aria-busy={emailCheck.status === 'checking'}
-              style={{ ...FIELD_STYLE, borderColor: emailCheck.status === 'valid' ? 'var(--sp-green)' : emailCheck.status === 'invalid' || emailCheck.status === 'typo' ? '#f59e0b' : 'var(--sp-gray2)' }}
+              style={{ ...FIELD_STYLE, borderColor: emailCheck.status === 'valid' ? 'var(--sp-green)' : emailCheck.status === 'invalid' || emailCheck.status === 'typo' ? 'var(--sp-warning)' : 'var(--sp-gray2)' }}
             />
             <div id="contact-email-status" role="status" aria-live="polite" style={{ fontSize: 13, marginBottom: 16, color: emailCheck.status === 'valid' ? 'var(--sp-green)' : 'var(--sp-gray)', overflowWrap: 'anywhere' }}>
               {emailCheck.message}
@@ -169,7 +169,7 @@ export function ContactPage() {
               type="submit"
               disabled={!canSend}
               aria-describedby="contact-email-status"
-              style={{ padding: '10px 28px', background: 'var(--sp-green)', border: 'none', borderRadius: 24, color: '#000', fontSize: 14, fontWeight: 700, cursor: isSending ? 'wait' : canSend ? 'pointer' : 'not-allowed', opacity: canSend ? 1 : 0.5, transition: 'opacity .15s' }}
+              style={{ padding: '10px 28px', background: 'var(--sp-green)', border: 'none', borderRadius: 24, color: 'var(--sp-on-green)', fontSize: 14, fontWeight: 700, cursor: isSending ? 'wait' : canSend ? 'pointer' : 'not-allowed', opacity: canSend ? 1 : 0.5, transition: 'opacity .15s' }}
             >
               {isSending ? 'Sending…' : emailCheck.status === 'checking' ? 'Checking email…' : 'Send message'}
             </button>

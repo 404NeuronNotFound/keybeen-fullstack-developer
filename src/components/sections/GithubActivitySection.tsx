@@ -7,9 +7,9 @@ import { SITE } from '../../constants';
 
 const LEGEND_LEVELS = [
   'var(--sp-dark3)',
-  'rgba(29,185,84,0.25)',
-  'rgba(29,185,84,0.5)',
-  'rgba(29,185,84,0.75)',
+  'var(--sp-heat-1)',
+  'var(--sp-heat-2)',
+  'var(--sp-heat-3)',
   'var(--sp-green)',
 ];
 
@@ -27,7 +27,7 @@ function StatPill({ icon, label, value, sub }: StatPillProps) {
         display:       'flex',
         alignItems:    'center',
         gap:           10,
-        background:    'rgba(255,255,255,.04)',
+        background:    'var(--sp-overlay)',
         border:        '1px solid var(--sp-dark3)',
         borderRadius:  'var(--radius-md)',
         padding:       '12px 16px',

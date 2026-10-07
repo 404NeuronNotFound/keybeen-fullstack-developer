@@ -100,7 +100,7 @@ export function SkillsPage() {
                 className={`grad-${GRADIENTS[i % GRADIENTS.length]}`}
                 style={{ width: 40, height: 40, borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
-                <Icon size={18} color="#fff" strokeWidth={1.5} />
+                <Icon size={18} color="var(--sp-art-text)" strokeWidth={1.5} />
               </div>
 
               <div style={{ flex: 1, minWidth: 0 }}>

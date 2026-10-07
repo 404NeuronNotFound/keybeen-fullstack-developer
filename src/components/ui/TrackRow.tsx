@@ -21,7 +21,7 @@ export function TrackRow({ project, index, onPlay, isPlaying, isCurrent, isLiked
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => onPlay(project)}
-      style={{ background: hovered ? '#2a2a2a' : isCurrent ? '#1c1c1c' : 'transparent', cursor: 'pointer', transition: 'background .1s' }}
+      style={{ background: hovered ? 'var(--sp-dark3)' : isCurrent ? 'var(--sp-dark2)' : 'transparent', cursor: 'pointer', transition: 'background .1s' }}
     >
       <td style={{ padding: '10px 16px', width: 40, textAlign: 'center', color: isCurrent ? 'var(--sp-green)' : 'var(--sp-gray)', fontSize: 13 }}>
         {isCurrent && isPlaying

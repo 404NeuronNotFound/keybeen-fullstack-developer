@@ -20,9 +20,9 @@ export function TopSkillCard({ skill, icon: Icon, gradient, rank }: Props) {
         className={`grad-${gradient}`}
         style={{ width: '100%', aspectRatio: '1', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10, position: 'relative', overflow: 'hidden' }}
       >
-        <Icon size={36} color="#fff" strokeWidth={1.5} />
+        <Icon size={36} color="var(--sp-art-text)" strokeWidth={1.5} />
         {rank && (
-          <span style={{ position: 'absolute', top: 8, left: 8, fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,.85)', letterSpacing: '.5px' }}>
+          <span style={{ position: 'absolute', top: 8, left: 8, fontSize: 11, fontWeight: 800, color: 'var(--sp-art-text)', letterSpacing: '.5px' }}>
             #{rank}
           </span>
         )}

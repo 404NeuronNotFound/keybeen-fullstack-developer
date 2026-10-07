@@ -19,7 +19,7 @@ export function SkillRadial({ name, level }: Skill) {
     >
       <div style={{ position: 'relative', width: SIZE, height: SIZE }}>
         <svg width={SIZE} height={SIZE} style={{ transform: 'rotate(-90deg)' }}>
-          <circle cx={SIZE / 2} cy={SIZE / 2} r={RADIUS} stroke="#2a2a2a" strokeWidth={STROKE} fill="none" />
+          <circle cx={SIZE / 2} cy={SIZE / 2} r={RADIUS} stroke="var(--sp-dark3)" strokeWidth={STROKE} fill="none" />
           <circle
             cx={SIZE / 2}
             cy={SIZE / 2}

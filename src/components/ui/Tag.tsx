@@ -6,7 +6,7 @@ interface Props {
 }
 
 const VARIANTS = {
-  default: { background: '#333',                      color: '#b3b3b3' },
+  default: { background: 'var(--sp-dark3)',             color: 'var(--sp-gray)' },
   green:   { background: 'rgba(29,185,84,0.15)',      color: 'var(--sp-green)' },
 } as const;
 

@@ -12,7 +12,7 @@ interface Props {
 export function TeaserRow({ project, index }: Props) {
   const openProject = useProjectReaderStore((s) => s.openProject);
   return (
-    <tr style={{ opacity: 0.6 }}>
+    <tr className="project-teaser-row" style={{ opacity: 0.6 }}>
       <td style={{ padding: '10px 16px', width: 40, textAlign: 'center', color: 'var(--sp-gray)', fontSize: 13 }}>
         {index}
       </td>

@@ -20,7 +20,7 @@ const SIZES: Record<Size, CSSProperties> = {
 };
 
 const VARIANTS: Record<Variant, CSSProperties> = {
-  primary: { background: 'var(--sp-green)',  color: '#000',              border: 'none', fontWeight: 700 },
+  primary: { background: 'var(--sp-green)',  color: 'var(--sp-on-green)',              border: 'none', fontWeight: 700 },
   outline: { background: 'transparent',      color: 'var(--sp-white)',   border: '1px solid var(--sp-gray2)', fontWeight: 700 },
   ghost:   { background: 'transparent',      color: 'var(--sp-gray)',    border: 'none', fontWeight: 500 },
 };

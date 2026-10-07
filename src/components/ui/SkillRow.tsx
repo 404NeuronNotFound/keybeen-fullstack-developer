@@ -50,7 +50,7 @@ export function SkillRow({ skill, relatedProjects, onProjectClick }: Props) {
           </div>
         </div>
 
-        <div style={{ height: 4, background: '#2a2a2a', borderRadius: 99 }}>
+        <div style={{ height: 4, background: 'var(--sp-dark3)', borderRadius: 99 }}>
           <div
             style={{
               width:      isVisible ? `${skill.level}%` : '0%',

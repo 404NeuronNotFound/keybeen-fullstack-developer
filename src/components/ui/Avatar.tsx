@@ -60,7 +60,7 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
         overflow:       'hidden',
         flexShrink:     0,
         position:       'relative',
-        background:     'linear-gradient(135deg, #1DB954 0%, #148a3d 100%)',
+        background:     'linear-gradient(135deg, var(--sp-green) 0%, var(--sp-green-h) 100%)',
         display:        'flex',
         alignItems:     'center',
         justifyContent: 'center',
@@ -201,7 +201,7 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
           style={{
             fontSize:      size * 0.32,
             fontWeight:    900,
-            color:         '#fff',
+            color:         'var(--sp-on-green)',
             letterSpacing: '-1px',
             position:      'relative',
             zIndex:        1,

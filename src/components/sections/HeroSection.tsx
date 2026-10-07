@@ -19,7 +19,7 @@ export function HeroSection() {
     <div
       style={{
         padding:    isMobile ? '32px 16px 28px' : '48px 32px 36px',
-        background: 'linear-gradient(180deg, rgba(29,185,84,.28) 0%, var(--sp-dark) 100%)',
+        background: 'linear-gradient(180deg, var(--sp-hero-tint) 0%, var(--sp-dark) 100%)',
       }}
     >
       {/* ── Spotify-style artist layout: photo left, info right ── */}
@@ -37,8 +37,8 @@ export function HeroSection() {
         {/* ── Artist photo ── */}
         <div
           style={{
-            boxShadow:    '0 16px 48px rgba(0,0,0,.6)',
-            border:       '2px solid rgba(255,255,255,.08)',
+            boxShadow:    'var(--sp-modal-shadow)',
+            border:       '2px solid var(--sp-line)',
             borderRadius: '50%',
             flexShrink:   0,
           }}
@@ -62,7 +62,7 @@ export function HeroSection() {
               marginBottom:   10,
             }}
           >
-            <BadgeCheck size={18} fill="var(--sp-green)" color="#000" />
+            <BadgeCheck size={18} fill="var(--sp-green)" color="var(--sp-on-green)" />
             <span
               style={{
                 fontSize:      11,
@@ -122,11 +122,11 @@ export function HeroSection() {
           onClick={() => openProject()}
           aria-label="Open project overview"
           title="Read project overview"
-          style={{ width: 54, height: 54, background: 'var(--sp-green)', border: 'none', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(29,185,84,.45)', transition: 'transform .12s, background .15s', flexShrink: 0 }}
+          style={{ width: 54, height: 54, background: 'var(--sp-green)', border: 'none', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--sp-accent-shadow)', transition: 'transform .12s, background .15s', flexShrink: 0 }}
           onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.07)'; e.currentTarget.style.background = 'var(--sp-green-h)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'var(--sp-green)'; }}
         >
-          <BookOpen size={22} color="#000" />
+          <BookOpen size={22} color="var(--sp-on-green)" />
         </button>
 
         <Button variant="outline" rounded onClick={() => navigate('contact')}>Get in touch</Button>
@@ -140,9 +140,9 @@ export function HeroSection() {
           aria-haspopup="dialog"
           aria-controls="share-profile-dialog"
           aria-expanded={showCard}
-          style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', borderRadius: 24, border: '1px solid rgba(255,255,255,.18)', background: 'rgba(255,255,255,.06)', color: 'var(--sp-gray)', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0 }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.12)'; e.currentTarget.style.color = 'var(--sp-white)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.35)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.06)'; e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.18)'; }}
+          style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', borderRadius: 24, border: '1px solid var(--sp-line)', background: 'var(--sp-overlay)', color: 'var(--sp-gray)', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0 }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; e.currentTarget.style.color = 'var(--sp-white)'; e.currentTarget.style.borderColor = 'var(--sp-gray2)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-overlay)'; e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.borderColor = 'var(--sp-line)'; }}
         >
           <Share2 size={15} />
           Share

@@ -50,7 +50,7 @@ export function ContactLinkCard({ link }: Props) {
           width:          44,
           height:         44,
           borderRadius:   '50%',
-          background:     'rgba(255,255,255,.06)',
+          background:     'var(--sp-overlay)',
           display:        'flex',
           alignItems:     'center',
           justifyContent: 'center',

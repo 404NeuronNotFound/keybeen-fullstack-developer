@@ -32,7 +32,7 @@ export function AboutPage() {
       <button
         onClick={() => navigate('contact')}
         style={{ display: 'flex', alignItems: 'center', gap: 16, background: 'var(--sp-dark2)', border: '1px solid var(--sp-dark3)', borderLeft: '3px solid var(--sp-green)', borderRadius: 'var(--radius-md)', padding: '20px 24px', cursor: 'pointer', width: '100%', textAlign: 'left', transition: 'background .15s' }}
-        onMouseEnter={(e) => { e.currentTarget.style.background = '#242424'; }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-dark2)'; }}
       >
         <div style={{ width: 48, height: 48, background: 'rgba(29,185,84,.12)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>

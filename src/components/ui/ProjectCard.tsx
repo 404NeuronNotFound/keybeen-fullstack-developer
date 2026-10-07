@@ -49,9 +49,9 @@ export function ProjectCard({ project, onPlay, isPlaying, isCurrent }: Props) {
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
             transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            style={{ position: 'absolute', bottom: 8, right: 8, width: 40, height: 40, background: 'var(--sp-green)', border: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#000' }}
+            style={{ position: 'absolute', bottom: 8, right: 8, width: 40, height: 40, background: 'var(--sp-green)', border: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--sp-on-green)' }}
           >
-            {isCurrent && isPlaying ? <Pause size={16} fill="#000" color="#000" /> : <Play size={16} fill="#000" color="#000" style={{ marginLeft: 1 }} />}
+            {isCurrent && isPlaying ? <Pause size={16} fill="var(--sp-on-green)" color="var(--sp-on-green)" /> : <Play size={16} fill="var(--sp-on-green)" color="var(--sp-on-green)" style={{ marginLeft: 1 }} />}
           </motion.button>
         </div>
         <div style={{ fontSize: 14, fontWeight: 700, color: isCurrent ? 'var(--sp-green)' : 'var(--sp-white)', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.title}</div>

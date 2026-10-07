@@ -29,12 +29,12 @@ export function ShareCardInner({ forExport = false }: CardProps) {
       id="share-card-inner"
       style={{
         width:          forExport ? 480 * scale : '100%',
-        background:     'linear-gradient(145deg, #121212 0%, #1a1a1a 60%, rgba(29,185,84,.08) 100%)',
+        background:     'linear-gradient(145deg, var(--sp-dark) 0%, var(--sp-dark2) 60%, rgba(29,185,84,.08) 100%)',
         border:         '1px solid rgba(29,185,84,.25)',
         borderRadius:   forExport ? 0 : 16,
         padding:        32 * scale,
         fontFamily:     "'Inter', 'Helvetica Neue', sans-serif",
-        color:          '#fff',
+        color:          'var(--sp-white)',
         position:       'relative',
         overflow:       'hidden',
         boxSizing:      'border-box',
@@ -45,12 +45,12 @@ export function ShareCardInner({ forExport = false }: CardProps) {
 
       {/* brand watermark */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6 * scale, marginBottom: 24 * scale }}>
-        <div style={{ width: 22 * scale, height: 22 * scale, borderRadius: '50%', background: '#1DB954', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 22 * scale, height: 22 * scale, borderRadius: '50%', background: 'var(--sp-green)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <svg width={12 * scale} height={12 * scale} viewBox="0 0 24 24" fill="none">
-            <path d="M5 3l14 9-14 9V3z" fill="#000" />
+            <path d="M5 3l14 9-14 9V3z" fill="var(--sp-on-green)" />
           </svg>
         </div>
-        <span style={{ fontSize: 12 * scale, fontWeight: 800, letterSpacing: 1, color: '#a7a7a7' }}>Keybeen</span>
+        <span style={{ fontSize: 12 * scale, fontWeight: 800, letterSpacing: 1, color: 'var(--sp-gray)' }}>Keybeen</span>
       </div>
 
       {/* avatar + name row */}
@@ -60,22 +60,22 @@ export function ShareCardInner({ forExport = false }: CardProps) {
         </div>
         <div>
           <div style={{ fontSize: 22 * scale, fontWeight: 900, letterSpacing: -1, lineHeight: 1, marginBottom: 4 * scale }}>{SITE.fullName}</div>
-          <div style={{ fontSize: 13 * scale, fontWeight: 600, color: '#1DB954', marginBottom: 4 * scale }}>{SITE.role}</div>
-          <div style={{ fontSize: 11 * scale, color: '#a7a7a7' }}>{SITE.location}</div>
+          <div style={{ fontSize: 13 * scale, fontWeight: 600, color: 'var(--sp-green)', marginBottom: 4 * scale }}>{SITE.role}</div>
+          <div style={{ fontSize: 11 * scale, color: 'var(--sp-gray)' }}>{SITE.location}</div>
         </div>
       </div>
 
       {/* divider */}
-      <div style={{ height: 1, background: 'rgba(255,255,255,.08)', marginBottom: 20 * scale }} />
+      <div style={{ height: 1, background: 'var(--sp-overlay)', marginBottom: 20 * scale }} />
 
       {/* top row: skills + QR */}
       <div style={{ display: 'flex', gap: 20 * scale, alignItems: 'flex-start', marginBottom: 20 * scale }}>
         {/* skill chips */}
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 10 * scale, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: '#a7a7a7', marginBottom: 10 * scale }}>Top skills</div>
+          <div style={{ fontSize: 10 * scale, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: 'var(--sp-gray)', marginBottom: 10 * scale }}>Top skills</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 * scale }}>
             {TOP_SKILLS.map((s) => (
-              <span key={s} style={{ fontSize: 11 * scale, fontWeight: 600, padding: `${4 * scale}px ${10 * scale}px`, background: 'rgba(29,185,84,.12)', border: '1px solid rgba(29,185,84,.25)', borderRadius: 99, color: '#1DB954' }}>
+              <span key={s} style={{ fontSize: 11 * scale, fontWeight: 600, padding: `${4 * scale}px ${10 * scale}px`, background: 'rgba(29,185,84,.12)', border: '1px solid rgba(29,185,84,.25)', borderRadius: 99, color: 'var(--sp-green)' }}>
                 {s}
               </span>
             ))}
@@ -95,21 +95,21 @@ export function ShareCardInner({ forExport = false }: CardProps) {
       </div>
 
       {/* divider */}
-      <div style={{ height: 1, background: 'rgba(255,255,255,.08)', marginBottom: 16 * scale }} />
+      <div style={{ height: 1, background: 'var(--sp-overlay)', marginBottom: 16 * scale }} />
 
       {/* footer: socials + website */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 * scale }}>
         <div style={{ display: 'flex', gap: 12 * scale, alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5 * scale, fontSize: 11 * scale, color: '#a7a7a7' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 * scale, fontSize: 11 * scale, color: 'var(--sp-gray)' }}>
             <FaGithub size={13 * scale} />
             @{SITE.githubUsername}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5 * scale, fontSize: 11 * scale, color: '#a7a7a7' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 * scale, fontSize: 11 * scale, color: 'var(--sp-gray)' }}>
             <FaInstagram size={13 * scale} />
             @kxvxn.js
           </div>
         </div>
-        <div style={{ fontSize: 12 * scale, fontWeight: 700, color: '#1DB954' }}>{SITE.website}</div>
+        <div style={{ fontSize: 12 * scale, fontWeight: 700, color: 'var(--sp-green)' }}>{SITE.website}</div>
       </div>
     </div>
   );
@@ -201,17 +201,17 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
         {/* modal header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
-            <h2 id="share-dialog-title" style={{ fontSize: 18, fontWeight: 800, color: '#fff', marginBottom: 2 }}>Share profile</h2>
-            <p id="share-dialog-description" style={{ fontSize: 13, color: '#a7a7a7' }}>My developer card, share it or download as PNG</p>
+            <h2 id="share-dialog-title" style={{ fontSize: 18, fontWeight: 800, color: 'var(--sp-white)', marginBottom: 2 }}>Share profile</h2>
+            <p id="share-dialog-description" style={{ fontSize: 13, color: 'var(--sp-gray)' }}>My developer card, share it or download as PNG</p>
           </div>
           <button
             type="button"
             autoFocus
             onClick={onClose}
             aria-label="Close share dialog"
-            style={{ background: 'rgba(255,255,255,.08)', border: 'none', borderRadius: '50%', width: 44, height: 44, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#a7a7a7', transition: 'background .15s' }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.15)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.08)'; }}
+            style={{ background: 'var(--sp-overlay)', border: 'none', borderRadius: '50%', width: 44, height: 44, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--sp-gray)', transition: 'background .15s' }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-overlay)'; }}
           >
             <X size={16} />
           </button>
@@ -228,9 +228,9 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
             <button
               type="button"
               onClick={copyLink}
-              style={{ flex: '1 1 0', minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px 0', background: copied ? 'rgba(29,185,84,.15)' : 'rgba(255,255,255,.06)', border: '1px solid', borderColor: copied ? 'var(--sp-green)' : 'rgba(255,255,255,.12)', borderRadius: 8, color: copied ? '#1DB954' : '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all .2s', whiteSpace: 'nowrap' }}
-              onMouseEnter={(e) => { if (!copied) e.currentTarget.style.background = 'rgba(255,255,255,.1)'; }}
-              onMouseLeave={(e) => { if (!copied) e.currentTarget.style.background = 'rgba(255,255,255,.06)'; }}
+              style={{ flex: '1 1 0', minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px 0', background: copied ? 'rgba(29,185,84,.15)' : 'var(--sp-overlay)', border: '1px solid', borderColor: copied ? 'var(--sp-green)' : 'var(--sp-line)', borderRadius: 8, color: copied ? 'var(--sp-green)' : 'var(--sp-white)', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all .2s', whiteSpace: 'nowrap' }}
+              onMouseEnter={(e) => { if (!copied) e.currentTarget.style.background = 'var(--sp-dark3)'; }}
+              onMouseLeave={(e) => { if (!copied) e.currentTarget.style.background = 'var(--sp-overlay)'; }}
             >
               {copied ? <Check size={15} /> : <Link size={15} />}
               {copied ? 'Copied!' : 'Copy link'}
@@ -239,15 +239,15 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
             <button
               type="button"
               onClick={downloadPNG}
-              style={{ flex: '1 1 0', minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px 0', background: '#1DB954', border: 'none', borderRadius: 8, color: '#000', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'background .15s', whiteSpace: 'nowrap' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#1ed760'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = '#1DB954'; }}
+              style={{ flex: '1 1 0', minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px 0', background: 'var(--sp-green)', border: 'none', borderRadius: 8, color: 'var(--sp-on-green)', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'background .15s', whiteSpace: 'nowrap' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-green-h)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-green)'; }}
             >
               <Download size={15} />
               Download card
             </button>
           </div>
-          <p role="status" aria-live="polite" aria-atomic="true" style={{ fontSize: 13, color: '#a7a7a7', lineHeight: 1.5, marginTop: feedback ? 12 : 0 }}>{feedback}</p>
+          <p role="status" aria-live="polite" aria-atomic="true" style={{ fontSize: 13, color: 'var(--sp-gray)', lineHeight: 1.5, marginTop: feedback ? 12 : 0 }}>{feedback}</p>
         </div>
       </div>
     </dialog>

@@ -84,7 +84,7 @@ export function ProjectPopover({ project, locked = false, children, onPlay }: Pr
             background:      'var(--sp-dark2)',
             border:          '1px solid var(--sp-dark3)',
             borderRadius:    'var(--radius-md)',
-            boxShadow:       '0 24px 64px rgba(0,0,0,.7)',
+            boxShadow:       'var(--sp-modal-shadow)',
             zIndex:          9998,
             overflow:        'visible',
             transformOrigin: pos.above ? 'bottom center' : 'top center',
@@ -149,7 +149,7 @@ export function ProjectPopover({ project, locked = false, children, onPlay }: Pr
                     style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--sp-green)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'transform .1s, background .15s' }}
                     onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.background = 'var(--sp-green-h)'; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)';    e.currentTarget.style.background = 'var(--sp-green)'; }}>
-                    <Play size={16} fill="#000" color="#000" style={{ marginLeft: 1 }} />
+                    <Play size={16} fill="var(--sp-on-green)" color="var(--sp-on-green)" style={{ marginLeft: 1 }} />
                   </button>
                 ) : (
                   <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--sp-dark3)', border: '1px solid var(--sp-dark4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

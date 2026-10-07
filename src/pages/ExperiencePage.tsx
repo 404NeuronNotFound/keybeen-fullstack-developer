@@ -40,7 +40,7 @@ export function ExperiencePage() {
                   className={`grad-${gradient}`}
                   style={{ width: 48, height: 48, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isOpen ? '0 0 0 3px var(--sp-dark), 0 0 0 5px var(--sp-green)' : '0 0 0 3px var(--sp-dark)', transition: 'box-shadow .2s' }}
                 >
-                  <Icon size={20} color="#fff" strokeWidth={2} />
+                  <Icon size={20} color="var(--sp-art-text)" strokeWidth={2} />
                 </div>
                 {!isLast && (
                   <div style={{ flex: 1, width: 2, background: 'var(--sp-dark3)', marginTop: 6, marginBottom: 6, minHeight: 24 }} />

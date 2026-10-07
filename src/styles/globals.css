@@ -20,6 +20,24 @@ html, body, #root { height: 100%; font-family: 'Inter', 'Helvetica Neue', sans-s
   --sp-white:    #ffffff;
   --sp-gray:     #a7a7a7;
   --sp-gray2:    #535353;
+  --sp-on-green: #000000;
+  --sp-art-text: #ffffff;
+  --sp-control: rgba(0,0,0,.7);
+  --sp-overlay: rgba(255,255,255,.06);
+  --sp-line: rgba(255,255,255,.12);
+  --sp-topbar: rgba(18,18,18,.92);
+  --sp-shadow: 0 8px 24px rgba(0,0,0,.3);
+  --sp-modal-shadow: 0 24px 64px rgba(0,0,0,.6);
+  --sp-backdrop: rgba(0,0,0,.8);
+  --sp-warning: #f59e0b;
+  --sp-tiktok: #69c9d0;
+  --sp-instagram: #e1306c;
+  --sp-heat-1: rgba(29,185,84,.25);
+  --sp-heat-2: rgba(29,185,84,.5);
+  --sp-heat-3: rgba(29,185,84,.75);
+  --sp-hero-tint: rgba(29,185,84,.28);
+  --sp-accent-shadow: 0 8px 24px rgba(29,185,84,.45);
+  color-scheme: dark;
 
   --sidebar-w:        236px;
   --projectbar-h:        90px;
@@ -32,15 +50,37 @@ html, body, #root { height: 100%; font-family: 'Inter', 'Helvetica Neue', sans-s
 
 /* ── LIGHT mode overrides ──────────────────────────────────── */
 [data-theme="light"] {
-  --sp-black:  #ffffff;
-  --sp-dark:   #f6f6f6;
-  --sp-dark2:  #ebebeb;
-  --sp-dark3:  #d8d8d8;
-  --sp-dark4:  #c0c0c0;
-  --sp-white:  #111111;
-  --sp-gray:   #555555;
-  --sp-gray2:  #888888;
+  --sp-black:  #edf0e9;
+  --sp-dark:   #f5f6f2;
+  --sp-dark2:  #fffdf8;
+  --sp-dark3:  #e4e9df;
+  --sp-dark4:  #c6d0c2;
+  --sp-white:  #202c24;
+  --sp-gray:   #536157;
+  --sp-gray2:  #66766b;
+  --sp-green:  #187246;
+  --sp-green-h: #125b37;
+  --sp-on-green: #ffffff;
+  --sp-art-text: #34483c;
+  --sp-control: #e4e9df;
+  --sp-overlay: rgba(32,44,36,.045);
+  --sp-line: #c6d0c2;
+  --sp-topbar: rgba(245,246,242,.94);
+  --sp-shadow: 0 8px 24px rgba(41,57,44,.08);
+  --sp-modal-shadow: 0 24px 64px rgba(41,57,44,.16);
+  --sp-backdrop: rgba(32,44,36,.28);
+  --sp-warning: #95510a;
+  --sp-tiktok: #176c72;
+  --sp-instagram: #a92354;
+  --sp-heat-1: #c7e2cd;
+  --sp-heat-2: #8fc29e;
+  --sp-heat-3: #55a370;
+  --sp-hero-tint: #e1ebdf;
+  --sp-accent-shadow: 0 4px 12px rgba(24,114,70,.18);
+  color-scheme: light;
 }
+body { background: var(--sp-dark); color: var(--sp-white); }
+input::placeholder, textarea::placeholder { color: var(--sp-gray); opacity: 1; }
 
 /* Light mode scrollbar */
 [data-theme="light"] ::-webkit-scrollbar-thumb        { background: #c0c0c0; }
@@ -147,11 +187,11 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid var(--sp-dark4);
   border-left: 3px solid var(--toast-accent);
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  box-shadow: var(--sp-shadow);
   pointer-events: auto;
   animation: toastEnter .18s ease-out;
 }
-.toast-card--error { --toast-accent: #f59e0b; }
+.toast-card--error { --toast-accent: var(--sp-warning); }
 .toast-card--info { --toast-accent: var(--sp-gray); }
 .toast-icon {
   width: 32px;
@@ -231,7 +271,7 @@ a { color: inherit; text-decoration: none; }
 }
 .project-open-button {
   background: var(--sp-green);
-  color: #000;
+  color: var(--sp-on-green);
   border-radius: 24px;
   font-weight: 700;
   padding: 8px 12px;
@@ -248,10 +288,10 @@ a { color: inherit; text-decoration: none; }
   background: var(--sp-dark2);
   border: 1px solid var(--sp-dark3);
   border-radius: 16px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, .6);
+  box-shadow: var(--sp-modal-shadow);
 }
 .project-overview::backdrop {
-  background: rgba(0, 0, 0, .8);
+  background: var(--sp-backdrop);
 }
 .project-overview-content {
   padding: clamp(16px, 4vw, 28px);
@@ -280,7 +320,7 @@ a { color: inherit; text-decoration: none; }
 .project-reader-primary {
   background: var(--sp-green);
   border-color: var(--sp-green);
-  color: #000;
+  color: var(--sp-on-green);
   font-weight: 700;
 }
 .project-overview-art {
@@ -379,11 +419,11 @@ a { color: inherit; text-decoration: none; }
   overscroll-behavior: contain;
   border: 1px solid var(--sp-dark3);
   border-radius: 16px;
-  background: #121212;
-  color: #fff;
+  background: var(--sp-dark2);
+  color: var(--sp-white);
 }
 .share-card-modal::backdrop {
-  background: rgba(0, 0, 0, .8);
+  background: var(--sp-backdrop);
   backdrop-filter: blur(6px);
 }
 .share-card-modal button:focus-visible {
@@ -393,4 +433,10 @@ a { color: inherit; text-decoration: none; }
 .theme-toggle:focus-visible {
   outline: 2px solid var(--sp-green);
   outline-offset: 2px;
+}
+[data-theme="light"] .project-card,
+[data-theme="light"] .project-teaser-row,
+[data-theme="light"] .pinned-project { opacity: 1 !important; }
+[data-theme="light"] .project-card {
+  box-shadow: 0 1px 4px rgba(41,57,44,.06), 0 0 0 1px var(--sp-dark3);
 }
