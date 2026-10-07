@@ -26,7 +26,8 @@ export function TeaserCard({ project }: { project: Project }) {
             <Lock size={14} color="rgba(255,255,255,.85)" />
           </div>
         </div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--sp-gray)', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.title}</div>
+        <div className="project-card-title" style={{ color: 'var(--sp-white)' }}>{project.shortTitle}</div>
+        <p className="project-card-subtitle">{project.subtitle}</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}><Tag>Coming soon</Tag></div>
         <div className="project-card-tags" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>{project.tags.map((t) => <Tag key={t}>{t}</Tag>)}</div>
         <button type="button" className="project-reader-button project-details-button" aria-label={`View details for ${project.title}`} aria-haspopup="dialog" aria-controls="project-overview" onClick={() => openProject(project)}>View details</button>

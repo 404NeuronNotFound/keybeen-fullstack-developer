@@ -39,9 +39,10 @@ export function TeaserRow({ project, index }: Props) {
             }}
           />
         </div>
-          <div>
-            <button type="button" className="project-title-button" aria-label={`View details for ${project.title}`} aria-haspopup="dialog" aria-controls="project-overview" onClick={() => openProject(project)}>{project.title}</button>
-            <div style={{ display: 'flex', gap: 4, marginTop: 3 }}>
+          <div style={{ minWidth: 0 }}>
+            <button type="button" className="project-title-button" aria-label={`View details for ${project.title}`} aria-haspopup="dialog" aria-controls="project-overview" onClick={() => openProject(project)}>{project.shortTitle}</button>
+            <p className="project-card-subtitle">{project.subtitle}</p>
+            <div style={{ display: 'flex', gap: 4, marginTop: 3, flexWrap: 'wrap' }}>
               {project.tags.slice(0, 2).map((t) => <Tag key={t}>{t}</Tag>)}
             </div>
           </div>

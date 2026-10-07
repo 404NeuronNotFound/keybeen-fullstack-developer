@@ -18,7 +18,7 @@ export function ProjectBar() {
       <button className="project-bar-summary" onClick={() => openProject()} aria-label={`Read overview of ${project.title}`}>
         <img src={project.image} alt="" width={40} height={40} style={{ objectFit: 'cover', borderRadius: 'var(--radius-sm)', flexShrink: 0 }} />
         <span style={{ minWidth: 0 }}>
-          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.title}</span>
+          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.shortTitle}</span>
           <span style={{ display: 'block', fontSize: 11, color: 'var(--sp-gray)' }}>Project {index + 1} of {projects.length} · {PROJECT_SECTIONS[section]}</span>
         </span>
       </button>

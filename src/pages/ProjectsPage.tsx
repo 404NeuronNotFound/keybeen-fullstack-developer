@@ -8,7 +8,7 @@ export function ProjectsPage() {
   const navigate = useNavStore((s) => s.navigate);
 
   return (
-    <div style={{ padding: '40px 32px' }}>
+    <div className="page">
       <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 10 }}>
         Projects
       </p>
@@ -22,7 +22,7 @@ export function ProjectsPage() {
           background:   'linear-gradient(135deg, rgba(29,185,84,.12), var(--sp-dark2))',
           border:       '1px solid var(--sp-dark3)',
           borderRadius: 'var(--radius-md)',
-          padding:      '40px 32px',
+          padding:      '32px clamp(16px, 4vw, 32px)',
           display:      'flex',
           flexDirection: 'column',
           alignItems:   'center',
@@ -78,7 +78,7 @@ export function ProjectsPage() {
 
       {/* ── teaser grid — locked previews of what's coming ─────────────── */}
       <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--sp-white)', marginBottom: 16 }}>Up next</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(175px, 1fr))', gridAutoRows: '1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(175px, 100%), 1fr))', gridAutoRows: '1fr', gap: 16 }}>
         {projects.map((p) => (
           <TeaserCard key={p.id} project={p} />
         ))}

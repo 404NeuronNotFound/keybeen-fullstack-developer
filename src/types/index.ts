@@ -3,6 +3,8 @@
 export interface Project {
   id: number;
   title: string;
+  shortTitle: string;
+  subtitle: string;
   /** "m:ss" format, e.g. "4:11" */
   duration: string;
   /** display string, e.g. "128K" */

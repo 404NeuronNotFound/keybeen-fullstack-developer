@@ -19,7 +19,7 @@ export function ExperiencePage() {
   const toggle = (id: number) => setOpenId((prev) => (prev === id ? null : id));
 
   return (
-    <div style={{ padding: '40px 32px' }}>
+    <div className="page">
       <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 10 }}>
         Experience
       </p>
@@ -57,6 +57,7 @@ export function ExperiencePage() {
               <button
                 onClick={() => toggle(job.id)}
                 aria-expanded={isOpen}
+                aria-controls={`experience-detail-${job.id}`}
                 style={{ flex: 1, minWidth: 0, textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', paddingBottom: isLast ? 0 : 28, color: 'inherit', font: 'inherit' }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
@@ -77,12 +78,8 @@ export function ExperiencePage() {
 
                 {/* expandable detail */}
                 <div
-                  style={{
-                    maxHeight:  isOpen ? 320 : 0,
-                    opacity:    isOpen ? 1 : 0,
-                    overflow:   'hidden',
-                    transition: 'max-height .3s ease, opacity .2s ease',
-                  }}
+                  id={`experience-detail-${job.id}`}
+                  hidden={!isOpen}
                 >
                   <p style={{ fontSize: 14, color: 'var(--sp-gray)', lineHeight: 1.7, margin: '14px 0 12px' }}>
                     {job.description}

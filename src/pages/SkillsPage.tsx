@@ -45,7 +45,7 @@ export function SkillsPage() {
   );
 
   return (
-    <div style={{ padding: '40px 32px' }}>
+    <div className="page">
       <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 10 }}>
         Tech stack
       </p>
@@ -68,12 +68,14 @@ export function SkillsPage() {
       </div>
 
       {/* ── Category tabs — genre pill style ─────────────────────────── */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+      <div className="skill-tabs" role="group" aria-label="Skill categories">
         {categories.map((cat) => (
           <button
+            className="skill-tab"
+            aria-pressed={activeTab === cat}
             key={cat}
             onClick={() => setActiveTab(cat)}
-            style={{ padding: '8px 20px', borderRadius: 24, border: '1px solid', borderColor: activeTab === cat ? 'var(--sp-green)' : 'var(--sp-gray2)', background: activeTab === cat ? 'rgba(29,185,84,.12)' : 'transparent', color: activeTab === cat ? 'var(--sp-green)' : 'var(--sp-gray)', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}
+            style={{ borderRadius: 24, border: '1px solid', borderColor: activeTab === cat ? 'var(--sp-green)' : 'var(--sp-gray2)', background: activeTab === cat ? 'rgba(29,185,84,.12)' : 'transparent', color: activeTab === cat ? 'var(--sp-green)' : 'var(--sp-gray)', fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}
           >
             {cat}
           </button>

@@ -9,11 +9,13 @@ export function BottomNav() {
     <nav
       style={{
         display:        'flex',
-        height:         'var(--bottomnav-h)',
+        minHeight:      'calc(var(--bottomnav-h) + env(safe-area-inset-bottom, 0px) + 1px)',
         background:     'var(--sp-black)',
         borderTop:      '1px solid var(--sp-dark3)',
         flexShrink:     0,
-        paddingBottom:  'env(safe-area-inset-bottom)',
+        paddingBottom:  'env(safe-area-inset-bottom, 0px)',
+        paddingLeft:    'env(safe-area-inset-left, 0px)',
+        paddingRight:   'env(safe-area-inset-right, 0px)',
       }}
     >
       {NAV_ITEMS.map((item) => {
@@ -27,6 +29,8 @@ export function BottomNav() {
             aria-current={isActive ? 'page' : undefined}
             style={{
               flex:           1,
+              minWidth:       0,
+              minHeight:      'var(--bottomnav-h)',
               display:        'flex',
               flexDirection:  'column',
               alignItems:     'center',
@@ -40,7 +44,7 @@ export function BottomNav() {
             }}
           >
             <Icon size={20} strokeWidth={2} fill={isActive ? 'currentColor' : 'none'} />
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '.2px' }}>{item.label}</span>
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '.2px', overflowWrap: 'anywhere', lineHeight: 1.2 }}>{item.label}</span>
           </button>
         );
       })}

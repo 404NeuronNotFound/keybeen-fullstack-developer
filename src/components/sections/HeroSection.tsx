@@ -17,8 +17,10 @@ export function HeroSection() {
 
   return (
     <div
+      className="page-x"
       style={{
-        padding:    isMobile ? '32px 16px 28px' : '48px 32px 36px',
+        paddingTop: isMobile ? 32 : 48,
+        paddingBottom: isMobile ? 28 : 36,
         background: 'linear-gradient(180deg, var(--sp-hero-tint) 0%, var(--sp-dark) 100%)',
       }}
     >
@@ -99,6 +101,7 @@ export function HeroSection() {
       <div
         style={{
           display:        'flex',
+          flexWrap:       'wrap',
           gap:             isMobile ? 24 : 32,
           marginBottom:    28,
           justifyContent:  isMobile ? 'center' : 'flex-start',
@@ -115,18 +118,20 @@ export function HeroSection() {
         ))}
       </div>
 
-      {/* ── CTA buttons — all on one row ── */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'nowrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
+      {/* Responsive project, contact, and share actions */}
+      <div className="hero-actions">
         {/* project overview */}
         <button
+          className="hero-primary-action"
           onClick={() => openProject()}
           aria-label="Open project overview"
           title="Read project overview"
-          style={{ width: 54, height: 54, background: 'var(--sp-green)', border: 'none', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--sp-accent-shadow)', transition: 'transform .12s, background .15s', flexShrink: 0 }}
+          style={{ background: 'var(--sp-green)', color: 'var(--sp-on-green)', border: 'none', borderRadius: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: 'var(--sp-accent-shadow)', transition: 'transform .12s, background .15s' }}
           onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.07)'; e.currentTarget.style.background = 'var(--sp-green-h)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'var(--sp-green)'; }}
         >
-          <BookOpen size={22} color="var(--sp-on-green)" />
+          <BookOpen size={18} color="var(--sp-on-green)" style={{ flexShrink: 0 }} />
+          <span>Read projects</span>
         </button>
 
         <Button variant="outline" rounded onClick={() => navigate('contact')}>Get in touch</Button>
@@ -134,18 +139,19 @@ export function HeroSection() {
 
         {/* share */}
         <button
+          className="hero-share-action"
           ref={shareButtonRef}
           onClick={() => setShowCard(true)}
           aria-label="Share profile"
           aria-haspopup="dialog"
           aria-controls="share-profile-dialog"
           aria-expanded={showCard}
-          style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', borderRadius: 24, border: '1px solid var(--sp-line)', background: 'var(--sp-overlay)', color: 'var(--sp-gray)', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0 }}
+          style={{ display: 'flex', alignItems: 'center', gap: 7, borderRadius: 24, border: '1px solid var(--sp-line)', background: 'var(--sp-overlay)', color: 'var(--sp-gray)', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .15s' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; e.currentTarget.style.color = 'var(--sp-white)'; e.currentTarget.style.borderColor = 'var(--sp-gray2)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-overlay)'; e.currentTarget.style.color = 'var(--sp-gray)'; e.currentTarget.style.borderColor = 'var(--sp-line)'; }}
         >
           <Share2 size={15} />
-          Share
+          <span className="hero-share-label">Share</span>
         </button>
       </div>
 

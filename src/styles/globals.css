@@ -44,6 +44,8 @@ html, body, #root { height: 100%; font-family: 'Inter', 'Helvetica Neue', sans-s
   --projectbar-h-mobile: 64px;
   --bottomnav-h:      56px;
   --topbar-h:         52px;
+  --page-gutter:      32px;
+  --page-block:       40px;
   --radius-sm:        4px;
   --radius-md:        8px;
 }
@@ -141,11 +143,36 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ── Page padding (responsive) ─────────────────────────────── */
-.page { padding: 40px 32px; }
-.page-x { padding-left: 32px; padding-right: 32px; }
+.page { padding-top: var(--page-block); padding-bottom: var(--page-block); }
+.page, .page-x {
+  min-width: 0;
+  padding-left: max(var(--page-gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--page-gutter), env(safe-area-inset-right, 0px));
+  overflow-wrap: anywhere;
+}
 @media (max-width: 768px) {
-  .page   { padding: 24px 16px; }
-  .page-x { padding-left: 16px; padding-right: 16px; }
+  :root { --page-gutter: 16px; --page-block: 24px; }
+}
+
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.hero-actions > button { min-width: 0; min-height: 48px; max-width: 100%; }
+.hero-primary-action { padding: 12px 16px; font-size: 14px; font-weight: 700; }
+.hero-primary-action span { min-width: 0; overflow-wrap: anywhere; }
+.hero-share-action { justify-content: center; padding: 9px 18px; }
+.hero-actions :focus-visible, .skill-tab:focus-visible {
+  outline: 2px solid var(--sp-green);
+  outline-offset: 3px;
+}
+.skill-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 4px 8px; margin-bottom: 8px; max-width: 100%; }
+.skill-tab { flex: 0 0 auto; min-height: 44px; padding: 8px 14px; white-space: nowrap; }
+.featured-project-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 28px 0 20px; }
+.project-card-title { font-size: 14px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; overflow-wrap: anywhere; }
+.project-card-subtitle { font-size: 12px; color: var(--sp-gray); line-height: 1.5; margin-bottom: 8px; overflow-wrap: anywhere; }
+@media (max-width: 768px) {
+  .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-primary-action { padding: 12px; font-size: 13px; }
+  .hero-share-action { width: 48px; padding: 0; justify-self: start; }
+  .hero-share-label { display: none; }
 }
 
 /* ── Timeline scroll-spy ────────────────────────────────────── */

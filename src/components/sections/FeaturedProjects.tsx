@@ -13,14 +13,14 @@ export function FeaturedProjects() {
       <GithubActivitySection />
 
       {/* ── featured teaser cards ─────────────────────────────────────── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '28px 0 20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div className="featured-project-heading">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--sp-white)' }}>Featured projects</h2>
           <Tag>Coming soon</Tag>
         </div>
         <button
           onClick={() => navigate('projects')}
-          style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--sp-gray)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .1s' }}
+          style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--sp-gray)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .1s', flexShrink: 0, minHeight: 44 }}
           onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--sp-white)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--sp-gray)'; }}
         >
@@ -28,7 +28,7 @@ export function FeaturedProjects() {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(175px, 1fr))', gridAutoRows: '1fr', gap: 16, marginBottom: 40 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(175px, 100%), 1fr))', gridAutoRows: '1fr', gap: 16, marginBottom: 40 }}>
         {projects.filter((p) => p.featured).map((p) => (
           <TeaserCard key={p.id} project={p} />
         ))}
@@ -36,13 +36,13 @@ export function FeaturedProjects() {
 
       {/* ── full track list teaser ────────────────────────────────────── */}
       <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--sp-white)', marginBottom: 16 }}>All tracks</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
         <thead>
           <tr style={{ borderBottom: '1px solid var(--sp-dark3)' }}>
             <th style={{ width: 40, padding: '8px 16px', color: 'var(--sp-gray)', fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'center' }}>#</th>
             <th style={{ padding: '8px 0', color: 'var(--sp-gray)', fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'left' }}>Title</th>
             <th className="hide-on-mobile" style={{ padding: '8px 16px', color: 'var(--sp-gray)', fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>Status</th>
-            <th style={{ padding: '8px 16px', color: 'var(--sp-gray)', fontSize: 11, textAlign: 'right' }}>
+            <th style={{ width: 44, padding: '8px 12px', color: 'var(--sp-gray)', fontSize: 11, textAlign: 'right' }}>
               <Clock size={13} style={{ verticalAlign: 'middle' }} />
             </th>
           </tr>

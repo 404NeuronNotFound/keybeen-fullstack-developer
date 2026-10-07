@@ -83,7 +83,7 @@ export function Sidebar() {
           />
         </div>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--sp-gray)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--sp-gray)', overflowWrap: 'anywhere' }}>{p.shortTitle}</div>
             <div style={{ fontSize: 11, color: 'var(--sp-gray)' }}>Coming soon</div>
           </div>
         </button>
