@@ -1,15 +1,19 @@
+import { TOOL_BRANDS } from '../../constants/toolBrands';
 import type { Skill, Project } from '../../types';
 import { getSkillContext } from '../../utils/skillEvidence';
 
 interface Props {
   skill: Skill;
+  index?: number;
   relatedProjects: Project[];
   onProjectClick: (project: Project) => void;
 }
 
-export function SkillRow({ skill, relatedProjects, onProjectClick }: Props) {
+export function SkillRow({ skill, relatedProjects, onProjectClick, index }: Props) {
+  const brand = TOOL_BRANDS[skill.name];
+  const Icon = brand.icon;
   return <div className="skill-evidence-row">
-    <h3>{skill.name}</h3>
+    <div className="skill-row-heading"><span aria-hidden="true">{String(index ?? 1).padStart(2, '0')}</span><span className="skill-brand-mark" style={{ color: brand.color, background: brand.surface }}><Icon size={20} aria-hidden="true" /></span><h3>{skill.name}</h3></div>
     <p>{skill.description}</p>
     {relatedProjects.length > 0 ? <details>
       <summary>Used in {relatedProjects.length} {relatedProjects.length === 1 ? 'project' : 'projects'}</summary>
