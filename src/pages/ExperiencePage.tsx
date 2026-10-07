@@ -35,9 +35,11 @@ export function ExperiencePage() {
               </button>
             </h2>
             <p className="experience-node-company">{job.company}</p>
-            <div id={'experience-detail-' + job.id} className="experience-node-detail" hidden={!isOpen}>
-              <p>{job.description}</p>
-              <div className="experience-node-tags">{job.tags.map(tag => <Tag key={tag}>{tag}</Tag>)}</div>
+            <div id={'experience-detail-' + job.id} className="experience-node-detail" aria-hidden={!isOpen} inert={!isOpen}>
+              <div className="experience-node-detail-inner">
+                <p>{job.description}</p>
+                <div className="experience-node-tags">{job.tags.map(tag => <Tag key={tag}>{tag}</Tag>)}</div>
+              </div>
             </div>
           </article>
         </li>;

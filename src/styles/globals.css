@@ -748,7 +748,7 @@ a { color: inherit; text-decoration: none; }
 .experience-node-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
 .experience-node-toggle:focus-visible { outline: 2px solid var(--sp-green); outline-offset: 4px; border-radius: 4px; }
 .experience-node-company { color: var(--sp-gray); font-size: 12px; line-height: 1.6; }
-.experience-node-detail > p { max-width: 720px; color: var(--sp-gray); font-size: 14px; line-height: 1.8; margin: 16px 0; }
+.experience-node-detail-inner > p { max-width: 720px; color: var(--sp-gray); font-size: 14px; line-height: 1.8; margin: 16px 0; }
 .experience-node-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 @media (max-width: 600px) {
   .experience-node { grid-template-columns: 36px minmax(0, 1fr); gap: 16px; padding-bottom: 20px; }
@@ -759,4 +759,29 @@ a { color: inherit; text-decoration: none; }
   .experience-node-panel { padding: 14px; }
   .experience-node-panel h2 { font-size: 16px; }
   .experience-node-toggle { gap: 10px; }
+}
+
+/* Quiet depth and smooth, intrinsic-height expansion for the journey. */
+.experience-node::before { background: linear-gradient(var(--sp-dark4), color-mix(in srgb, var(--sp-green) 22%, var(--sp-dark4))); }
+.experience-node::after { transition: background-color 240ms ease; }
+.experience-node[data-expanded="true"]::after { background: color-mix(in srgb, var(--sp-green) 45%, var(--sp-dark4)); }
+.experience-node-icon { box-shadow: 0 0 0 5px var(--sp-dark); transition: color 240ms ease, border-color 240ms ease, box-shadow 240ms ease; }
+.experience-node[data-expanded="true"] > .experience-node-icon { background: linear-gradient(145deg, color-mix(in srgb, var(--sp-green) 14%, var(--sp-dark2)), var(--sp-dark2)); box-shadow: 0 0 0 5px var(--sp-dark), 0 0 0 6px color-mix(in srgb, var(--sp-green) 18%, transparent); }
+.experience-node-panel { position: relative; border-radius: 14px; background: linear-gradient(120deg, var(--sp-dark2), color-mix(in srgb, var(--sp-dark2) 75%, var(--sp-dark))); transition: border-color 240ms ease, box-shadow 240ms ease, transform 240ms ease; }
+.experience-node[data-expanded="true"] .experience-node-panel { border-color: color-mix(in srgb, var(--sp-green) 28%, var(--sp-dark3)); background: linear-gradient(120deg, color-mix(in srgb, var(--sp-green) 5%, var(--sp-dark2)), var(--sp-dark2) 65%); box-shadow: 0 8px 24px rgb(0 0 0 / 6%); }
+.experience-node-meta { font-variant-numeric: tabular-nums; }
+.experience-type { padding: 3px 8px; border-radius: 6px; background: var(--sp-dark3); font-size: 10px; }
+.experience-node-toggle svg { box-sizing: content-box; padding: 6px; border-radius: 50%; background: var(--sp-dark3); transition: transform 280ms ease, color 240ms ease, background-color 240ms ease; }
+.experience-node-toggle[aria-expanded="true"] svg { color: var(--sp-green); background: color-mix(in srgb, var(--sp-green) 10%, var(--sp-dark3)); }
+.experience-node-detail { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden; transition: grid-template-rows 320ms cubic-bezier(.22, 1, .36, 1), opacity 220ms ease, visibility 320ms; }
+.experience-node[data-expanded="true"] .experience-node-detail { grid-template-rows: 1fr; opacity: 1; visibility: visible; }
+.experience-node-detail-inner { min-height: 0; overflow: hidden; }
+.experience-node-detail-inner > p { padding-top: 16px; border-top: 1px solid var(--sp-dark3); }
+@media (hover: hover) {
+  .experience-node-panel:hover { transform: translateX(3px); border-color: var(--sp-gray2); }
+  .experience-node-panel:hover .experience-node-toggle svg { color: var(--sp-green); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience-node::after, .experience-node-icon, .experience-node-panel, .experience-node-toggle svg, .experience-node-detail { transition: none; }
+  .experience-node-panel:hover { transform: none; }
 }
