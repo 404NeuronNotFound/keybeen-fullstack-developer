@@ -1,6 +1,5 @@
-import { Clock } from 'lucide-react';
 import { useNavStore } from '../../store';
-import { TeaserCard, TeaserRow, Tag } from '../../components/ui';
+import { TeaserCard } from '../../components/ui';
 import { GithubActivitySection } from './GithubActivitySection';
 import { projects }          from '../../data';
 
@@ -16,7 +15,6 @@ export function FeaturedProjects() {
       <div className="featured-project-heading">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--sp-white)' }}>Featured projects</h2>
-          <Tag>Coming soon</Tag>
         </div>
         <button
           onClick={() => navigate('projects')}
@@ -33,26 +31,6 @@ export function FeaturedProjects() {
           <TeaserCard key={p.id} project={p} />
         ))}
       </div>
-
-      {/* ── full track list teaser ────────────────────────────────────── */}
-      <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--sp-white)', marginBottom: 16 }}>All tracks</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
-        <thead>
-          <tr style={{ borderBottom: '1px solid var(--sp-dark3)' }}>
-            <th style={{ width: 40, padding: '8px 16px', color: 'var(--sp-gray)', fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'center' }}>#</th>
-            <th style={{ padding: '8px 0', color: 'var(--sp-gray)', fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'left' }}>Title</th>
-            <th className="hide-on-mobile" style={{ padding: '8px 16px', color: 'var(--sp-gray)', fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>Status</th>
-            <th style={{ width: 44, padding: '8px 12px', color: 'var(--sp-gray)', fontSize: 11, textAlign: 'right' }}>
-              <Clock size={13} style={{ verticalAlign: 'middle' }} />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map((p, i) => (
-            <TeaserRow key={p.id} project={p} index={i + 1} />
-          ))}
-        </tbody>
-      </table>
 
     </div>
   );

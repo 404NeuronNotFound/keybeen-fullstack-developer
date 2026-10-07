@@ -3,6 +3,8 @@ import { projects } from '../data';
 import type { Project } from '../types';
 
 export const PROJECT_SECTIONS = ['Overview', 'Technologies', 'Next steps'] as const;
+export const getProjectSections = (project: Project): readonly string[] => project.caseStudy
+  ? ['Overview', 'Case study', 'Technologies', 'Next steps'] : PROJECT_SECTIONS;
 
 interface ProjectReaderState {
   currentProject: Project;
@@ -37,7 +39,7 @@ export const useProjectReaderStore = create<ProjectReaderState>((set, get) => {
     },
     close: () => set({ isOpen: false }),
     setSection: (section) => {
-      if (Number.isInteger(section) && section >= 0 && section < PROJECT_SECTIONS.length) {
+      if (Number.isInteger(section) && section >= 0 && section < getProjectSections(get().currentProject).length) {
         set({ section });
       }
     },

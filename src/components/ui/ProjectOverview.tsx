@@ -2,7 +2,11 @@ import { useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink, X } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { useNavStore, useProjectReaderStore } from '../../store';
-import { PROJECT_SECTIONS } from '../../store/projectReaderStore';
+import { getProjectSections } from '../../store/projectReaderStore';
+import { ProjectCover } from './ProjectCover';
+import { ProjectStatusBadge } from './ProjectStatusBadge';
+import { SaveProjectButton } from './SaveProjectButton';
+import { ProjectCaseStudyContent } from './ProjectCaseStudyContent';
 import { projects } from '../../data';
 import { getProjectUrl } from '../../utils';
 
@@ -17,7 +21,8 @@ export function ProjectOverview() {
   const nextProject = useProjectReaderStore((s) => s.nextProject);
   const navigate = useNavStore((s) => s.navigate);
   const index = projects.findIndex((item) => item.id === project.id);
-  const finalSection = section === PROJECT_SECTIONS.length - 1;
+  const sections = getProjectSections(project);
+  const finalSection = section === sections.length - 1;
   const githubUrl = getProjectUrl(project.github);
   const liveUrl = getProjectUrl(project.live);
 
@@ -38,7 +43,7 @@ export function ProjectOverview() {
   };
 
   return (
-    <dialog id="project-overview" ref={dialogRef} className="project-overview" aria-labelledby="project-overview-title" onCancel={close} onClose={close}>
+    <dialog id="project-overview" ref={dialogRef} className="project-overview" aria-labelledby="project-overview-title" onCancel={close} onClose={event => { if (!event.currentTarget.open) close(); }}>
       <div className="project-overview-content">
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 20 }}>
           <div style={{ minWidth: 0 }}>
@@ -49,32 +54,35 @@ export function ProjectOverview() {
         </header>
 
         <nav aria-label="Overview sections" className="project-section-nav">
-          {PROJECT_SECTIONS.map((label, step) => (
+          {sections.map((label, step) => (
             <button key={label} onClick={() => setSection(step)} aria-current={section === step ? 'step' : undefined}>{step + 1}. {label}</button>
           ))}
         </nav>
 
         <section aria-labelledby="project-section-title" style={{ padding: '24px 0', minHeight: 160 }}>
-          <p role="status" aria-live="polite" style={{ color: 'var(--sp-gray)', fontSize: 12, marginBottom: 8 }}>Section {section + 1} of {PROJECT_SECTIONS.length}</p>
-          <h3 id="project-section-title" style={{ fontSize: 18, marginBottom: 16 }}>{PROJECT_SECTIONS[section]}</h3>
+          <p role="status" aria-live="polite" style={{ color: 'var(--sp-gray)', fontSize: 12, marginBottom: 8 }}>Section {section + 1} of {sections.length}</p>
+          <h3 id="project-section-title" style={{ fontSize: 18, marginBottom: 16 }}>{sections[section]}</h3>
           {section === 0 && (
             <>
-              <img src={project.image} alt="" className="project-overview-art" />
+              <div className="project-overview-cover"><ProjectCover project={project} /></div>
+              <div className="project-card-meta"><ProjectStatusBadge status={project.status} /><SaveProjectButton project={project} /></div>
+              <p className="project-availability">{project.availability}</p>
               <p style={{ color: 'var(--sp-gray)', fontSize: 15, lineHeight: 1.7 }}>{project.description}</p>
               {(githubUrl || liveUrl) && (
                 <div className="project-overview-links">
                   {githubUrl && <a className="project-reader-button" href={githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`View repository for ${project.title}`}><FaGithub size={16} aria-hidden="true" />Repository</a>}
-                  {liveUrl && <a className="project-reader-button" href={liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open demo for ${project.title}`}><ExternalLink size={16} aria-hidden="true" />Live demo</a>}
+                  {liveUrl && <a className="project-reader-button" href={liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open live website for ${project.title}`}><ExternalLink size={16} aria-hidden="true" />Live website</a>}
                 </div>
               )}
             </>
           )}
-          {section === 1 && (
+          {sections[section] === 'Case study' && project.caseStudy && <ProjectCaseStudyContent study={project.caseStudy} />}
+          {sections[section] === 'Technologies' && (
             <ul className="project-technologies">{project.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>
           )}
-          {section === 2 && (
+          {sections[section] === 'Next steps' && (
             <>
-              <p style={{ color: 'var(--sp-gray)', lineHeight: 1.7, marginBottom: 20 }}>Want to know more about this project? Get in touch, or explore the rest of my work.</p>
+              <p style={{ color: 'var(--sp-gray)', lineHeight: 1.7, marginBottom: 20 }}>{project.caseStudy ? project.caseStudy.nextSteps.join(' ') : project.availability + '. Want to know more? Get in touch, or explore the rest of my work.'}</p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <button className="project-reader-button project-reader-primary" onClick={() => goTo('contact')}>Ask about this project</button>
                 <button className="project-reader-button" onClick={() => goTo('projects')}>All projects</button>

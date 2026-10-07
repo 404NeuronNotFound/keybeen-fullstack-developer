@@ -1,88 +1,41 @@
-import { Hammer, ExternalLink } from 'lucide-react';
-import { TeaserCard, Button } from '../components/ui';
-import { useNavStore } from '../store';
+﻿import { useState } from 'react';
+import { Heart } from 'lucide-react';
+import { TeaserCard } from '../components/ui';
 import { projects } from '../data';
-import { SITE } from '../constants';
+import { PROJECT_STATUSES } from '../constants/projects';
+import { useSavedProjectsStore } from '../store/savedProjectsStore';
+import type { ProjectStatus } from '../types';
+
+const categories = [...new Set(projects.map(project => project.category))];
+const statuses = PROJECT_STATUSES.filter(status => projects.some(project => project.status === status.value));
 
 export function ProjectsPage() {
-  const navigate = useNavStore((s) => s.navigate);
+  const [category, setCategory] = useState('all');
+  const [status, setStatus] = useState<ProjectStatus | 'all'>('all');
+  const [savedOnly, setSavedOnly] = useState(false);
+  const savedIds = useSavedProjectsStore(state => state.savedProjectIds);
+  const filtered = projects.filter(project =>
+    (category === 'all' || project.category === category)
+    && (status === 'all' || project.status === status)
+    && (!savedOnly || savedIds.includes(project.id))
+  );
+  const clearFilters = () => { setCategory('all'); setStatus('all'); setSavedOnly(false); };
 
   return (
     <div className="page">
-      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 10 }}>
-        Projects
-      </p>
-      <h1 style={{ fontSize: 36, fontWeight: 900, color: 'var(--sp-white)', letterSpacing: '-1px', marginBottom: 24 }}>
-        The discography
-      </h1>
-
-      {/* ── "in development" banner — Spotify empty-state style ───────── */}
-      <div
-        style={{
-          background:   'linear-gradient(135deg, rgba(29,185,84,.12), var(--sp-dark2))',
-          border:       '1px solid var(--sp-dark3)',
-          borderRadius: 'var(--radius-md)',
-          padding:      '32px clamp(16px, 4vw, 32px)',
-          display:      'flex',
-          flexDirection: 'column',
-          alignItems:   'center',
-          textAlign:    'center',
-          gap:          16,
-          marginBottom: 36,
-        }}
-      >
-        <div
-          style={{
-            width:          64,
-            height:         64,
-            borderRadius:   '50%',
-            background:     'rgba(29,185,84,.12)',
-            border:         '1px solid rgba(29,185,84,.3)',
-            display:        'flex',
-            alignItems:     'center',
-            justifyContent: 'center',
-            animation:      'softPulse 2.4s ease-in-out infinite',
-          }}
-        >
-          <Hammer size={26} color="var(--sp-green)" />
-        </div>
-
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 8 }}>
-            In development
-          </div>
-          <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--sp-white)', marginBottom: 8 }}>
-            New tracks dropping soon
-          </h2>
-          <p style={{ fontSize: 14, color: 'var(--sp-gray)', maxWidth: 440, lineHeight: 1.6 }}>
-            This page and the projects on it are still in the studio. I'm actively building
-            things and will publish them here as they ship. Check back soon, or follow along on GitHub.
-          </p>
-        </div>
-
-        <div style={{ display: 'flex', gap: 12, marginTop: 4, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Button
-            variant="primary"
-            rounded
-            onClick={() => window.open(SITE.github, '_blank', 'noopener,noreferrer')}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
-          >
-            <ExternalLink size={16} />
-            Follow on GitHub
-          </Button>
-          <Button variant="outline" rounded onClick={() => navigate('contact')}>
-            Ask about a project
-          </Button>
-        </div>
+      <p className="discography-eyebrow">Projects</p>
+      <h1 className="discography-title">The discography</h1>
+      <p className="discography-intro">Explore the ideas, tools, and decisions behind my work. Save a project to come back to it later.</p>
+      <div className="project-filter-toolbar" role="group" aria-label="Filter projects">
+        <label className="project-filter-select"><span>Category</span><select value={category} onChange={event => setCategory(event.target.value)}><option value="all">All categories</option>{categories.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
+        <label className="project-filter-select"><span>Status</span><select value={status} onChange={event => setStatus(event.target.value as ProjectStatus | 'all')}><option value="all">All statuses</option>{statuses.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
+        <button className="saved-project-filter" aria-pressed={savedOnly} onClick={() => setSavedOnly(value => !value)}><Heart size={15} aria-hidden="true" />Saved ({savedIds.length})</button>
+        {(category !== 'all' || status !== 'all' || savedOnly) && <button className="project-filter-clear" onClick={clearFilters}>Clear filters</button>}
       </div>
-
-      {/* ── teaser grid — locked previews of what's coming ─────────────── */}
-      <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--sp-white)', marginBottom: 16 }}>Up next</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(175px, 100%), 1fr))', gridAutoRows: '1fr', gap: 16 }}>
-        {projects.map((p) => (
-          <TeaserCard key={p.id} project={p} />
-        ))}
-      </div>
+      <p role="status" aria-live="polite" className="project-result-count">{filtered.length} {filtered.length === 1 ? 'project' : 'projects'}{savedOnly ? ' in your saved selection' : ''}</p>
+      {filtered.length ? <>
+        <div className="discography-grid">{filtered.map(project => <TeaserCard key={project.id} project={project} />)}</div>
+      </> : <div className="project-empty-state"><p>{savedOnly && savedIds.length === 0 ? 'Use the heart on a project to save it here.' : 'No projects match these filters.'}</p><button className="project-reader-button" onClick={clearFilters}>Browse all projects</button></div>}
     </div>
   );
 }

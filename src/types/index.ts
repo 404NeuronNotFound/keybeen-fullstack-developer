@@ -1,14 +1,32 @@
 // ─── Domain models ────────────────────────────────────────────────────────────
 
+export type ProjectStatus = 'released' | 'completed' | 'in-progress' | 'prototype' | 'archived';
+
+export interface ProjectCaseStudy {
+  problem: string;
+  intendedUsers: string;
+  role: string;
+  constraints: string[];
+  decisions: string[];
+  screenshots: { src: string; caption: string }[];
+  outcome: string;
+  lessons: string[];
+  nextSteps: string[];
+  linerNote: string;
+}
+
 export interface Project {
   id: number;
   title: string;
   shortTitle: string;
   subtitle: string;
-  /** "m:ss" format, e.g. "4:11" */
-  duration: string;
-  /** display string, e.g. "128K" */
-  plays: string;
+  category: string;
+  accent: string;
+  /** Set only after the project owner confirms its actual status. */
+  status?: ProjectStatus;
+  availability?: string;
+  /** Only publish confirmed first-person facts and genuine screenshot captions. */
+  caseStudy?: ProjectCaseStudy;
   /** CSS class suffix: "emerald" | "blue" | "yellow" | "purple" | "teal" | "zinc" */
   gradient: string;
   tags: string[];

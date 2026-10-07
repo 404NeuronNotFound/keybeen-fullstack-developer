@@ -1,15 +1,15 @@
 import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Play, Lock, ExternalLink } from 'lucide-react';
+import { BookOpen, ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import type { Project } from '../../types';
 import { getProjectUrl } from '../../utils';
+import { useProjectReaderStore } from '../../store';
+import { ProjectCover } from './ProjectCover';
 
 interface Props {
   project:  Project;
-  locked?:  boolean;
   children: React.ReactNode;
-  onPlay?:  (p: Project) => void;
 }
 
 const DELAY_MS  = 280;
@@ -32,7 +32,8 @@ function positionPreview(card: HTMLElement, preview: HTMLElement) {
   preview.style.visibility = 'visible';
 }
 
-export function ProjectPopover({ project, locked = false, children, onPlay }: Props) {
+export function ProjectPopover({ project, children }: Props) {
+  const openProject = useProjectReaderStore(state => state.openProject);
   const githubUrl = getProjectUrl(project.github);
   const liveUrl = getProjectUrl(project.live);
   const [visible, setVisible] = useState(false);
@@ -130,45 +131,13 @@ export function ProjectPopover({ project, locked = false, children, onPlay }: Pr
           {/* rounded inner clip */}
           <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
 
-            {/* thumbnail */}
-            <div className={`grad-${project.gradient}`} style={{ height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 44, position: 'relative' }}>
-             <img
-              src={project.image}
-              alt={project.title}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-              }}
-            />
-              {locked && (
-                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                    <Lock size={20} color="rgba(255,255,255,.85)" />
-                    <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,.75)', letterSpacing: '.5px', textTransform: 'uppercase' }}>Coming soon</span>
-                  </div>
-                </div>
-              )}
-            </div>
+            <ProjectCover project={project} />
 
             {/* content */}
             <div style={{ padding: '14px 14px 16px' }}>
               {/* action row */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                {!locked && onPlay ? (
-                  <button
-                    onClick={e => { e.stopPropagation(); onPlay(project); }}
-                    style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--sp-green)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'transform .1s, background .15s' }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.background = 'var(--sp-green-h)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)';    e.currentTarget.style.background = 'var(--sp-green)'; }}>
-                    <Play size={16} fill="var(--sp-on-green)" color="var(--sp-on-green)" style={{ marginLeft: 1 }} />
-                  </button>
-                ) : (
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--sp-dark3)', border: '1px solid var(--sp-dark4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Lock size={14} color="var(--sp-gray)" />
-                  </div>
-                )}
+                <button className="project-icon-button" aria-label={'View details for ' + project.title} aria-haspopup="dialog" onClick={() => { hide(); openProject(project); }}><BookOpen size={18} /></button>
 
                 <div style={{ display: 'flex', gap: 8 }}>
                   {githubUrl && <a href={githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`View repository for ${project.title}`}
@@ -177,8 +146,8 @@ export function ProjectPopover({ project, locked = false, children, onPlay }: Pr
                     onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--sp-gray)'; }}>
                     <FaGithub size={16} />
                   </a>}
-                  {!locked && liveUrl && (
-                    <a href={liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open demo for ${project.title}`}
+                  {liveUrl && (
+                    <a href={liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open live website for ${project.title}`}
                       style={{ color: 'var(--sp-gray)', display: 'flex', padding: 4, transition: 'color .15s' }}
                       onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--sp-white)'; }}
                       onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--sp-gray)'; }}>

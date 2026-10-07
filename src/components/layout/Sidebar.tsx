@@ -1,5 +1,6 @@
-import { Lock, Play } from 'lucide-react';
-import { useNavStore } from '../../store';
+import { Play } from 'lucide-react';
+import { useNavStore, useProjectReaderStore } from '../../store';
+import { projectStatusLabel } from '../../constants/projects';
 import { useNowCoding }                from '../../hooks';
 import { projects }                    from '../../data';
 import { NAV_ITEMS }                   from '../../constants';
@@ -8,6 +9,7 @@ import type { SectionId }              from '../../types';
 export function Sidebar() {
   const navigate     = useNavStore((s) => s.navigate);
   const active       = useNavStore((s) => s.active);
+  const openProject = useProjectReaderStore(s => s.openProject);
   const nowCoding    = useNowCoding();
 
   return (
@@ -50,14 +52,13 @@ export function Sidebar() {
       {/* pinned featured projects — in development */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '0 10px', marginBottom: 8 }}>
         <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.1px', textTransform: 'uppercase', color: 'var(--sp-gray)' }}>Pinned</span>
-        <Lock size={11} color="var(--sp-gray)" />
       </div>
       {projects.filter((p) => p.featured).map((p) => (
         <button
           key={p.id}
           className="pinned-project"
-          onClick={() => navigate('projects')}
-          style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 8px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', background: 'transparent', border: 'none', color: 'inherit', width: '100%', transition: 'background .1s', opacity: 0.6 }}
+          onClick={() => openProject(p)}
+          style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 8px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', background: 'transparent', border: 'none', color: 'inherit', width: '100%', transition: 'background .1s' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
         >
@@ -68,7 +69,7 @@ export function Sidebar() {
             borderRadius: 'var(--radius-sm)',
             overflow: 'hidden',
             flexShrink: 0,
-            filter: 'grayscale(0.4)',
+
           }}
         >
           <img
@@ -84,7 +85,7 @@ export function Sidebar() {
         </div>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--sp-gray)', overflowWrap: 'anywhere' }}>{p.shortTitle}</div>
-            <div style={{ fontSize: 11, color: 'var(--sp-gray)' }}>Coming soon</div>
+            <div style={{ fontSize: 11, color: 'var(--sp-gray)' }}>{projectStatusLabel(p.status)}</div>
           </div>
         </button>
       ))}
