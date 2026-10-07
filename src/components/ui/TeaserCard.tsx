@@ -4,9 +4,11 @@ import { Tag } from './Tag';
 import { ProjectPopover } from './ProjectPopover';
 import type { Project } from '../../types';
 import { useHoverSound } from '../../hooks/useHoverSound';
+import { useProjectReaderStore } from '../../store';
 
 export function TeaserCard({ project }: { project: Project }) {
   const { play: playSound } = useHoverSound();
+  const openProject = useProjectReaderStore((s) => s.openProject);
 
   return (
     <ProjectPopover project={project} locked>
@@ -26,6 +28,7 @@ export function TeaserCard({ project }: { project: Project }) {
         <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--sp-gray)', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{project.title}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}><Tag>Coming soon</Tag></div>
         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>{project.tags.map((t) => <Tag key={t}>{t}</Tag>)}</div>
+        <button type="button" className="project-reader-button project-details-button" aria-label={`View details for ${project.title}`} aria-haspopup="dialog" aria-controls="project-overview" onClick={() => openProject(project)}>View details</button>
       </motion.div>
     </ProjectPopover>
   );

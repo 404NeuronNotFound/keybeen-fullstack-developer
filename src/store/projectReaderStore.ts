@@ -31,7 +31,7 @@ export const useProjectReaderStore = create<ProjectReaderState>((set, get) => {
       if (!selected) return;
       set({
         currentProject: selected,
-        section: selected.id === get().currentProject.id ? get().section : 0,
+        section: project ? 0 : get().section,
         isOpen: true,
       });
     },

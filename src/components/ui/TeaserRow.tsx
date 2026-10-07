@@ -1,6 +1,7 @@
 import { Lock } from 'lucide-react';
 import { Tag } from './Tag';
 import type { Project } from '../../types';
+import { useProjectReaderStore } from '../../store';
 
 interface Props {
   project: Project;
@@ -9,6 +10,7 @@ interface Props {
 
 /** Same shape as TrackRow, but locked — no play action, "Coming soon" state */
 export function TeaserRow({ project, index }: Props) {
+  const openProject = useProjectReaderStore((s) => s.openProject);
   return (
     <tr style={{ opacity: 0.6 }}>
       <td style={{ padding: '10px 16px', width: 40, textAlign: 'center', color: 'var(--sp-gray)', fontSize: 13 }}>
@@ -38,7 +40,7 @@ export function TeaserRow({ project, index }: Props) {
           />
         </div>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--sp-gray)' }}>{project.title}</div>
+            <button type="button" className="project-title-button" aria-label={`View details for ${project.title}`} aria-haspopup="dialog" aria-controls="project-overview" onClick={() => openProject(project)}>{project.title}</button>
             <div style={{ display: 'flex', gap: 4, marginTop: 3 }}>
               {project.tags.slice(0, 2).map((t) => <Tag key={t}>{t}</Tag>)}
             </div>

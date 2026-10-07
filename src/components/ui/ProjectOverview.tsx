@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, X } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 import { useNavStore, useProjectReaderStore } from '../../store';
 import { PROJECT_SECTIONS } from '../../store/projectReaderStore';
 import { projects } from '../../data';
+import { getProjectUrl } from '../../utils';
 
 export function ProjectOverview() {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -16,6 +18,8 @@ export function ProjectOverview() {
   const navigate = useNavStore((s) => s.navigate);
   const index = projects.findIndex((item) => item.id === project.id);
   const finalSection = section === PROJECT_SECTIONS.length - 1;
+  const githubUrl = getProjectUrl(project.github);
+  const liveUrl = getProjectUrl(project.live);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -34,7 +38,7 @@ export function ProjectOverview() {
   };
 
   return (
-    <dialog ref={dialogRef} className="project-overview" aria-labelledby="project-overview-title" onCancel={close} onClose={close}>
+    <dialog id="project-overview" ref={dialogRef} className="project-overview" aria-labelledby="project-overview-title" onCancel={close} onClose={close}>
       <div className="project-overview-content">
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 20 }}>
           <div style={{ minWidth: 0 }}>
@@ -57,6 +61,12 @@ export function ProjectOverview() {
             <>
               <img src={project.image} alt="" className="project-overview-art" />
               <p style={{ color: 'var(--sp-gray)', fontSize: 15, lineHeight: 1.7 }}>{project.description}</p>
+              {(githubUrl || liveUrl) && (
+                <div className="project-overview-links">
+                  {githubUrl && <a className="project-reader-button" href={githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`View repository for ${project.title}`}><FaGithub size={16} aria-hidden="true" />Repository</a>}
+                  {liveUrl && <a className="project-reader-button" href={liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open demo for ${project.title}`}><ExternalLink size={16} aria-hidden="true" />Live demo</a>}
+                </div>
+              )}
             </>
           )}
           {section === 1 && (

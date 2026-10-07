@@ -308,11 +308,48 @@ a { color: inherit; text-decoration: none; }
   cursor: default;
 }
 .project-bar button:focus-visible,
-.project-overview button:focus-visible {
+.project-overview button:focus-visible,
+.project-overview a:focus-visible,
+.project-details-button:focus-visible,
+.project-title-button:focus-visible {
   outline: 2px solid var(--sp-green);
   outline-offset: 3px;
 }
 .project-bar button:not(:disabled):hover,
-.project-overview button:not(:disabled):hover {
+.project-overview button:not(:disabled):hover,
+.project-overview a:hover,
+.project-details-button:hover {
   filter: brightness(1.15);
+}
+
+.project-details-button {
+  margin-top: 16px;
+  width: 100%;
+}
+.project-title-button {
+  display: block;
+  min-height: 44px;
+  padding: 6px 0;
+  color: var(--sp-white);
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.project-title-button:hover { text-decoration: underline; }
+.project-overview-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.project-overview-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
 }
