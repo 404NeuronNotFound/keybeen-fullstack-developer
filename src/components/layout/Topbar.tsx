@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, ChevronDown, Moon, Sun, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Moon, Sun, Volume2, VolumeX } from 'lucide-react';
 import { useNavStore, useThemeStore, useSoundStore } from '../../store';
 import { primeAudio } from '../../hooks/useHoverSound';
 import { SITE }          from '../../constants';
@@ -106,13 +106,10 @@ export function Topbar() {
 
         {/* user pill */}
         <div
-          style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--sp-dark3)', padding: '4px 10px 4px 4px', borderRadius: 24, cursor: 'pointer', transition: 'background .15s' }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--sp-dark3)'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--sp-dark3)'; }}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--sp-dark3)', padding: '4px 10px 4px 4px', borderRadius: 24 }}
         >
           <Avatar size={28} />
           <span className="hide-on-mobile" style={{ fontSize: 13, fontWeight: 700, color: 'var(--sp-white)' }}>{SITE.role}</span>
-          <ChevronDown size={14} color="var(--sp-gray)" className="hide-on-mobile" />
         </div>
       </div>
     </div>

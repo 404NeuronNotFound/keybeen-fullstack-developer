@@ -106,7 +106,7 @@ export function ShareCardInner({ forExport = false }: CardProps) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 * scale, fontSize: 11 * scale, color: 'var(--sp-gray)' }}>
             <FaInstagram size={13 * scale} />
-            @kxvxn.js
+            @{SITE.instagramUsername}
           </div>
         </div>
         <div style={{ fontSize: 12 * scale, fontWeight: 700, color: 'var(--sp-green)' }}>{SITE.website}</div>

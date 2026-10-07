@@ -3,6 +3,7 @@ import type { ExperienceItem } from '../types';
 export const experience: ExperienceItem[] = [
   {
     id: 1,
+    icon: 'cpu',
     emoji: '⚡',
     role: 'AI-Assisted Full-Stack Developer',
     company: 'Personal Projects',
@@ -14,6 +15,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     id: 2,
+    icon: 'monitor',
     emoji: '🖥️',
     role: 'Frontend Developer / Tech Support Intern',
     company: 'MSU Naawan — ICT Center',
@@ -25,6 +27,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     id: 3,
+    icon: 'graduation',
     emoji: '🎓',
     role: 'Full-Stack Developer — Capstone Project',
     company: 'University Capstone',
@@ -36,6 +39,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     id: 4,
+    icon: 'sparkles',
     emoji: '👋',
     role: 'Hello, World!',
     company: 'Where it all started',

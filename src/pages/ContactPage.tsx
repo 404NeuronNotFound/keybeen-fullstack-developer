@@ -21,9 +21,9 @@ const LABEL_STYLE: CSSProperties = {
 // contact links
 const LINKS: ContactLink[] = [
   { icon: FiMail,     label: 'Gmail',     handle: SITE.email,        color: 'var(--sp-green)', href: `mailto:${SITE.email}` },
-  { icon: FaGithub,   label: 'GitHub',    handle: '@404NeuronNotFound', color: 'var(--sp-white)', href: SITE.github },
-  { icon: FaInstagram, label: 'Instagram', handle: '@kxvxn',          color: 'var(--sp-instagram)', href: SITE.instagram },
-  { icon: FaTiktok,   label: 'TikTok',    handle: '@keybeen.creatives', color: 'var(--sp-tiktok)', href: SITE.tiktok },
+  { icon: FaGithub,   label: 'GitHub',    handle: `@${SITE.githubUsername}`, color: 'var(--sp-white)', href: SITE.github },
+  { icon: FaInstagram, label: 'Instagram', handle: `@${SITE.instagramUsername}`, color: 'var(--sp-instagram)', href: SITE.instagram },
+  { icon: FaTiktok,   label: 'TikTok',    handle: `@${SITE.tiktokUsername}`, color: 'var(--sp-tiktok)', href: SITE.tiktok },
 ];
 
 export function ContactPage() {

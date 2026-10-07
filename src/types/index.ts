@@ -28,6 +28,7 @@ export type SkillCategory = Record<string, Skill[]>;
 
 export interface ExperienceItem {
   id: number;
+  icon: 'cpu' | 'monitor' | 'graduation' | 'sparkles';
   emoji: string;
   role: string;
   company: string;
@@ -74,6 +75,8 @@ export interface SiteConfig {
   initials: string;
   stats: StatItem[];
   instagram: string;
+  instagramUsername: string;
   tiktok: string;
+  tiktokUsername: string;
   githubUsername: string;
 }

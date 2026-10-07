@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import { GraduationCap, Monitor, Sparkles, ChevronDown, CpuIcon  } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import type { ExperienceItem } from '../types';
 import { Tag } from '../components/ui';
 import { experience } from '../data';
 
 /** One icon + gradient per entry, keeping the Spotify "cover art" feel */
-const ICONS: LucideIcon[] = [CpuIcon, GraduationCap, Monitor, Sparkles];
+const ICONS: Record<ExperienceItem['icon'], LucideIcon> = {
+  cpu: CpuIcon,
+  monitor: Monitor,
+  graduation: GraduationCap,
+  sparkles: Sparkles,
+};
 const GRADIENTS = ['emerald', 'blue', 'purple'];
 
 export function ExperiencePage() {
@@ -28,7 +34,7 @@ export function ExperiencePage() {
       <div style={{ maxWidth: 640, position: 'relative' }}>
         {experience.map((job, i) => {
           const isOpen = openId === job.id;
-          const Icon = ICONS[i % ICONS.length];
+          const Icon = ICONS[job.icon];
           const gradient = GRADIENTS[i % GRADIENTS.length];
           const isLast = i === experience.length - 1;
 

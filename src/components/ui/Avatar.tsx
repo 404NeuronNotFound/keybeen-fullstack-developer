@@ -65,7 +65,7 @@ export function Avatar({ size = 40, src = '/avatar.jpeg', hoverSrc = '/avatar-sp
         alignItems:     'center',
         justifyContent: 'center',
         userSelect:     'none',
-        cursor:         'pointer',
+        cursor:         'default',
       }}
     >
       {/* base layer — the reveal image, always mounted underneath */}

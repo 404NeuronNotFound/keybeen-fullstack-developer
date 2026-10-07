@@ -71,7 +71,7 @@ export function ProjectsPage() {
             Follow on GitHub
           </Button>
           <Button variant="outline" rounded onClick={() => navigate('contact')}>
-            Get notified
+            Ask about a project
           </Button>
         </div>
       </div>

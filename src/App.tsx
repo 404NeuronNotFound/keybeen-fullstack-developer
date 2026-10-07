@@ -1,4 +1,6 @@
 import { useNavStore }                                 from './store';
+import { subscribeToBrowserNavigation } from './store/navStore';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useIsMobile }                                 from './hooks';
 import { Sidebar, Topbar, ProjectBar, BottomNav }      from './components/layout';
 import { ProjectOverview } from './components/ui/ProjectOverview';
@@ -29,6 +31,12 @@ const PAGE_MAP: Record<SectionId, JSX.Element> = {
 export default function App() {
   const active   = useNavStore((s) => s.active);
   const isMobile = useIsMobile();
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(subscribeToBrowserNavigation, []);
+  useLayoutEffect(() => {
+    if (mainRef.current) mainRef.current.scrollTop = useNavStore.getState().getScrollPosition(active);
+  }, [active]);
 
   return (
     <div
@@ -50,6 +58,8 @@ export default function App() {
         <Topbar />
 
         <main
+          ref={mainRef}
+          onScroll={event => useNavStore.getState().recordScroll(active, event.currentTarget.scrollTop)}
           role="main"
           style={{ flex: 1, overflowY: 'auto', background: 'var(--sp-dark)', WebkitOverflowScrolling: 'touch' }}
         >

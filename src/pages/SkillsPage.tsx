@@ -13,7 +13,7 @@ interface SkillWithCategory extends Skill {
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   Frontend: Code2,
   Backend:  Server,
-  DevOps:   Cloud,
+  DevTools: Cloud,
 };
 
 /** Cycled across cards/rows for visual variety, Spotify-cover style */

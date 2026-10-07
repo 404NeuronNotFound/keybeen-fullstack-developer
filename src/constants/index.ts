@@ -2,6 +2,10 @@ import { Home, User, Code2, Briefcase, LayoutGrid, Mail, type LucideIcon } from 
 import type { SectionId, SiteConfig } from '../types';
 
 
+const INSTAGRAM_USERNAME = 'kxvxn.js';
+const TIKTOK_USERNAME = 'keybeen.creatives';
+const GITHUB_USERNAME = '404NeuronNotFound';
+
 export const SITE: SiteConfig = {
   name:     'Keybeen',
   fullName: 'Keybeen',
@@ -9,13 +13,15 @@ export const SITE: SiteConfig = {
   tagline:  'Building things for the web & beyond',
   location: 'Cagayan De Oro, PH',
   email:    'keybeen.webdeveloper@gmail.com',
-  github:   'https://github.com/404NeuronNotFound',
-  githubUsername: '404NeuronNotFound',
+  github:   `https://github.com/${GITHUB_USERNAME}`,
+  githubUsername: GITHUB_USERNAME,
   linkedin: 'https://linkedin.com/in/kxvxn',
   twitter:  'https://twitter.com/kxvxn',
   website:  'https://keybeen-fullstack-developer.vercel.app/',
-  instagram: 'https://instagram.com/kxvxn.js',
-  tiktok: 'https://tiktok.com/@keybeen.creatives',
+  instagram: `https://instagram.com/${INSTAGRAM_USERNAME}`,
+  instagramUsername: INSTAGRAM_USERNAME,
+  tiktok: `https://tiktok.com/@${TIKTOK_USERNAME}`,
+  tiktokUsername: TIKTOK_USERNAME,
   initials: 'KR',
 
   stats: [
