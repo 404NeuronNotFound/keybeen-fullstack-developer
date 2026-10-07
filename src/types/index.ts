@@ -40,8 +40,7 @@ export interface Project {
 
 export interface Skill {
   name: string;
-  /** 0 – 100 */
-  level: number;
+  description: string;
 }
 
 export type SkillCategory = Record<string, Skill[]>;

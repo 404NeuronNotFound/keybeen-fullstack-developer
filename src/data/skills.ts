@@ -2,28 +2,31 @@ import type { SkillCategory } from '../types';
 
 export const skills: SkillCategory = {
   Frontend: [
-    { name: 'React',        level: 85 },
-    { name: 'TypeScript',   level: 82 },
-    { name: 'JavaScript',   level: 84 },
-    { name: 'Next.js',      level: 78 },
-    { name: 'Tailwind CSS', level: 90 },
-    { name: 'React Native', level: 72 },
-    { name: 'Vue',          level: 90 },
-    { name: 'Nuxt.JS',      level: 80 },
+    { name: 'React', description: 'Web interfaces and reusable components' },
+    { name: 'TypeScript', description: 'Typed application code' },
+    { name: 'JavaScript', description: 'Browser and application logic' },
+    { name: 'Next.js', description: 'React web applications' },
+    { name: 'Tailwind CSS', description: 'Responsive layouts and styling' },
+    { name: 'React Native', description: 'Mobile app interfaces' },
+    { name: 'Vue', description: 'Component-based web interfaces' },
+    { name: 'Nuxt.JS', description: 'Vue web applications' },
   ],
   Backend: [
-    { name: 'Node.js',    level: 85 },
-    { name: 'Django',     level: 90 },
-    { name: 'PostgreSQL', level: 85 },
-    { name: 'MySQL',      level: 80 },
-    { name: 'MongoDB',    level: 75 },
-    { name: 'Laravel',    level: 70 },
+    { name: 'Node.js', description: 'Server-side JavaScript' },
+    { name: 'Django', description: 'Web backends and application logic' },
+    { name: 'PostgreSQL', description: 'Relational data storage' },
+    { name: 'MySQL', description: 'Relational data storage' },
+    { name: 'MongoDB', description: 'Document-based data storage' },
+    { name: 'Laravel', description: 'PHP web applications' },
   ],
   DevTools: [
-    { name: 'Docker',         level: 82 },
-    { name: 'ExpoGo',         level: 90 },
-    { name: 'Postman',        level: 92 },
-    { name: 'GitHub Actions', level: 95 },
-    { name: 'Vercel',         level: 90 },
+    { name: 'Docker', description: 'Containerized development environments' },
+    { name: 'ExpoGo', description: 'React Native development previews' },
+    { name: 'Postman', description: 'API requests and debugging' },
+    { name: 'GitHub Actions', description: 'Automated repository workflows' },
+    { name: 'Vercel', description: 'Web application hosting' },
   ],
 };
+
+// Curated core tools, rather than a ranking based on self-rated percentages.
+export const CORE_SKILL_NAMES = ['React', 'Django', 'TypeScript', 'Node.js', 'Tailwind CSS'];

@@ -1,49 +1,26 @@
-import { ChevronRight, MessageCircle } from 'lucide-react';
-import { useNavStore } from '../store';
-import { SITE }        from '../constants';
-
-const BIO_PARAGRAPHS = [
-  `I'm a <b> AI Assisted Full-Stack App & Web Developer</b> who loves turning complex idea or problem into clean, elegant solutions. I've been shipping code for 3+ years, from scrappy <"Hello World!"> to scaling products used by me.`,
-  `My stack spans both ends: <b>React & TypeScript</b> on the frontend, <b>Node.js, Django, & PostgreSQL</b> on the backend. I care deeply about performance, accessibility, and developer experience.`,
-  `When I'm not coding, I'm editing videos for international clients, or doing side quests around ${SITE.location} outdoors. I'm also a student of <b>Stoicism</b>, it keeps me grounded when things is outside of my control like a deploy breaking at midnight. I believe great software is made by people who give a damn.`,
-];
+import { SITE } from '../constants';
+import { PageNextStep } from '../components/ui/PageNextStep';
 
 export function AboutPage() {
-  const navigate = useNavStore((s) => s.navigate);
- 
   return (
     <div className="page">
-      <div style={{ background: 'rgba(29,185,84,.08)', border: '1px solid var(--sp-dark3)', borderRadius: 'var(--radius-md)', padding: 32, marginBottom: 24 }}>
-        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--sp-green)', marginBottom: 10 }}>About me</p>
-        <h1 style={{ fontSize: 36, fontWeight: 900, color: 'var(--sp-white)', letterSpacing: '-1px', marginBottom: 24 }}>Hey, I build things.</h1>
-        {BIO_PARAGRAPHS.map((text, i) => (
-          <p
-            key={i}
-            style={{ fontSize: 15, color: 'var(--sp-gray)', lineHeight: 1.8, maxWidth: 640, marginBottom: 16 }}
-            dangerouslySetInnerHTML={{
-              __html: text
-                .replace(/<b>/g, '<strong style="color:var(--sp-white)">')
-                .replace(/<\/b>/g, '</strong>'),
-            }}
-          />
-        ))}
-      </div>
- 
-      <button
-        onClick={() => navigate('contact')}
-        style={{ display: 'flex', alignItems: 'center', gap: 16, background: 'var(--sp-dark2)', border: '1px solid var(--sp-dark3)', borderLeft: '3px solid var(--sp-green)', borderRadius: 'var(--radius-md)', padding: '20px 24px', cursor: 'pointer', width: '100%', textAlign: 'left', transition: 'background .15s' }}
-        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sp-dark3)'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sp-dark2)'; }}
-      >
-        <div style={{ width: 48, height: 48, background: 'rgba(29,185,84,.12)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <MessageCircle size={22} color="var(--sp-green)" />
-        </div>
-        <div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--sp-white)', marginBottom: 2 }}>Open to opportunities</div>
-          <div style={{ fontSize: 12, color: 'var(--sp-gray)' }}>Available for freelance &amp; full-time roles · Let's talk</div>
-        </div>
-        <ChevronRight size={18} color="var(--sp-gray)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
-      </button>
+      <section className="about-intro-panel">
+        <p className="discography-eyebrow">About me</p>
+        <h1>Hey, I build things.</h1>
+        <p>I'm an <strong>AI-assisted full-stack app and web developer</strong> who enjoys turning complex ideas or problems into practical solutions. My journey started with a simple "Hello, World!" and grew into personal projects I build, use, and keep improving.</p>
+        <p>My stack spans both ends: <strong>React and TypeScript</strong> for interfaces, and <strong>Node.js, Django, and PostgreSQL</strong> for backend work. I care about performance, accessibility, and making software easier to use.</p>
+      </section>
+      <section className="about-note-section">
+        <h2>How I work with AI</h2>
+        <p>On projects such as Findify and CoinFession, I handle the planning, coding, review, testing, and debugging. I use AI as an assistant throughout that process, while keeping responsibility for the work and the decisions.</p>
+      </section>
+      <section className="about-note-section">
+        <h2>Outside the editor</h2>
+        <p>Outside development, I edit videos for international clients and enjoy exploring outdoors around {SITE.location}. Working with video gives me another way to tell stories and make something people can connect with.</p>
+        <p>I'm also a student of <strong>Stoicism</strong>. It keeps me grounded when things are outside my control, including a deploy breaking at midnight.</p>
+      </section>
+      {SITE.resumeUrl && <a className="project-reader-button" href={SITE.resumeUrl} download>Download resume</a>}
+      <PageNextStep title="Let's build something" description="Have a practical problem or an idea you want to talk through?" page="contact" label="Get in touch" />
     </div>
   );
 }

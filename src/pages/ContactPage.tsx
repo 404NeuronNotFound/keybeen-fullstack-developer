@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
-import { FiMail } from 'react-icons/fi';
 import { FaGithub, FaInstagram, FaTiktok } from 'react-icons/fa';
 import { ContactLinkCard, type ContactLink } from '../components/ui';
+import { EmailActions } from '../components/ui/EmailActions';
+import { PageNextStep } from '../components/ui/PageNextStep';
 import { SITE } from '../constants';
 import { submitContactMessage } from '../utils/contactSubmission';
 import { toast } from '../store/toastStore';
@@ -20,7 +21,6 @@ const LABEL_STYLE: CSSProperties = {
 
 // contact links
 const LINKS: ContactLink[] = [
-  { icon: FiMail,     label: 'Gmail',     handle: SITE.email,        color: 'var(--sp-green)', href: `mailto:${SITE.email}` },
   { icon: FaGithub,   label: 'GitHub',    handle: `@${SITE.githubUsername}`, color: 'var(--sp-white)', href: SITE.github },
   { icon: FaInstagram, label: 'Instagram', handle: `@${SITE.instagramUsername}`, color: 'var(--sp-instagram)', href: SITE.instagram },
   { icon: FaTiktok,   label: 'TikTok',    handle: `@${SITE.tiktokUsername}`, color: 'var(--sp-tiktok)', href: SITE.tiktok },
@@ -91,9 +91,11 @@ export function ContactPage() {
         Let's collab
       </h1>
       <p style={{ fontSize: 15, color: 'var(--sp-gray)', marginBottom: 32, maxWidth: 480 }}>
-        Open to full-time roles, freelance projects, and interesting conversations. My DMs are always open.
+        Have a project in mind or want to ask about my work? Send a message or email me directly.
       </p>
  
+      <EmailActions />
+
       {/* social links */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, marginBottom: 36 }}>
         {LINKS.map((link) => (
@@ -179,6 +181,7 @@ export function ContactPage() {
           </div>
         </form>
       </div>
+      <PageNextStep title="Want to see what I've built?" description="Take a look at my web and mobile projects." page="projects" label="Explore projects" />
     </div>
   );
 }

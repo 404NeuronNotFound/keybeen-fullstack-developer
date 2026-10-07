@@ -3,6 +3,7 @@ import { GraduationCap, Monitor, Sparkles, ChevronDown, CpuIcon  } from 'lucide-
 import type { LucideIcon } from 'lucide-react';
 import type { ExperienceItem } from '../types';
 import { Tag } from '../components/ui';
+import { PageNextStep } from '../components/ui/PageNextStep';
 import { experience } from '../data';
 
 /** One icon + gradient per entry, keeping the Spotify "cover art" feel */
@@ -93,6 +94,7 @@ export function ExperiencePage() {
           );
         })}
       </div>
+      <PageNextStep title="Explore my work" description="See the projects behind this development journey." page="projects" label="View projects" />
     </div>
   );
 }

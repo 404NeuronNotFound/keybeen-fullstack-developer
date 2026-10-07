@@ -5,15 +5,10 @@ import { X, Download, Link, Check } from 'lucide-react';
 import { FaGithub, FaInstagram } from 'react-icons/fa';
 import { Avatar } from '../../components/ui';
 import { SITE }   from '../../constants';
-import { skills } from '../../data';
+import { CORE_SKILL_NAMES } from '../../data/skills';
 import { toast } from '../../store/toastStore';
 
-// Top 6 skills by level for the card
-const TOP_SKILLS = Object.values(skills)
-  .flat()
-  .sort((a, b) => b.level - a.level)
-  .slice(0, 6)
-  .map((s) => s.name);
+const TOP_SKILLS = CORE_SKILL_NAMES;
 
 // ── The actual card (also used for PNG export) ───────────────────────────
 interface CardProps {

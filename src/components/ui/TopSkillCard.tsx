@@ -1,36 +1,20 @@
 import type { LucideIcon } from 'lucide-react';
 import type { Skill } from '../../types';
+import { useProjectReaderStore } from '../../store';
+import { getSkillContext, getSkillProjects } from '../../utils/skillEvidence';
 
 interface Props {
-  skill:    Skill;
-  icon:     LucideIcon;
+  skill: Skill;
+  icon: LucideIcon;
   gradient: string;
-  /** small rank badge, e.g. "#1" */
-  rank?:    number;
 }
 
-export function TopSkillCard({ skill, icon: Icon, gradient, rank }: Props) {
-  return (
-    <div
-      style={{ flex: '0 0 132px', cursor: 'default', transition: 'transform .15s' }}
-      onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-    >
-      <div
-        className={`grad-${gradient}`}
-        style={{ width: '100%', aspectRatio: '1', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10, position: 'relative', overflow: 'hidden' }}
-      >
-        <Icon size={36} color="var(--sp-art-text)" strokeWidth={1.5} />
-        {rank && (
-          <span style={{ position: 'absolute', top: 8, left: 8, fontSize: 11, fontWeight: 800, color: 'var(--sp-art-text)', letterSpacing: '.5px' }}>
-            #{rank}
-          </span>
-        )}
-      </div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--sp-white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        {skill.name}
-      </div>
-      <div style={{ fontSize: 12, color: 'var(--sp-gray)' }}>{skill.level}% proficiency</div>
-    </div>
-  );
+export function TopSkillCard({ skill, icon: Icon, gradient }: Props) {
+  const openProject = useProjectReaderStore(state => state.openProject);
+  const project = getSkillProjects(skill.name)[0];
+  return <div className="top-skill-card">
+    <div className={'grad-' + gradient} style={{ aspectRatio: '1', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}><Icon size={36} color="var(--sp-art-text)" strokeWidth={1.5} /></div>
+    <h3>{skill.name}</h3>
+    {project ? <button type="button" className="top-skill-evidence" aria-haspopup="dialog" aria-controls="project-overview" onClick={() => openProject(project)}>{getSkillContext(skill.name, skill.description)}</button> : <p>{skill.description}</p>}
+  </div>;
 }

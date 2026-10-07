@@ -8,9 +8,9 @@ export const experience: ExperienceItem[] = [
     role: 'AI-Assisted Full-Stack Developer',
     company: 'Personal Projects',
     period: '2026 - Present',
-    type: 'Innovation & Experimentation',
+    type: 'Personal projects',
     description:
-      'Building AI-powered side projects, exploring unconventional ideas, and shipping experimental products for fun. Currently developing multiple personal projects while pushing the limits of rapid development with modern AI tools.',
+      'Building practical web and mobile projects. Findify and CoinFession are completed and awaiting hosting; PaLista and PowerAtomic are completed mobile apps awaiting deployment. Langgam-it is still in progress.',
     tags: ['AI', 'React', 'Next.js', 'React-Native','TypeScript', 'GitHub',],
   },
   {
@@ -22,8 +22,8 @@ export const experience: ExperienceItem[] = [
     period: '2025',
     type: 'Internship',
     description:
-      'Provided technical support and frontend development for the ICT Center at Mindanao State University – Naawan. Assisted with troubleshooting hardware and software issues, maintained internal department tools, and built small web interfaces for office workflows.',
-    tags: ['Nuxt.js', 'JavaScript', 'Postman',  'Tech Support', 'GitHub'],
+      'Worked on a Document Management System at the MSU Naawan ICT Center using Nuxt and Pinia. My contributions included frontend development, UI design, and reviewing the interface.',
+    tags: ['Nuxt.js', 'Pinia', 'UI Design', 'UI Review'],
   },
   {
     id: 3,
@@ -32,9 +32,9 @@ export const experience: ExperienceItem[] = [
     role: 'Full-Stack Developer — Capstone Project',
     company: 'University Capstone',
     period: '2022 – 2024',
-    type: 'Capstone Project',
+    type: 'Education / Capstone',
     description:
-      'Designed and built a full-stack web application from the ground up as my university capstone project, covering database design, REST API development, and a responsive frontend. Worked in a small team, owning the frontend architecture and integration with the backend services.',
+      'Built the Grades Management System as a university capstone, handling the full stack while still learning development. The application is completed and awaiting hosting. Taking responsibility for both the frontend and backend was the hardest part.',
     tags: ['Django', 'Tailwind CSS', 'MySQL', 'REST API', 'GitHub'],
   },
   {
@@ -44,7 +44,7 @@ export const experience: ExperienceItem[] = [
     role: 'Hello, World!',
     company: 'Where it all started',
     period: '2020',
-    type: 'First Line of Code',
+    type: 'Learning milestone',
     description:
       "Wrote my very first program a simple \"Hello, World!\", and got hooked on building things with code. The spark that started this whole journey into web development.",
     tags: ['Curiosity', 'First Commit'],
