@@ -1,5 +1,6 @@
 import { Home, User, Code2, Briefcase, LayoutGrid, Mail, type LucideIcon } from 'lucide-react';
 import type { SectionId, SiteConfig } from '../types';
+import { projects } from '../data/projects';
 
 
 const INSTAGRAM_USERNAME = 'kxvxn.js';
@@ -28,7 +29,7 @@ export const SITE: SiteConfig = {
 
   stats: [
     { value: '3+',  label: 'Years exp.'    },
-    { value: '7', label: 'Projects'      },
+    { value: String(projects.length), label: 'Projects' },
     { value: '19',  label: 'Technologies'  },
   ],
 };
