@@ -134,4 +134,21 @@ export const projects: Project[] = [
     year: '2026',
     featured: false,
   },
+  {
+    id: 8,
+    image: '/paserve.jpg',
+    status: 'completed',
+    availability: 'Awaiting deployment',
+    category: 'Food & beverage',
+    accent: '#e2a56c',
+    title: 'PaServe - QR QR Ordering and Shop Management System for Cafés and Restaurants',
+    shortTitle: 'PaServe',
+    subtitle: 'QR ordering and shop management',
+    gradient: 'yellow',
+    tags: ['React', 'Vite', 'TypeScript', 'Tailwind CSS', 'shadcn/ui', 'NestJS', 'Supabase PostgreSQL', 'Prisma'],
+    description:
+      'PaServe is a web-based QR ordering system for coffee shops and restaurants that lets customers scan a table QR code, browse the menu, and order from their phones. It helps staff manage orders and gives owners tools to update menus, control item availability, and track sales.',
+    year: '2026',
+    featured: false,
+  },
 ];
