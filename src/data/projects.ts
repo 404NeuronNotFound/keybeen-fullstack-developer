@@ -137,11 +137,12 @@ export const projects: Project[] = [
   {
     id: 8,
     image: '/paserve.jpg',
-    status: 'completed',
-    availability: 'Awaiting deployment',
+    status: 'released',
+    availability: 'Live website',
+    live: 'https://paserve.vercel.app/',
     category: 'Food & beverage',
     accent: '#e2a56c',
-    title: 'PaServe - QR QR Ordering and Shop Management System for Cafés and Restaurants',
+    title: 'PaServe - QR Ordering and Shop Management System for Cafés and Restaurants',
     shortTitle: 'PaServe',
     subtitle: 'QR ordering and shop management',
     gradient: 'yellow',
@@ -149,6 +150,7 @@ export const projects: Project[] = [
     description:
       'PaServe is a web-based QR ordering system for coffee shops and restaurants that lets customers scan a table QR code, browse the menu, and order from their phones. It helps staff manage orders and gives owners tools to update menus, control item availability, and track sales.',
     year: '2026',
+    github: 'https://github.com/404NeuronNotFound/PaServe',
     featured: false,
   },
 ];
