@@ -38,6 +38,8 @@ The home page uses GSAP and `@gsap/react` for its coordinated artist-profile ent
 
 Reduced-motion preferences disable entrances and scroll reveals while keeping all content and project actions available. Framer Motion retains control of existing card hover interactions.
 
+About uses `src/styles/about.css` for its portrait, workflow, and personal-interest layout. `src/hooks/useAboutMotion.ts` adds a scoped entrance, section reveals, and a scroll-driven workflow line inside the app's main scroller. Motion respects reduced-motion preferences, completes when a control receives keyboard focus, and cleans up when leaving About. The editing-work link uses the existing video portfolio URL in project data.
+
 ## Images
 
 Original JPEG artwork remains in `public` for editing and regeneration. Runtime images use generated WebP variants under `public/images` and the mapping in `src/data/imageManifest.ts`; small thumbnails and responsive source sets avoid downloading the full originals. Add a JPEG and rerun the generator whenever artwork changes.
