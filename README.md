@@ -32,6 +32,12 @@ Contact reserves a 600-second cooldown before each validation/delivery attempt, 
 
 Hash URLs such as `/#projects` support direct navigation, refresh, and browser Back/Forward. The browser title follows the active page. Social crawlers receive one static site-level preview because hash fragments are not separate server routes.
 
+## Home page motion
+
+The home page uses GSAP and `@gsap/react` for its coordinated artist-profile entrance and scroll reveals. `src/hooks/useHomeMotion.ts` scopes animations to Home and uses `.app-content` as the scroll container. A resize observer refreshes trigger positions when contribution data changes the layout. Context cleanup removes animations and triggers when leaving Home.
+
+Reduced-motion preferences disable entrances and scroll reveals while keeping all content and project actions available. Framer Motion retains control of existing card hover interactions.
+
 ## Images
 
 Original JPEG artwork remains in `public` for editing and regeneration. Runtime images use generated WebP variants under `public/images` and the mapping in `src/data/imageManifest.ts`; small thumbnails and responsive source sets avoid downloading the full originals. Add a JPEG and rerun the generator whenever artwork changes.

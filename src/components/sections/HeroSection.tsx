@@ -17,7 +17,7 @@ export function HeroSection() {
 
   return (
     <div
-      className="page-x"
+      className="page-x home-hero"
       style={{
         paddingTop: isMobile ? 32 : 48,
         paddingBottom: isMobile ? 28 : 36,
@@ -38,6 +38,7 @@ export function HeroSection() {
       >
         {/* ── Artist photo ── */}
         <div
+          className="hero-portrait"
           style={{
             boxShadow:    'var(--sp-modal-shadow)',
             border:       '2px solid var(--sp-line)',
@@ -54,7 +55,7 @@ export function HeroSection() {
         </div>
 
         {/* ── Text info ── */}
-        <div style={{ flex: 1, minWidth: isMobile ? '100%' : 240 }}>
+        <div className="hero-copy" style={{ flex: 1, minWidth: isMobile ? '100%' : 240 }}>
           {/* independent developer badge — just like Spotify */}
           <div
             style={{
@@ -92,6 +93,7 @@ export function HeroSection() {
 
       {/* ── Stats row ── */}
       <div
+        className="hero-stats"
         style={{
           display:        'flex',
           flexWrap:       'wrap',

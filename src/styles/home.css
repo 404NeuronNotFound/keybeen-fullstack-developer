@@ -1,0 +1,7 @@
+/* Home follows the existing Spotify palette in both themes. */
+.home-page { min-width: 0; }
+.home-project-reveal { display: grid; min-width: 0; }
+.home-project-reveal > * { min-width: 0; height: 100%; }
+.home-outro { padding-bottom: 28px; }
+.home-outro .page-next-step { margin-top: 0; }
+.home-endnote { padding-top: 28px; color: var(--sp-gray); font-size: 10px; letter-spacing: .4px; text-align: center; }
