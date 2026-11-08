@@ -1,0 +1,32 @@
+/* Native dialogs retain focus trapping, Escape, and top-layer behavior. */
+dialog[open] {
+  transform-origin: 50% 45%;
+  animation: modal-arrive 420ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+dialog[open]::backdrop {
+  backdrop-filter: blur(6px);
+  animation: modal-backdrop-arrive 300ms ease-out both;
+}
+
+@keyframes modal-arrive {
+  from { opacity: 0; transform: translateY(18px) scale(.975); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes modal-backdrop-arrive {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  dialog[open] { animation-name: modal-arrive-mobile; }
+  @keyframes modal-arrive-mobile {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog[open], dialog[open]::backdrop { animation: none; }
+}
