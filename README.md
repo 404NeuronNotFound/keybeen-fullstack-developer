@@ -40,7 +40,11 @@ Reduced-motion preferences disable entrances and scroll reveals while keeping al
 
 Scroll reveals start their GSAP tween only after entering view, so waiting for a trigger never hides content. The contribution calendar is kept outside reveal animations so loading, cached data, and errors remain visible on reload.
 
+`src/hooks/useCalendarMotion.ts` gives loaded calendar weeks a short left-to-right wave and gently lifts the contribution stats. It starts only when data is ready and the card is in view, never hides the calendar wrapper, and respects reduced motion. Week columns are animated as groups rather than hundreds of individual cells.
+
 About uses `src/styles/about.css` for its portrait, workflow, and personal-interest layout. `src/hooks/useAboutMotion.ts` adds a scoped entrance, section reveals, and a scroll-driven workflow line inside the app's main scroller. Motion respects reduced-motion preferences, completes when a control receives keyboard focus, and cleans up when leaving About. The editing-work link uses the existing video portfolio URL in project data.
+
+The Skills page uses `src/styles/skills.css` for a core-tool record shelf and searchable library. Category buttons and search combine to filter tools; expanding a tool reveals its related projects. `src/hooks/useSkillsMotion.ts` adds a short introduction, deferred core-card reveals, and brief filter feedback. Animations use the main scroll container, respect reduced motion, and clean up on navigation. Layout follows the content container width to account for the desktop sidebar.
 
 ## Images
 

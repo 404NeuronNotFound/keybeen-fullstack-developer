@@ -4,6 +4,7 @@ import { useGithubContributions } from '../../hooks';
 import { ContributionHeatmap } from '../../components/ui';
 import { computeContributionStats, formatShortDate } from '../../utils';
 import { SITE } from '../../constants';
+import { useCalendarMotion } from '../../hooks/useCalendarMotion';
 
 const LEGEND_LEVELS = [
   'var(--sp-dark3)',
@@ -23,6 +24,7 @@ interface StatPillProps {
 function StatPill({ icon, label, value, sub }: StatPillProps) {
   return (
     <div
+      data-contribution-stat
       style={{
         display:       'flex',
         alignItems:    'center',
@@ -50,9 +52,11 @@ function StatPill({ icon, label, value, sub }: StatPillProps) {
 export function GithubActivitySection() {
   const { days, total, loading, error, retry } = useGithubContributions(SITE.githubUsername);
   const stats = computeContributionStats(days);
+  const calendarRef = useCalendarMotion(days, loading);
 
   return (
     <div
+      ref={calendarRef}
       style={{
         background:   'var(--sp-dark2)',
         border:       '1px solid var(--sp-dark3)',

@@ -100,14 +100,16 @@ export function ContributionHeatmap({ days, loading }: Props) {
         style={{
           display:             'grid',
           gridTemplateColumns: isMobile ? `repeat(${colCount}, ${CELL_MOBILE}px)` : `repeat(${colCount}, minmax(0, 1fr))`,
-          gridTemplateRows:    'repeat(7, auto)',
-          gridAutoFlow:        'column',
           gap:                  GAP,
           opacity:              loading ? 0.4 : 1,
           transition:          'opacity .3s',
         }}
       >
-        {weeks.flatMap((week, wi) => week.map((day, di) => dayCell(day, `${wi}-${di}`)))}
+        {weeks.map((week, wi) => (
+          <div key={wi} data-contribution-week style={{ display: 'grid', gridTemplateRows: 'repeat(7, auto)', gap: GAP, minWidth: 0 }}>
+            {week.map((day, di) => dayCell(day, `${wi}-${di}`))}
+          </div>
+        ))}
       </div>
     </div>
   );
