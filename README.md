@@ -32,7 +32,9 @@ Contact reserves a 600-second cooldown before each validation/delivery attempt, 
 
 Hash URLs such as `/#projects` support direct navigation, refresh, and browser Back/Forward. The browser title follows the active page. Social crawlers receive one static site-level preview because hash fragments are not separate server routes.
 
-## Home page motion
+## Page entrances and motion
+
+`PortfolioEntry` in `src/components/layout/PortfolioEntry.tsx` presents a roughly three-second portrait-record and name entrance before Home. It measures Home after mounting, then moves floating portrait/name copies into their real hero positions while the backdrop clears. Home's separate hero entrance is suppressed during this handoff. Copies and temporary styles are cleaned up on completion or Skip. It plays once per tab session, offers Skip and Escape, respects reduced motion, and bypasses direct links to other sections. A five-second fallback prevents the intro from blocking entry. Add `?intro=1` to the Home URL to replay it from the top for review; reduced motion still takes precedence.
 
 The home page uses GSAP and `@gsap/react` for its coordinated artist-profile entrance and scroll reveals. `src/hooks/useHomeMotion.ts` scopes animations to Home and uses `.app-content` as the scroll container. A resize observer refreshes trigger positions when contribution data changes the layout. Context cleanup removes animations and triggers when leaving Home.
 
@@ -51,6 +53,8 @@ Experience keeps a single-open accordion with a date column on wider content con
 Projects uses `src/styles/projects.css` for a responsive album grid consistent with the rest of the portfolio. Its cards include category, year, and a short stack summary. `src/hooks/useProjectsMotion.ts` adds a brief header entrance and deferred card reveals, rebuilding the reveals when filters change. Scrolling stays native, and every card remains in normal document flow. Reduced-motion preferences disable the animations; keyboard focus completes a pending reveal.
 
 Contact uses `src/styles/contact.css` for direct email, social links, and a responsive message form. `src/hooks/useContactMotion.ts` adds a short entrance and deferred secondary-section reveals; focusing a control completes the entrance immediately. The existing email validation, cooldown, honeypot, delivery checks, retry feedback, and failure preservation remain in place. Routine verification must mock submissions and email checks.
+
+`src/hooks/useModalMorph.ts` opens the native project and share dialogs with a short source-to-panel transform. A project card's cover can bridge into the modal artwork using an inert copy inside the dialog's top layer. The native dialog retains focus trapping, Escape, and focus return; interaction, scrolling, resizing, reduced-motion changes, and close all settle or clean up the animation. Share exports stay outside the animated preview surface.
 
 ## Images
 

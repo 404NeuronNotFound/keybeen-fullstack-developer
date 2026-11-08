@@ -9,6 +9,7 @@ import { SaveProjectButton } from './SaveProjectButton';
 import { ProjectCaseStudyContent } from './ProjectCaseStudyContent';
 import { projects } from '../../data';
 import { getProjectUrl } from '../../utils';
+import { useModalMorph } from '../../hooks/useModalMorph';
 
 export function ProjectOverview() {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -27,15 +28,9 @@ export function ProjectOverview() {
   const liveUrl = getProjectUrl(project.live);
 
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (isOpen && !dialog.open) dialog.showModal();
-    else if (!isOpen && dialog.open) dialog.close();
-  }, [isOpen]);
-
-  useEffect(() => {
     if (isOpen) dialogRef.current?.querySelector<HTMLElement>('.project-overview-content')?.scrollTo(0, 0);
   }, [isOpen, project.id, section]);
+  useModalMorph(dialogRef, isOpen);
 
   const goTo = (page: 'contact' | 'projects') => {
     close();
@@ -44,7 +39,7 @@ export function ProjectOverview() {
 
   return (
     <dialog id="project-overview" ref={dialogRef} className="project-overview" aria-labelledby="project-overview-title" onCancel={close} onClose={event => { if (!event.currentTarget.open) close(); }}>
-      <div className="project-overview-content">
+      <div className="project-overview-content modal-morph-surface">
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 20 }}>
           <div style={{ minWidth: 0 }}>
             <p style={{ fontSize: 11, color: 'var(--sp-green)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Project overview · {project.year}</p>

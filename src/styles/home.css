@@ -1,5 +1,6 @@
 /* Home follows the existing Spotify palette in both themes. */
 .home-page { min-width: 0; }
+.hero-name-word { display: inline-block; }
 .home-project-reveal { display: grid; min-width: 0; }
 .home-project-reveal > * { min-width: 0; height: 100%; }
 .home-outro { padding-bottom: 28px; }

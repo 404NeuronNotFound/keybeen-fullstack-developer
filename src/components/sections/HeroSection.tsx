@@ -82,7 +82,7 @@ export function HeroSection() {
 
           <h1 className="artist-title"
           >
-            {SITE.fullName}
+            <span className="hero-name-word">{SITE.fullName}</span>
           </h1>
 
           <p className="hero-role">{SITE.role}</p>

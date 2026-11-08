@@ -1,4 +1,7 @@
 /* Native dialogs retain focus trapping, Escape, and top-layer behavior. */
+dialog[data-modal-motion="morph"][open] { animation: none; background: transparent; border: 0; padding: 0; overflow: visible; box-shadow: none; }
+dialog[data-modal-motion="morph"] > .modal-morph-surface { border: 1px solid var(--sp-dark3); border-radius: 16px; background: var(--sp-dark2); box-shadow: var(--sp-modal-shadow); transform-origin: center; }
+dialog[data-modal-motion="morph"] > .share-modal-surface { padding: clamp(12px, 3vw, 24px); max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
 dialog[open] {
   transform-origin: 50% 45%;
   animation: modal-arrive 420ms cubic-bezier(.16, 1, .3, 1) both;

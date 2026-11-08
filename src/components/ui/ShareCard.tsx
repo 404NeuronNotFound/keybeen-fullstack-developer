@@ -8,6 +8,7 @@ import { waitForExportAssets } from '../../utils/shareExport';
 import { SITE }   from '../../constants';
 import { CORE_SKILL_NAMES } from '../../data/skills';
 import { toast } from '../../store/toastStore';
+import { useModalMorph } from '../../hooks/useModalMorph';
 
 const TOP_SKILLS = CORE_SKILL_NAMES;
 
@@ -132,14 +133,13 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
     const trigger = returnFocusRef?.current ?? document.activeElement;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    if (!dialog.open) dialog.showModal();
     return () => {
       if (copyTimerRef.current !== null) clearTimeout(copyTimerRef.current);
-      if (dialog.open) dialog.close();
       document.body.style.overflow = previousOverflow;
       if (trigger instanceof HTMLElement && trigger.isConnected) trigger.focus({ preventScroll: true });
     };
   }, [returnFocusRef]);
+  useModalMorph(dialogRef, true);
 
   const copyLink = useCallback(async () => {
     try {
@@ -215,9 +215,7 @@ export function ShareCardModal({ onClose, returnFocusRef }: ShareCardModalProps)
       <div ref={exportRef} className="share-export-surface" aria-hidden="true" inert>
         <ShareCardInner forExport />
       </div>
-      <div
-        style={{ width: '100%' }}
-      >
+      <div className="modal-morph-surface share-modal-surface" style={{ width: '100%' }}>
         {/* modal header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 16 }}>
           <div style={{ minWidth: 0, overflowWrap: 'anywhere' }}>
