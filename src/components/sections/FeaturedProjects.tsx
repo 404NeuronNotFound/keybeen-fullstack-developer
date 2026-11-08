@@ -9,7 +9,7 @@ export function FeaturedProjects() {
   return (
     <div className="page-x" style={{ paddingBottom: 40 }}>
       {/* ── GitHub contribution activity ──────────────────────────────── */}
-      <div data-home-reveal><GithubActivitySection /></div>
+      <GithubActivitySection />
 
       {/* ── featured teaser cards ─────────────────────────────────────── */}
       <div className="featured-project-heading" data-home-reveal>

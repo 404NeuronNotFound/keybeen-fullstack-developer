@@ -2,6 +2,8 @@ import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { createScrollReveals } from '../utils/scrollReveals';
+import { useNavStore } from '../store/navStore';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -14,10 +16,10 @@ export function useHomeMotion() {
     if (!scroller) return;
     const media = gsap.matchMedia();
 
-    media.add('(prefers-reduced-motion: no-preference)', () => {
+    media.add('(prefers-reduced-motion: no-preference)', context => {
       let intro: gsap.core.Timeline | undefined;
       // Preserve the visitor's place when returning via browser history.
-      if (scroller.scrollTop < 40) {
+      if (useNavStore.getState().getScrollPosition('home') < 40) {
         intro = gsap.timeline({ defaults: { duration: 0.7, ease: 'power3.out', clearProps: 'transform,opacity,visibility' } })
           .from('.hero-portrait', { opacity: 0, scale: 0.94 }, 0)
           .from('.hero-copy > *', { opacity: 0, y: 20, stagger: 0.07 }, 0.08)
@@ -25,25 +27,20 @@ export function useHomeMotion() {
           .from('.hero-actions', { opacity: 0, y: 12 }, 0.42);
       }
 
-      const reveals = gsap.utils.toArray<HTMLElement>('[data-home-reveal]', root.current).map(element => {
-        // Animate wrappers so Framer Motion retains ownership of card hover transforms.
-        const animation = gsap.from(element, {
-          y: 24, opacity: 0, duration: 0.65, ease: 'power2.out',
-          delay: Math.min(Number(element.dataset.revealOrder ?? 0), 3) * 0.08,
-          clearProps: 'transform,opacity,visibility',
-          scrollTrigger: { trigger: element, scroller, start: 'clamp(top 94%)', once: true },
-        });
-        return { element, animation };
+      const stopReveals = createScrollReveals({
+        scope: root.current!, scroller, selector: '[data-home-reveal]', context,
+        distance: 24, duration: 0.65,
+        delay: element => Math.min(Number(element.dataset.revealOrder ?? 0), 3) * 0.08,
       });
       // Keyboard navigation must never land on a transparent control.
       const onFocus = (event: FocusEvent) => {
         if (event.target instanceof Element && event.target.closest('.home-hero')) intro?.progress(1);
-        reveals.forEach(({ element, animation }) => {
-          if (event.target instanceof Node && element.contains(event.target)) animation.progress(1);
-        });
       };
       scroller.addEventListener('focusin', onFocus);
-      return () => scroller.removeEventListener('focusin', onFocus);
+      return () => {
+        scroller.removeEventListener('focusin', onFocus);
+        stopReveals();
+      };
     }, root);
 
     // Contribution data and responsive images can change the page height later.

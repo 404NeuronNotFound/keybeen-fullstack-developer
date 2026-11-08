@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useNavStore } from '../store/navStore';
+import { createScrollReveals } from '../utils/scrollReveals';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -17,7 +18,6 @@ export function useAboutMotion() {
 
     media.add({ motion: '(prefers-reduced-motion: no-preference)', desktop: '(min-width: 1000px)' }, context => {
       if (!context.conditions?.motion) return;
-      const animations: { element: Element; animation: gsap.core.Animation }[] = [];
       // Read the destination's saved position, before App restores main's scroll.
       let entrance: gsap.core.Timeline | undefined;
       if (useNavStore.getState().getScrollPosition('about') < 40) {
@@ -27,14 +27,10 @@ export function useAboutMotion() {
           .from('[data-about-intro]', { y: 16, opacity: 0, stagger: 0.08 }, 0.18);
       }
 
-      gsap.utils.toArray<HTMLElement>('[data-about-reveal]', element).forEach(target => {
-        const animation = gsap.from(target, {
-          y: context.conditions?.desktop ? 22 : 12, opacity: 0, duration: 0.6,
-          delay: Number(target.dataset.aboutOrder ?? 0) * 0.07,
-          ease: 'power2.out', clearProps: 'transform,opacity',
-          scrollTrigger: { trigger: target, scroller, start: 'clamp(top 94%)', once: true },
-        });
-        animations.push({ element: target, animation });
+      const stopReveals = createScrollReveals({
+        scope: element, scroller, selector: '[data-about-reveal]', context,
+        distance: context.conditions?.desktop ? 22 : 12, duration: 0.6,
+        delay: target => Number(target.dataset.aboutOrder ?? 0) * 0.07,
       });
 
       gsap.fromTo('.about-workflow-rail > span', { scaleY: 0 }, {
@@ -48,12 +44,12 @@ export function useAboutMotion() {
         if (!(focused instanceof Node)) return;
         // Page-heading focus announces navigation; only controls skip the intro.
         if (focused instanceof Element && focused.closest('button, a') && element.querySelector('.about-profile')?.contains(focused)) entrance?.progress(1);
-        animations.forEach(({ element: target, animation }) => {
-          if (target.contains(focused)) animation.progress(1);
-        });
       };
       scroller.addEventListener('focusin', finishOnFocus);
-      return () => scroller.removeEventListener('focusin', finishOnFocus);
+      return () => {
+        scroller.removeEventListener('focusin', finishOnFocus);
+        stopReveals();
+      };
     }, root);
 
     let frame = 0;

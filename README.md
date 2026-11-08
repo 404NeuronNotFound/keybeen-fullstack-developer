@@ -38,6 +38,8 @@ The home page uses GSAP and `@gsap/react` for its coordinated artist-profile ent
 
 Reduced-motion preferences disable entrances and scroll reveals while keeping all content and project actions available. Framer Motion retains control of existing card hover interactions.
 
+Scroll reveals start their GSAP tween only after entering view, so waiting for a trigger never hides content. The contribution calendar is kept outside reveal animations so loading, cached data, and errors remain visible on reload.
+
 About uses `src/styles/about.css` for its portrait, workflow, and personal-interest layout. `src/hooks/useAboutMotion.ts` adds a scoped entrance, section reveals, and a scroll-driven workflow line inside the app's main scroller. Motion respects reduced-motion preferences, completes when a control receives keyboard focus, and cleans up when leaving About. The editing-work link uses the existing video portfolio URL in project data.
 
 ## Images
