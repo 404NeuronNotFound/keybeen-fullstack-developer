@@ -46,6 +46,12 @@ About uses `src/styles/about.css` for its portrait, workflow, and personal-inter
 
 The Skills page uses `src/styles/skills.css` for a core-tool record shelf and searchable library. Category buttons and search combine to filter tools; expanding a tool reveals its related projects. `src/hooks/useSkillsMotion.ts` adds a short introduction, deferred core-card reveals, and brief filter feedback. Animations use the main scroll container, respect reduced motion, and clean up on navigation. Layout follows the content container width to account for the desktop sidebar.
 
+Experience keeps a single-open accordion with a date column on wider content containers. `src/styles/experience.css` defines the timeline, while `src/hooks/useExperienceMotion.ts` adds deferred entry reveals, a scroll-driven rail, and short detail entrances. Resize refreshes wait for expansion to settle; reduced motion bypasses the animations. Related-project buttons are limited to work named in the corresponding history entry.
+
+Projects uses `src/styles/projects.css` for a responsive album grid consistent with the rest of the portfolio. Its cards include category, year, and a short stack summary. `src/hooks/useProjectsMotion.ts` adds a brief header entrance and deferred card reveals, rebuilding the reveals when filters change. Scrolling stays native, and every card remains in normal document flow. Reduced-motion preferences disable the animations; keyboard focus completes a pending reveal.
+
+Contact uses `src/styles/contact.css` for direct email, social links, and a responsive message form. `src/hooks/useContactMotion.ts` adds a short entrance and deferred secondary-section reveals; focusing a control completes the entrance immediately. The existing email validation, cooldown, honeypot, delivery checks, retry feedback, and failure preservation remain in place. Routine verification must mock submissions and email checks.
+
 ## Images
 
 Original JPEG artwork remains in `public` for editing and regeneration. Runtime images use generated WebP variants under `public/images` and the mapping in `src/data/imageManifest.ts`; small thumbnails and responsive source sets avoid downloading the full originals. Add a JPEG and rerun the generator whenever artwork changes.

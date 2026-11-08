@@ -1,26 +1,19 @@
 import { useRef, useState } from 'react';
-import type { CSSProperties, FormEvent } from 'react';
+import type { FormEvent } from 'react';
+import { ArrowRight, ArrowUpRight, Copy, LoaderCircle, Mail, MapPin, MessageSquare } from 'lucide-react';
 import { FaGithub, FaInstagram, FaTiktok } from 'react-icons/fa';
 import { ContactLinkCard, type ContactLink } from '../components/ui';
 import { FiMail } from 'react-icons/fi';
 import { useContactCooldown } from '../hooks/useContactCooldown';
 import { formatContactCooldown, getContactCooldownSeconds } from '../utils/contactCooldown';
-import { PageNextStep } from '../components/ui/PageNextStep';
+import { useNavStore } from '../store';
+import { useContactMotion } from '../hooks/useContactMotion';
+import '../styles/contact.css';
 import { SITE } from '../constants';
 import { submitContactMessage } from '../utils/contactSubmission';
 import { toast } from '../store/toastStore';
 import { useEmailValidation } from '../hooks/useEmailValidation';
 import { ContactEmailValidationError } from '../utils/verifyContactEmail';
-
-const FIELD_STYLE: CSSProperties = {
-  width: '100%', background: 'var(--sp-dark2)', border: '1px solid var(--sp-gray2)',
-  borderRadius: 'var(--radius-sm)', padding: '10px 14px', color: 'var(--sp-white)',
-  fontSize: 14, boxSizing: 'border-box',
-};
-
-const LABEL_STYLE: CSSProperties = {
-  display: 'block', marginBottom: 6, fontSize: 13, fontWeight: 600, color: 'var(--sp-white)',
-};
 
 // contact links
 const LINKS: ContactLink[] = [
@@ -31,6 +24,8 @@ const LINKS: ContactLink[] = [
 ];
 
 export function ContactPage() {
+  const root = useContactMotion();
+  const navigate = useNavStore(state => state.navigate);
   const { remaining, refreshCooldown } = useContactCooldown();
   const [name, setName] = useState('');
   const { email, updateEmail, check: emailCheck, validate: validateEmail, canUseEmail } = useEmailValidation();
@@ -96,95 +91,65 @@ export function ContactPage() {
   }
  
   return (
-    <div className="page">
-      <p className="discography-eyebrow">
-        Contact
-      </p>
-      <h1 className="discography-title">
-        Let's collab
-      </h1>
-      <p style={{ fontSize: 15, color: 'var(--sp-gray)', marginBottom: 32, maxWidth: 480 }}>
-        Have a project in mind or want to ask about my work? Send a message or email me directly.
-      </p>
- 
-      {/* social links */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, marginBottom: 36 }}>
-        {LINKS.map((link) => (
-          <ContactLinkCard key={link.label} link={link} />
-        ))}
-      </div>
- 
-      {/* message form */}
-      <div style={{ background: 'var(--sp-dark2)', borderRadius: 'var(--radius-md)', padding: 24, border: '1px solid var(--sp-dark3)' }}>
-        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--sp-white)', marginBottom: 16 }}>Send a message</div>
- 
-        <form onSubmit={handleSubmit} aria-busy={isSending}>
-          <fieldset disabled={isSending || remaining > 0} style={{ border: 'none', padding: 0, margin: 0, minWidth: 0 }}>
-            <label htmlFor="contact-name" style={LABEL_STYLE}>Your name</label>
-            <input
-              id="contact-name"
-              name="name"
-              autoComplete="name"
-              required
-              maxLength={100}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
-              style={{ ...FIELD_STYLE, marginBottom: 16 }}
-            />
-            <label htmlFor="contact-email" style={LABEL_STYLE}>Your email</label>
-            <input
-              id="contact-email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              maxLength={254}
-              value={email}
-              onChange={(e) => updateEmail(e.target.value)}
-              onBlur={() => { void validateEmail(); }}
-              placeholder="you@example.com"
-              aria-describedby="contact-email-status"
-              aria-invalid={emailCheck.status === 'invalid'}
-              style={{ ...FIELD_STYLE, borderColor: emailCheck.status === 'valid' ? 'var(--sp-green)' : emailCheck.status === 'invalid' ? 'var(--sp-warning)' : 'var(--sp-gray2)' }}
-            />
-            <div id="contact-email-status" role="status" aria-live="polite" style={{ fontSize: 13, marginBottom: 16, color: emailCheck.status === 'valid' ? 'var(--sp-green)' : 'var(--sp-gray)', overflowWrap: 'anywhere' }}>
-              {emailCheck.message}
-            </div>
-            <label htmlFor="contact-message" style={LABEL_STYLE}>Your message</label>
-            <textarea
-              id="contact-message"
-              name="message"
-              required
-              maxLength={5000}
-              value={msg}
-              onChange={(e) => setMsg(e.target.value)}
-              placeholder="Hey, I'd love to work on something together..."
-              rows={4}
-              style={{ ...FIELD_STYLE, resize: 'vertical', marginBottom: 12 }}
-            />
-            <input type="checkbox" name="botcheck" tabIndex={-1} aria-hidden="true" style={{ display: 'none' }} />
-            <p style={{ fontSize: 12, color: 'var(--sp-gray)', marginBottom: 16 }}>
-              Your details help me reply to your message.
-            </p>
-            <button
-              type="submit"
-              disabled={!canSend}
-              aria-describedby={remaining > 0 ? "contact-cooldown" : "contact-email-status"}
-              className="ui-button ui-button--primary ui-button--rounded contact-submit"
-              aria-busy={isSending}
-            >
-              {isSending ? 'Checking email and sending...' : remaining > 0 ? 'Please wait' : 'Send message'}
-            </button>
-          </fieldset>
-          {remaining > 0 && <p id="contact-cooldown" className="contact-cooldown">You can send another message in <span role="timer" aria-live="off">{formatContactCooldown(remaining)}</span>.</p>}
-          {emailRetryWarning && remaining === 0 && <p role="alert" style={{ fontSize: 13, color: 'var(--sp-warning)', marginTop: 16 }}>{emailRetryWarning}</p>}
-          <div role="status" aria-live="polite" aria-atomic="true" style={{ marginTop: 16, color: 'var(--sp-green)', fontSize: 14 }}>
-            {isSending && 'Checking your email before sending your message...'}
+    <div ref={root} className="page contact-page">
+      <header className="contact-heading">
+        <p className="contact-eyebrow"><MessageSquare size={14} aria-hidden="true" />Contact</p>
+        <h1>Let's talk<span>.</span></h1>
+        <p>Have a project in mind or a question about my work?<br className="contact-heading-break" /> Send a message or email me directly.</p>
+      </header>
+
+      <div className="contact-layout">
+        <aside className="contact-direct" aria-labelledby="contact-direct-title">
+          <div className="contact-direct-intro">
+            <p className="contact-eyebrow">A conversation starts here</p>
+            <h2 id="contact-direct-title">Tell me what{' '}<br />you're building.</h2>
+            <p>An app idea, an everyday problem, or something in my portfolio you'd like to know more about.</p>
           </div>
-        </form>
+          <div className="contact-email-block">
+            <div className="contact-email-label"><Mail size={15} aria-hidden="true" /><span>Email me directly</span></div>
+            <a className="contact-email-address" href={'mailto:' + SITE.email}>{SITE.email}<ArrowUpRight size={18} aria-hidden="true" /></a>
+            <button type="button" className="contact-copy-email" onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(SITE.email);
+                toast.success({ title: 'Email address copied', description: 'Paste it into your email app to get in touch.' });
+              } catch {
+                toast.error({ title: "Couldn't copy the email address", description: 'Use the email link, or select and copy the address above.' });
+              }
+            }}><Copy size={13} aria-hidden="true" />Copy email address</button>
+          </div>
+          <p className="contact-location"><MapPin size={14} aria-hidden="true" />{SITE.location}</p>
+          <section className="contact-elsewhere" aria-labelledby="contact-elsewhere-title" data-contact-reveal>
+            <h3 id="contact-elsewhere-title">Elsewhere</h3>
+            <div className="contact-social-list">{LINKS.slice(1).map(link => <ContactLinkCard key={link.label} link={link} />)}</div>
+          </section>
+        </aside>
+
+        <section className="contact-compose" aria-labelledby="contact-form-title">
+          <div className="contact-compose-heading"><div><p className="contact-eyebrow">In your own words</p><h2 id="contact-form-title">Send a message</h2></div><ArrowUpRight size={23} strokeWidth={1.5} aria-hidden="true" /></div>
+          <p className="contact-required-note">All fields are required.</p>
+          <form onSubmit={handleSubmit} aria-busy={isSending}>
+            <fieldset disabled={isSending || remaining > 0}>
+              <div className="contact-field-pair">
+                <div className="contact-field"><label htmlFor="contact-name">Your name</label><input id="contact-name" name="name" autoComplete="name" required maxLength={100} value={name} onChange={event => setName(event.target.value)} placeholder="Your name" /></div>
+                <div className="contact-field"><label htmlFor="contact-email">Your email</label><input id="contact-email" name="email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={event => updateEmail(event.target.value)} onBlur={() => { void validateEmail(); }} placeholder="you@example.com" aria-describedby="contact-email-status" aria-invalid={emailCheck.status === 'invalid'} data-validation={emailCheck.status} />
+                  <div id="contact-email-status" className="contact-email-status" role="status" aria-live="polite">{emailCheck.message}</div>
+                </div>
+              </div>
+              <div className="contact-field contact-message-field"><label htmlFor="contact-message">What's on your mind?</label><textarea id="contact-message" name="message" required maxLength={5000} value={msg} onChange={event => setMsg(event.target.value)} placeholder="Tell me about the idea, the problem, or what you'd like to know." rows={6} aria-describedby="contact-message-help" />
+                <div className="contact-message-meta"><p id="contact-message-help">Your name and email help me reply.</p><span>{msg.length.toLocaleString()} / 5,000<span className="sr-only"> characters</span></span></div>
+              </div>
+              <input type="checkbox" name="botcheck" tabIndex={-1} aria-hidden="true" style={{ display: 'none' }} />
+              <button type="submit" disabled={!canSend} aria-describedby={remaining > 0 ? 'contact-cooldown' : 'contact-email-status'} className="ui-button ui-button--primary ui-button--rounded contact-submit" aria-busy={isSending}>
+                <span>{isSending ? 'Checking email and sending...' : remaining > 0 ? 'Please wait' : 'Send message'}</span>{isSending ? <LoaderCircle size={17} className="contact-send-spinner" aria-hidden="true" /> : <ArrowUpRight size={17} aria-hidden="true" />}
+              </button>
+            </fieldset>
+            {remaining > 0 && <p id="contact-cooldown" className="contact-cooldown">You can send another message in <span role="timer" aria-live="off">{formatContactCooldown(remaining)}</span>.</p>}
+            {emailRetryWarning && remaining === 0 && <p role="alert" className="contact-retry-warning">{emailRetryWarning}</p>}
+            <div role="status" aria-live="polite" aria-atomic="true" className="contact-send-status">{isSending && 'Checking your email before sending your message...'}</div>
+          </form>
+        </section>
       </div>
-      <PageNextStep title="Want to see what I've built?" description="Take a look at my web and mobile projects." page="projects" label="Explore projects" />
+      <footer className="contact-signoff" data-contact-reveal><p>Want to see the work first?</p><button type="button" onClick={() => navigate('projects')}>Explore projects<ArrowRight size={15} aria-hidden="true" /></button></footer>
     </div>
   );
 }

@@ -1,0 +1,70 @@
+/* A discography that shares the portfolio's typography, surfaces, and spacing. */
+.projects-page { max-width: 1440px; padding-top: 32px; padding-bottom: 32px; container: catalogue / inline-size; }
+.projects-heading { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 8px 0 36px; border-bottom: 1px solid var(--sp-line); }
+.projects-eyebrow { display: flex; align-items: center; gap: 8px; color: var(--sp-gray); font-size: 10px; font-weight: 700; line-height: 1.5; letter-spacing: 1.5px; text-transform: uppercase; }
+.projects-eyebrow > svg { color: var(--sp-green); }
+.projects-heading h1 { margin: 18px 0; font-size: clamp(38px, 5.2vw, 68px); font-weight: 850; line-height: 1.05; letter-spacing: -.055em; }
+.projects-heading h1 .projects-title-dot { color: var(--sp-green); }
+.projects-title-mask { display: inline-block; overflow: clip; vertical-align: bottom; padding: .08em .04em .12em; margin: -.08em -.04em -.12em; }
+.projects-title-word { display: inline-block; }
+.projects-intro-rule { position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--sp-green); opacity: 0; transform-origin: left; pointer-events: none; }
+.projects-heading-copy > p:last-child { max-width: 490px; color: var(--sp-gray); font-size: 14px; line-height: 1.8; }
+.projects-catalogue { flex-shrink: 0; padding-left: 28px; border-left: 1px solid var(--sp-line); }
+.projects-catalogue > span { color: var(--sp-white); font-size: 42px; font-weight: 650; letter-spacing: -2px; line-height: 1; font-variant-numeric: tabular-nums; }
+.projects-catalogue > p { color: var(--sp-gray); font-size: 10px; line-height: 1.7; margin-top: 12px; }
+.projects-page .projects-toolbar { gap: 12px; margin: 0; padding-block: 28px; align-items: end; }
+.projects-page .project-filter-select { flex: 0 1 190px; }
+.projects-page .project-filter-select > span { font-size: 10px; }
+.projects-page .project-filter-select select { border-color: var(--sp-line); background: var(--sp-dark2); border-radius: 6px; font-size: 12px; }
+.projects-page .saved-project-filter { gap: 9px; margin-left: auto; border-color: var(--sp-line); border-radius: 24px; font-size: 12px; }
+.projects-page .saved-project-filter > span { font-size: 10px; font-variant-numeric: tabular-nums; }
+.projects-page .saved-project-filter[aria-pressed="true"] { background: color-mix(in srgb, var(--sp-green) 10%, var(--sp-dark)); border-color: var(--sp-green); }
+.projects-page .project-filter-clear { font-size: 11px; }
+.projects-collection-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+.projects-collection-heading > h2 { font-size: 24px; font-weight: 750; letter-spacing: -.7px; line-height: 1.2; }
+.projects-collection-heading > p { color: var(--sp-gray); font-size: 11px; }
+.projects-album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); grid-auto-rows: 1fr; gap: 20px 16px; list-style: none; margin: 0; padding: 0; }
+.projects-album-item { display: grid; min-width: 0; }
+.projects-page .project-card { padding: 12px; border: 1px solid var(--sp-line); border-radius: 8px; background: var(--sp-dark2); transition: background-color var(--motion-fast), border-color var(--motion-fast); }
+.projects-page .project-card-art { margin-bottom: 14px; }
+.projects-page .project-cover { border-radius: 5px; }
+.project-album-caption { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--sp-gray); font-size: 10px; line-height: 1.5; }
+.project-album-caption > span:last-child { font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.projects-page .project-card-title { font-size: 15px; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
+.projects-page .project-card-subtitle { min-height: 40px; margin: 6px 0 10px; color: var(--sp-gray); font-size: 12px; line-height: 1.7; }
+.project-album-stack { min-height: 17px; margin-bottom: 16px; color: var(--sp-gray); font-size: 10px; line-height: 1.7; overflow-wrap: anywhere; }
+.project-album-stack > span { color: var(--sp-white); }
+.projects-page .project-card .project-card-meta { margin-top: auto; margin-bottom: 10px; gap: 6px; }
+.projects-page .project-card .project-details-button { width: 100%; min-height: 44px; justify-content: center; border-color: var(--sp-line); border-radius: 5px; font-size: 11px; background: transparent; }
+.projects-page .project-details-button:hover { border-color: var(--sp-green); color: var(--sp-green); background: var(--sp-overlay); }
+.projects-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; min-height: 280px; padding: 36px 20px; border-block: 1px solid var(--sp-line); text-align: center; color: var(--sp-gray); }
+.projects-empty h3 { font-size: 20px; color: var(--sp-white); font-weight: 650; }
+.projects-empty p { max-width: 400px; font-size: 13px; line-height: 1.8; }
+.projects-empty button { margin-top: 8px; }
+.projects-signoff { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--sp-line); }
+.projects-signoff p { color: var(--sp-gray); font-size: 12px; }
+.projects-signoff button { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 6px 0; border: 0; background: transparent; color: var(--sp-white); font-size: 12px; font-weight: 600; cursor: pointer; }
+.projects-signoff button:hover { color: var(--sp-green); }
+@media (hover: hover) {
+  .projects-page .project-card:hover { background: var(--sp-dark3); border-color: var(--sp-gray2); }
+}
+@container catalogue (max-width: 680px) {
+  .projects-catalogue { display: none; }
+  .projects-page .project-filter-select { flex: 1 1 150px; }
+  .projects-page .saved-project-filter { margin-left: 0; }
+}
+@container catalogue (max-width: 520px) {
+  .projects-album-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .projects-page .project-card { padding: 10px; }
+  .projects-page .project-card-title { font-size: 13px; }
+  .projects-page .project-card-subtitle { font-size: 11px; }
+  .project-album-caption { font-size: 9px; gap: 6px; }
+  .project-album-stack { font-size: 9px; }
+  .projects-collection-heading > h2 { font-size: 22px; }
+}
+@container catalogue (max-width: 300px) {
+  .projects-album-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 768px) {
+  .projects-page { padding-top: 24px; }
+}
