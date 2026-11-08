@@ -151,6 +151,6 @@ export const projects: Project[] = [
       'PaServe is a web-based QR ordering system for coffee shops and restaurants that lets customers scan a table QR code, browse the menu, and order from their phones. It helps staff manage orders and gives owners tools to update menus, control item availability, and track sales.',
     year: '2026',
     github: 'https://github.com/404NeuronNotFound/PaServe',
-    featured: false,
+    featured: true,
   },
 ];
