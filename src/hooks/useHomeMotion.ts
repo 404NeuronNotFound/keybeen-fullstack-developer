@@ -1,3 +1,4 @@
+import { isPageTransitioning } from '../utils/pageTransition';
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -19,7 +20,7 @@ export function useHomeMotion() {
     media.add('(prefers-reduced-motion: no-preference)', context => {
       let intro: gsap.core.Timeline | undefined;
       // Preserve the visitor's place when returning via browser history.
-      if (useNavStore.getState().getScrollPosition('home') < 40 && !root.current?.closest('[data-entry-phase="reveal"]')) {
+      if (!isPageTransitioning() && useNavStore.getState().getScrollPosition('home') < 40 && !root.current?.closest('[data-entry-phase="reveal"]')) {
         intro = gsap.timeline({ defaults: { duration: 0.7, ease: 'power3.out', clearProps: 'transform,opacity,visibility' } })
           .from('.hero-portrait', { opacity: 0, scale: 0.94 }, 0)
           .from('.hero-copy > *', { opacity: 0, y: 20, stagger: 0.07 }, 0.08)

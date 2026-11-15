@@ -1,3 +1,4 @@
+import { isPageTransitioning } from '../utils/pageTransition';
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -20,7 +21,7 @@ export function useAboutMotion() {
       if (!context.conditions?.motion) return;
       // Read the destination's saved position, before App restores main's scroll.
       let entrance: gsap.core.Timeline | undefined;
-      if (useNavStore.getState().getScrollPosition('about') < 40) {
+      if (!isPageTransitioning() && useNavStore.getState().getScrollPosition('about') < 40) {
         entrance = gsap.timeline({ defaults: { duration: 0.75, ease: 'power3.out', clearProps: 'transform,opacity' } })
           .from('.about-title-line', { y: 28, opacity: 0, stagger: 0.09 }, 0)
           .from('.about-photo', { y: 18, opacity: 0 }, 0.1)

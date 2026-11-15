@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { isPageTransitioning } from './pageTransition';
 
 interface RevealOptions {
   scope: HTMLElement;
@@ -13,6 +14,9 @@ interface RevealOptions {
 
 /** Content stays visible until a trigger actually starts its entrance. */
 export function createScrollReveals(options: RevealOptions) {
+  // Page snapshots need fully visible destination content. The route morph
+  // already provides its entrance, so don't hide it for a second animation.
+  if (isPageTransitioning()) return () => {};
   const { scope, scroller, selector, context, distance, duration, delay } = options;
   const animations = new Map<HTMLElement, gsap.core.Tween>();
   const completed = new Set<HTMLElement>();

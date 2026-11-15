@@ -1,3 +1,4 @@
+import { isPageTransitioning } from '../utils/pageTransition';
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -16,7 +17,7 @@ export function useExperienceMotion(openId: number | null) {
     if (!element || !scroller) return;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', context => {
-      if (useNavStore.getState().getScrollPosition('experience') < 40) {
+      if (!isPageTransitioning() && useNavStore.getState().getScrollPosition('experience') < 40) {
         gsap.timeline({ defaults: { duration: 0.65, ease: 'power3.out', clearProps: 'transform,opacity' } })
           .from('.experience-heading-copy > *', { y: 18, opacity: 0, stagger: 0.07 }, 0)
           .from('.experience-origin', { y: 12, opacity: 0 }, 0.16);
@@ -47,7 +48,7 @@ export function useExperienceMotion(openId: number | null) {
   }, { scope: root });
 
   useGSAP(() => {
-    if (openId === null) return;
+    if (openId === null || isPageTransitioning()) return;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.fromTo('.experience-node[data-expanded="true"] .experience-node-detail-inner > *',

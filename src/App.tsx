@@ -18,6 +18,7 @@ import {
 } from './pages';
 import type { SectionId } from './types';
 import type { JSX }       from 'react';
+import './styles/page-transitions.css';
 
 // ─── page registry ─────────────────────────────────────────────────────────
 // Add a new page here and it instantly appears — no switch statements to update
@@ -71,7 +72,7 @@ export default function App() {
             className="app-content"
             onScroll={event => useNavStore.getState().recordScroll(active, event.currentTarget.scrollTop)}
           >
-            {PAGE_MAP[active] ?? <HomePage />}
+            <div className="page-transition-surface">{PAGE_MAP[active] ?? <HomePage />}</div>
           </main>
 
           <ProjectBar />

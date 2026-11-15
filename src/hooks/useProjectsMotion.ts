@@ -1,3 +1,4 @@
+import { isPageTransitioning } from '../utils/pageTransition';
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -16,7 +17,7 @@ export function useProjectsMotion(projectIds: string) {
     if (!element) return;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
-      if (useNavStore.getState().getScrollPosition('projects') >= 40) return;
+      if (isPageTransitioning() || useNavStore.getState().getScrollPosition('projects') >= 40) return;
       const entrance = gsap.timeline({ defaults: { duration: 0.65, ease: 'power3.out', clearProps: 'transform,opacity' } })
         .from('.projects-eyebrow', { y: 6, opacity: 0 }, 0)
         .from('.projects-eyebrow > svg', { rotation: -90, duration: 0.9 }, 0)

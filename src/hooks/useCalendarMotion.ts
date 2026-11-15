@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import type { ContributionDay } from './useGithubContributions';
+import { isPageTransitioning } from '../utils/pageTransition';
 
 gsap.registerPlugin(useGSAP);
 
@@ -11,7 +12,7 @@ export function useCalendarMotion(days: ContributionDay[], loading: boolean) {
   useGSAP(() => {
     const element = root.current;
     const scroller = element?.closest<HTMLElement>('.app-content');
-    if (!element || !scroller || loading || days.length === 0) return;
+    if (!element || !scroller || loading || days.length === 0 || isPageTransitioning()) return;
     const media = gsap.matchMedia();
 
     media.add('(prefers-reduced-motion: no-preference)', context => {

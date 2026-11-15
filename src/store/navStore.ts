@@ -1,5 +1,6 @@
 ﻿import { create } from 'zustand';
 import type { SectionId } from '../types';
+import { settlePageTransition, transitionPage } from '../utils/pageTransition';
 
 const SECTIONS: SectionId[] = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
 const HISTORY_KEY = 'portfolioNavigation';
@@ -51,6 +52,7 @@ const saved = readSnapshot();
 const initial = saved?.history[saved.histIdx] === initialSection ? saved : null;
 let session = initial?.session ?? `${Date.now()}-${Math.random()}`;
 const scrollPositions: ScrollPositions = { ...initial?.scroll };
+let pendingBrowserSection: SectionId | null = null;
 
 function writeHistory(mode: 'pushState' | 'replaceState', state: Pick<NavState, 'active' | 'history' | 'histIdx'>) {
   if (typeof window === 'undefined') return;
@@ -70,6 +72,7 @@ export const useNavStore = create<NavState>((set, get) => ({
   histIdx: initial?.histIdx ?? 0,
 
   navigate: (section) => {
+    settlePageTransition();
     const current = get();
     if (!isSection(section) || current.active === section) return;
     captureScroll();
@@ -77,10 +80,11 @@ export const useNavStore = create<NavState>((set, get) => ({
     const history = [...current.history.slice(0, current.histIdx + 1), section];
     const next = { active: section, history, histIdx: history.length - 1 };
     writeHistory('pushState', next);
-    set(next);
+    transitionPage(() => set(next));
   },
 
   back: () => {
+    settlePageTransition();
     const current = get();
     if (current.histIdx <= 0) return;
     captureScroll();
@@ -91,6 +95,7 @@ export const useNavStore = create<NavState>((set, get) => ({
   },
 
   forward: () => {
+    settlePageTransition();
     const current = get();
     if (current.histIdx >= current.history.length - 1) return;
     captureScroll();
@@ -112,6 +117,13 @@ export const useNavStore = create<NavState>((set, get) => ({
 export function subscribeToBrowserNavigation() {
   if (typeof window === 'undefined') return () => {};
   const sync = () => {
+    const requested = sectionFromHash();
+    const before = useNavStore.getState();
+    const entry = readSnapshot();
+    // popstate and hashchange can describe the same traversal. Preserve its
+    // running morph rather than cancelling it when the second event arrives.
+    if (pendingBrowserSection === requested || (entry?.session === session && before.active === requested && before.histIdx === entry.histIdx)) return;
+    settlePageTransition();
     const current = useNavStore.getState();
     const active = sectionFromHash();
     const snapshot = readSnapshot();
@@ -123,15 +135,27 @@ export function subscribeToBrowserNavigation() {
       const history = snapshot.session === session && current.history[snapshot.histIdx] === active
         ? current.history : snapshot.history;
       session = snapshot.session;
-      useNavStore.setState({ active, history, histIdx: snapshot.histIdx });
+      pendingBrowserSection = active;
+      transitionPage(() => {
+        useNavStore.setState({ active, history, histIdx: snapshot.histIdx });
+        pendingBrowserSection = null;
+        if (sectionFromHash() === active) writeHistory('replaceState', useNavStore.getState());
+      });
     } else if (active !== current.active) {
       const history = [...current.history.slice(0, current.histIdx + 1), active];
-      useNavStore.setState({ active, history, histIdx: history.length - 1 });
+      pendingBrowserSection = active;
+      transitionPage(() => {
+        useNavStore.setState({ active, history, histIdx: history.length - 1 });
+        pendingBrowserSection = null;
+        if (sectionFromHash() === active) writeHistory('replaceState', useNavStore.getState());
+      });
+    } else {
+      writeHistory('replaceState', useNavStore.getState());
     }
-    // Update the destination's snapshot too, so refreshing after Back retains Forward.
-    writeHistory('replaceState', useNavStore.getState());
+    // Destination snapshots are written inside the commit, after its state changes.
   };
   const save = () => {
+    settlePageTransition();
     captureScroll();
     writeHistory('replaceState', useNavStore.getState());
   };

@@ -1,3 +1,4 @@
+import { isPageTransitioning } from '../utils/pageTransition';
 import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -16,7 +17,7 @@ export function useSkillsMotion(category: string, query: string) {
     if (!element || !scroller) return;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', context => {
-      if (useNavStore.getState().getScrollPosition('skills') < 40) {
+      if (!isPageTransitioning() && useNavStore.getState().getScrollPosition('skills') < 40) {
         gsap.timeline({ defaults: { duration: 0.65, ease: 'power3.out', clearProps: 'transform,opacity' } })
           .from('.skills-intro-copy > *', { y: 18, opacity: 0, stagger: 0.07 }, 0)
           .from('.skills-discipline-index > div', { x: 12, opacity: 0, stagger: 0.08 }, 0.15);
@@ -44,6 +45,7 @@ export function useSkillsMotion(category: string, query: string) {
 
   // Filter feedback is independent of the entrance: typing never replays it.
   useGSAP(() => {
+    if (isPageTransitioning()) return;
     const element = root.current;
     const results = element?.querySelector<HTMLElement>('.skills-results');
     const scroller = element?.closest<HTMLElement>('.app-content');
