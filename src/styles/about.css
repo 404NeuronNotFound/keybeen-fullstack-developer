@@ -1,5 +1,5 @@
 /* A portrait and liner notes, using the portfolio's existing theme tokens. */
-.about-page.about-editorial { max-width: 1440px; padding-top: 24px; padding-bottom: 40px; }
+.about-page.about-editorial { width: 100%; max-width: none; padding-top: 24px; padding-bottom: 40px; }
 .about-kicker { display: flex; align-items: center; gap: 10px; color: var(--sp-gray); font-size: 10px; line-height: 1.5; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; }
 .about-marker { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--sp-green); }
 .about-masthead { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--sp-line); }

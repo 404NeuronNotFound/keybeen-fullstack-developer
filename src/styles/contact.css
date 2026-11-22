@@ -1,4 +1,4 @@
-.contact-page { max-width: 1440px; padding-top: 32px; container: contact / inline-size; }
+.contact-page { width: 100%; max-width: none; padding-top: 32px; container: contact / inline-size; }
 .contact-eyebrow { display: flex; align-items: center; gap: 8px; color: var(--sp-gray); font-size: 10px; line-height: 1.5; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
 .contact-eyebrow > svg { color: var(--sp-green); }
 .contact-heading { padding: 8px 0 36px; border-bottom: 1px solid var(--sp-line); }

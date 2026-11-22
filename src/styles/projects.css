@@ -1,5 +1,5 @@
 /* A discography that shares the portfolio's typography, surfaces, and spacing. */
-.projects-page { max-width: 1440px; padding-top: 32px; padding-bottom: 32px; container: catalogue / inline-size; }
+.projects-page { width: 100%; max-width: none; padding-top: 32px; padding-bottom: 32px; container: catalogue / inline-size; }
 .projects-heading { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 8px 0 36px; border-bottom: 1px solid var(--sp-line); }
 .projects-eyebrow { display: flex; align-items: center; gap: 8px; color: var(--sp-gray); font-size: 10px; font-weight: 700; line-height: 1.5; letter-spacing: 1.5px; text-transform: uppercase; }
 .projects-eyebrow > svg { color: var(--sp-green); }

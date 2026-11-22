@@ -1,5 +1,5 @@
 /* Keep the journey's branching timeline; give dates and roles their own space. */
-.experience-page.experience-editorial { max-width: 1440px; padding-top: 32px; }
+.experience-page.experience-editorial { width: 100%; max-width: none; padding-top: 32px; }
 .experience-editorial .experience-page-heading { display: flex; justify-content: space-between; align-items: center; gap: 36px; padding: 8px 0 36px; border-bottom: 1px solid var(--sp-line); }
 .experience-eyebrow { display: flex; align-items: center; gap: 9px; font-size: 10px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--sp-gray); }
 .experience-eyebrow svg { color: var(--sp-green); }
