@@ -1,6 +1,8 @@
 .entry-app { height: 100%; }
 .portfolio-entry { position: fixed; inset: 0; z-index: 30000; display: grid; grid-template-rows: auto 1fr auto; min-height: 100%; padding: clamp(20px, 3vw, 40px); color: var(--sp-white); }
-.entry-backdrop { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 35%, var(--sp-hero-tint), transparent 58%), var(--sp-dark); pointer-events: none; }
+.entry-backdrop { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 35%, var(--sp-hero-tint), transparent 58%), var(--sp-dark); pointer-events: none; }
+.entry-code-scan { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .8; mask-image: radial-gradient(ellipse at center, transparent 12%, #000 85%); }
+.entry-scan-beam { position: absolute; top: 0; left: 0; right: 0; height: 12vh; min-height: 50px; border-bottom: 1px solid #1db95455; background: linear-gradient(transparent, #1db9540c 65%, #1db9541c); }
 .entry-header, .entry-stage, .entry-footer { position: relative; }
 .entry-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .entry-brand { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 750; letter-spacing: -.4px; }
@@ -8,7 +10,7 @@
 .entry-header button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--sp-line); border-radius: 24px; background: transparent; color: var(--sp-gray); font: inherit; font-size: 11px; cursor: pointer; }
 .entry-header button:hover { border-color: var(--sp-gray); color: var(--sp-white); }
 .entry-stage { align-self: center; justify-self: center; width: 100%; max-width: 640px; padding: 24px 0 40px; text-align: center; }
-.entry-record { position: relative; width: clamp(132px, 17vw, 180px); aspect-ratio: 1; margin: 0 auto 30px; border-radius: 50%; box-shadow: 0 18px 40px #0003; }
+.entry-record { position: relative; width: clamp(180px, 22vw, 240px); aspect-ratio: 1; margin: 0 auto 30px; border-radius: 50%; box-shadow: 0 18px 40px #0003; }
 .entry-record-grooves { position: absolute; inset: 0; border: 1px solid #444; border-radius: inherit; background: conic-gradient(from 10deg, #111, #373737 45deg, #151515 90deg, #111 180deg, #333 225deg, #151515 270deg, #111); }
 .entry-record-grooves::after { content: ''; position: absolute; inset: 8px; border-radius: inherit; background: repeating-radial-gradient(circle, transparent 0 3px, #ffffff14 3.5px 4px, transparent 4.5px 6px); }
 .entry-record-label { position: absolute; inset: 25%; display: grid; place-items: center; overflow: hidden; border-radius: 50%; background: var(--sp-green); border: 3px solid var(--sp-green); }
@@ -20,8 +22,13 @@
 .entry-name-word > span { color: var(--sp-green); }
 .entry-role { max-width: 430px; margin-inline: auto; color: var(--sp-gray); font-size: clamp(12px, 1.5vw, 15px); line-height: 1.8; }
 .entry-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; color: var(--sp-gray); font-size: 10px; letter-spacing: .4px; }
+@media (max-height: 700px) {
+  .entry-stage { padding: 16px 0 24px; }
+  .entry-record { width: 160px; margin-bottom: 20px; }
+  .entry-name { font-size: clamp(54px, 9vw, 80px); margin: 10px 0 12px; }
+}
 @media (max-height: 550px) {
   .entry-stage { padding-block: 12px; }
-  .entry-record { width: 90px; margin-bottom: 16px; }
+  .entry-record { width: 112px; margin-bottom: 16px; }
   .entry-name { font-size: 54px; margin-block: 8px; }
 }

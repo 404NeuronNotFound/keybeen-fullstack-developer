@@ -3,12 +3,12 @@ interface Glyph {
   vx: number; vy: number; color: number; glyph: number; original: number; heat: number;
 }
 
-const SIZE = 64;
 const CHARACTERS = '01010101{}[]<>/;=+';
 const seed = (x: number, y: number) => ((x * 73856093) ^ (y * 19349663)) >>> 0;
 
 /** Cache character sprites once, then animate their positions and contents. */
-export function createCodePortrait(canvas: HTMLCanvasElement, image: HTMLImageElement, motion = true) {
+export function createCodePortrait(canvas: HTMLCanvasElement, image: HTMLImageElement, motion = true, columns = 64) {
+  const SIZE = Math.max(24, Math.min(96, Math.round(columns) || 64));
   const context = canvas.getContext('2d');
   const sample = document.createElement('canvas');
   sample.width = sample.height = SIZE;

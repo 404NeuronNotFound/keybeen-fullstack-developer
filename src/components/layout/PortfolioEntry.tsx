@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { SITE } from '../../constants';
 import { ResponsiveImage } from '../ui/ResponsiveImage';
+import { IntroCodeScan } from './IntroCodeScan';
 import { shouldPlaySiteIntro, rememberSiteIntro } from '../../utils/siteIntro';
 import { focusPageHeading } from '../../utils/pageFocus';
 import { useNavStore } from '../../store/navStore';
@@ -19,6 +20,7 @@ function SiteIntro({ reveal, finish, morphing }: { reveal: () => void; finish: (
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({ defaults: { ease: 'power3.out' } })
+        .fromTo('.entry-scan-beam', { y: () => -window.innerHeight * 0.15 }, { y: () => window.innerHeight, duration: 1.8, ease: 'none', repeat: 1 }, 0)
         .from('.entry-record', { scale: 0.86, opacity: 0, duration: 0.9 }, 0)
         .fromTo('.entry-record-grooves', { rotation: -140 }, { rotation: 25, duration: 2.15, ease: 'power2.out' }, 0)
         .from('.entry-eyebrow', { y: 8, opacity: 0, duration: 0.65 }, 0.2)
@@ -116,7 +118,7 @@ function SiteIntro({ reveal, finish, morphing }: { reveal: () => void; finish: (
   }, [finish]);
 
   return <section ref={root} className="portfolio-entry" aria-label="Welcome to Keybeen's portfolio">
-    <div className="entry-backdrop" aria-hidden="true" />
+    <div className="entry-backdrop" aria-hidden="true"><IntroCodeScan /><div className="entry-scan-beam" /></div>
     <header className="entry-header"><span className="entry-brand"><Disc3 size={19} aria-hidden="true" />{SITE.name}</span><button type="button" autoFocus onClick={finish}>Skip intro<ArrowRight size={15} aria-hidden="true" /></button></header>
     <div className="entry-stage">
       <div className="entry-record" aria-hidden="true"><div className="entry-record-grooves" /><div className="entry-record-label"><span>{SITE.initials}</span><ResponsiveImage src="/avatar.jpeg" alt="" loading="eager" fetchPriority="high" sizes="192px" onError={event => { event.currentTarget.style.display = 'none'; }} /></div></div>
