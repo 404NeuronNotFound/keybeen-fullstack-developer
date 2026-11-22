@@ -21,7 +21,7 @@ export function TeaserCard({ project, showContext = false }: { project: Project;
         whileHover={reducedMotion ? undefined : { y: -2 }}
         transition={{ type: 'spring', stiffness: 260, damping: 24 }}
       >
-        <div className="project-card-art"><ProjectCover project={project} /></div>
+        <div className="project-card-art"><ProjectCover project={project} vinyl /></div>
         {showContext && <div className="project-album-caption"><span>{project.category}</span><span>{project.year}</span></div>}
         <div className="project-card-title">{project.shortTitle}</div>
         <p className="project-card-subtitle">{project.subtitle}</p>
