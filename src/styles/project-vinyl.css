@@ -61,6 +61,8 @@
 @media (hover: none) {
   .project-vinyl-disc { left: 27%; }
 }
+.project-cover-vinyl[data-vinyl-mode="expanded"] .project-vinyl-disc { left: 14%; }
+.project-overview-cover:has(.project-cover-vinyl) { max-width: 352px; }
 @media (prefers-reduced-motion: reduce) {
   .project-vinyl-spin { animation: none; }
 }

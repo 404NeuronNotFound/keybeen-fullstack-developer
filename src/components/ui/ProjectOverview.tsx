@@ -59,7 +59,7 @@ export function ProjectOverview() {
           <h3 id="project-section-title" style={{ fontSize: 18, marginBottom: 16 }}>{sections[section]}</h3>
           {section === 0 && (
             <>
-              <div className="project-overview-cover"><ProjectCover project={project} /></div>
+              <div className="project-overview-cover"><ProjectCover key={project.id} project={project} vinyl expanded={isOpen} /></div>
               <div className="project-card-meta"><ProjectStatusBadge status={project.status} /><SaveProjectButton project={project} /></div>
               <p className="project-availability">{project.availability}</p>
               <p style={{ color: 'var(--sp-gray)', fontSize: 15, lineHeight: 1.7 }}>{project.description}</p>

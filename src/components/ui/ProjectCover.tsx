@@ -8,46 +8,51 @@ import '../../styles/project-vinyl.css';
 
 gsap.registerPlugin(useGSAP);
 
-export function ProjectCover({ project, compact = false, vinyl = false }: { project: Project; compact?: boolean; vinyl?: boolean }) {
+export function ProjectCover({ project, compact = false, vinyl = false, expanded }: { project: Project; compact?: boolean; vinyl?: boolean; expanded?: boolean }) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
   useGSAP(() => {
     if (!vinyl || !root.current) return;
     const artwork = root.current;
     const card = artwork.closest<HTMLElement>('.project-card');
-    if (!card) return;
+    const dialog = artwork.closest('dialog');
+    if (!card && expanded === undefined) return;
     const media = gsap.matchMedia();
     media.add({ motion: '(prefers-reduced-motion: no-preference)', reduce: '(prefers-reduced-motion: reduce)', hover: '(hover: hover)' }, context => {
       const { motion, hover } = context.conditions!;
-      const slide = gsap.timeline({ paused: true, defaults: { duration: 0.65, ease: 'power3.inOut' } })
-        .to('.project-vinyl-disc', { xPercent: hover ? 26 : 7 }, 0)
-        .to('.project-cover-print', { xPercent: hover ? -17.5676 : -10.8 }, 0);
+      const fullSlide = hover || expanded !== undefined;
+      const slide = gsap.timeline({ paused: true, defaults: { duration: 0.8, ease: 'power3.inOut' } })
+        .to('.project-vinyl-disc', { xPercent: fullSlide ? 26 : 7 }, 0)
+        .to('.project-cover-print', { xPercent: fullSlide ? -17.5676 : -10.8 }, 0);
       let visible = true;
       let active = false;
       const syncSpin = () => { artwork.dataset.spinning = String(Boolean(active && motion && visible && !document.hidden)); };
       const update = (event?: Event) => {
         const focused = event?.type === 'focusout' ? (event as FocusEvent).relatedTarget : document.activeElement;
-        active = Boolean((hover && card.matches(':hover')) || (focused instanceof Node && card.contains(focused)));
+        const waitingForMorph = dialog && (!dialog.open || dialog.dataset.morphState === 'opening');
+        active = expanded !== undefined ? expanded && !waitingForMorph : Boolean((hover && card?.matches(':hover')) || (focused instanceof Node && card?.contains(focused)));
         if (motion) { if (active) slide.play(); else slide.reverse(); }
         else slide.progress(active ? 1 : 0);
         syncSpin();
       };
       const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; syncSpin(); });
       observer.observe(artwork);
-      for (const event of ['pointerenter', 'pointerleave', 'focusin', 'focusout']) card.addEventListener(event, update);
+      for (const event of ['pointerenter', 'pointerleave', 'focusin', 'focusout']) card?.addEventListener(event, update);
       document.addEventListener('visibilitychange', syncSpin);
+      dialog?.addEventListener('modal:morph-complete', update);
       update();
       return () => {
         observer.disconnect();
-        for (const event of ['pointerenter', 'pointerleave', 'focusin', 'focusout']) card.removeEventListener(event, update);
+        for (const event of ['pointerenter', 'pointerleave', 'focusin', 'focusout']) card?.removeEventListener(event, update);
         document.removeEventListener('visibilitychange', syncSpin);
+        dialog?.removeEventListener('modal:morph-complete', update);
         delete artwork.dataset.spinning;
       };
     });
     return () => media.revert();
-  }, { scope: root, dependencies: [vinyl], revertOnUpdate: true });
+  }, { scope: root, dependencies: [vinyl, expanded, project.id], revertOnUpdate: true });
   return (
-    <div ref={root} className={`project-cover${compact ? ' project-cover-compact' : ''}${vinyl ? ' project-cover-vinyl' : ''}`} style={{ '--project-accent': project.accent } as CSSProperties} role="img" aria-label={`Cover art for ${project.shortTitle}`}>
+    <div ref={root} data-vinyl-mode={expanded !== undefined ? 'expanded' : undefined} className={`project-cover${compact ? ' project-cover-compact' : ''}${vinyl ? ' project-cover-vinyl' : ''}`} style={{ '--project-accent': project.accent } as CSSProperties} role="img" aria-label={`Cover art for ${project.shortTitle}`}>
       {vinyl && <div className="project-vinyl-disc" aria-hidden="true"><div className="project-vinyl-spin"><span className="project-vinyl-label"><span>{project.shortTitle}</span><i /></span></div><div className="project-vinyl-sheen" /></div>}
       <div className="project-cover-print" aria-hidden="true">
         {project.image && failedSrc !== project.image ? <ResponsiveImage src={project.image} alt="" sizes={compact ? '40px' : '(max-width: 768px) 50vw, 320px'} onError={() => setFailedSrc(project.image ?? '')} /> : (
