@@ -1,5 +1,5 @@
 import { ArrowRight, ArrowUpRight, MapPin, Film, Car, Coffee, MessageCircle, Sparkles, Code2, Check, Braces, ScanLine, Bug } from 'lucide-react';
-import { ResponsiveImage } from '../components/ui/ResponsiveImage';
+import { InteractiveCodePortrait } from '../components/ui/InteractiveCodePortrait';
 import { Button } from '../components/ui/Button';
 import { SITE } from '../constants';
 import { projects } from '../data';
@@ -44,7 +44,7 @@ export function AboutPage() {
           </div>
         </div>
         <figure className="about-photo">
-          <div className="about-photo-frame"><ResponsiveImage src="/avatar.jpeg" alt={`${SITE.fullName}, the developer behind this portfolio`} sizes="(max-width: 600px) 80vw, (max-width: 1100px) 30vw, 360px" loading="eager" /></div>
+          <div className="about-photo-frame"><InteractiveCodePortrait src="/images/about-portrait-pixels.png" name={SITE.fullName} /></div>
           <figcaption><span>{SITE.fullName}</span><span><MapPin size={12} aria-hidden="true" />{SITE.location}</span></figcaption>
         </figure>
       </section>

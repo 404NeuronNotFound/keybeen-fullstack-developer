@@ -60,6 +60,8 @@ Contact uses `src/styles/contact.css` for direct email, social links, and a resp
 
 ## Images
 
+About's portrait uses `public/images/about-portrait-pixels.png` as a monochrome source for `InteractiveCodePortrait` and `src/utils/codePortrait.ts`. Bolder binary digits and code symbols form the face. A repeating scan and staggered character shuffles continuously rebuild the portrait while keeping its silhouette visible. Hover adds local scrambling; click/tap or keyboard activation sends a ripple. Character sprites and the dim background are cached, and ambient drawing runs at about 11 Hz. The artwork has no visible interaction hints or playback controls; off-screen and hidden-tab states stop its loop automatically. Reduced motion keeps a static code portrait; unavailable canvas keeps the source artwork. The original photo remains at `public/images/about-portrait.jpeg`; other portraits are unchanged.
+
 Original JPEG artwork remains in `public` for editing and regeneration. Runtime images use generated WebP variants under `public/images` and the mapping in `src/data/imageManifest.ts`; small thumbnails and responsive source sets avoid downloading the full originals. Add a JPEG and rerun the generator whenever artwork changes.
 
 Install Pillow in your Python environment (`python -m pip install Pillow`), then run `python scripts/optimize_images.py`. The script also creates `public/social-preview.jpg` (1200 x 630) and the Apple touch icon. WebP is the selected optimized format; AVIF is not required. Generated assets are committed alongside the app, so production builds do not need Python. The script falls back to a system font when Windows fonts are unavailable.
