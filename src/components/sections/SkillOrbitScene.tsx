@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { ArrowUpRight, Code2, X } from 'lucide-react';
+import { Code2, Heart, Play, SkipBack, SkipForward, X } from 'lucide-react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { TOOL_BRANDS } from '../../constants/toolBrands';
@@ -129,9 +129,11 @@ export function SkillOrbitScene() {
         const point = projectSkillSphere(points[index], 0);
         return <div key={skill.name} className="skill-orbit-anchor" style={{ left: `${50 + point.x * 20}%`, top: `${69 + point.y * 20}%`, zIndex: point.layer, '--skill-color': brand.color, '--skill-surface': brand.surface } as CSSProperties}>
           <button type="button" className="skill-orbit-card" title={`${skill.name} · ${skill.description}`} aria-label={skill.project ? `See ${skill.name} in ${skill.project.shortTitle}` : `${skill.name}: ${skill.description}`} aria-haspopup={skill.project ? 'dialog' : undefined} aria-controls={skill.project ? 'project-overview' : undefined} popoverTarget={skill.project ? undefined : `skill-info-${index}`} onClick={() => { if (skill.project) openProject(skill.project); }}>
-            <span className="skill-orbit-art" aria-hidden="true"><span className="skill-orbit-icon"><Icon /></span></span>
+            <span className="skill-orbit-art" aria-hidden="true"><span className="skill-orbit-track">{String(index + 1).padStart(2, '0')}</span><span className="skill-orbit-icon"><Icon /></span></span>
             <span className="skill-orbit-name">{skill.name}</span>
-            <span className="skill-orbit-category">{skill.category === 'DevTools' ? 'Dev tools' : skill.category}<ArrowUpRight size={9} aria-hidden="true" /></span>
+            <span className="skill-orbit-category">{skill.category === 'DevTools' ? 'Dev tools' : skill.category}<Heart size={6} fill="currentColor" aria-hidden="true" /></span>
+            <span className="skill-orbit-progress" aria-hidden="true"><i style={{ '--track-progress': `${38 + index % 5 * 9}%` } as CSSProperties} /></span>
+            <span className="skill-orbit-controls" aria-hidden="true"><SkipBack size={8} fill="currentColor" /><span className="skill-orbit-play"><Play size={6} fill="currentColor" /></span><SkipForward size={8} fill="currentColor" /></span>
           </button>
         </div>;
       })}
