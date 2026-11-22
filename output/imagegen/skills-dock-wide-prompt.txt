@@ -1,0 +1,8 @@
+Tool: built-in image_gen (edit using the two attached reference images).
+Final asset: public/images/skills-dock-wide.jpg (1672 x 941).
+Responsive asset: public/images/skills-dock-960.jpg.
+Full-resolution generated source: output/imagegen/skills-dock-wide-source.png.
+JPEG conversion uses quality 90; interactive skill cards are rendered separately in React.
+
+Prompt:
+Edit target: the FIRST of the two attached images, the photograph of a young man seated on a wooden dock beside a lake, wearing a white t-shirt, olive cargo trousers, black sneakers, hands in black hair, face obscured. The SECOND image is solely context for later interactive web UI; do NOT reproduce that street scene or any floating album UI. Create a high quality photorealistic WIDESCREEN 16:9 landscape extension of the FIRST photograph for a website Skills hero. Preserve the same person, clothing, seated pose, dock wooden planks, two empty chairs at far end of dock, calm lake and tree-lined opposite shore. Naturally outpaint left and right to show more lake and the broad dock. Position the seated person lower center, around x50% y70%; whole seated figure visible, chairs upper center. Keep generous open lake space on both sides for floating HTML glass skill cards added separately. Natural late-afternoon light, realistic wood texture, rich muted forest greens, warm wood, clean editorial photography, high-resolution detail, coherent perspective. No typography, no logos, no code, no music players, no floating cards, no graphic overlays. Output ONLY the clean extended photograph, aspect ratio 16:9.

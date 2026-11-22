@@ -12,7 +12,7 @@ export function useModalMorph(ref: RefObject<HTMLDialogElement | null>, isOpen: 
 
     // Capture the origin before showModal moves focus into the dialog.
     const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const card = trigger?.closest<HTMLElement>('.project-card-shell, .top-skill-card');
+    const card = trigger?.closest<HTMLElement>('.project-card-shell, .top-skill-card, .skill-orbit-card');
     const origin = card ?? (trigger?.matches('button, a') ? trigger : null);
     const from = origin?.getBoundingClientRect();
     const sourceCover = trigger?.closest('.project-card-shell, .project-bar-summary')?.querySelector<HTMLElement>('.project-cover');
