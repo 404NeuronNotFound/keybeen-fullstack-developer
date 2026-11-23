@@ -80,8 +80,8 @@ export function Topbar() {
             Hover sounds will not play until this has been clicked once. */}
         <button
           onClick={toggleSound}
-          aria-label="Sounds and avatar music"
-          title={muted ? 'Unmute sounds and avatar music' : 'Mute sounds and avatar music'}
+          aria-label={muted ? 'Unmute all audio' : 'Mute all audio'}
+          title={muted ? 'Unmute all audio' : 'Mute all audio'}
           type="button"
           className="icon-button"
           aria-pressed={!muted}

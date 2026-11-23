@@ -59,7 +59,10 @@ export function transitionPage(update: () => void) {
     if (current === transition) settlePageTransition();
   }, 1000);
 
-  if (typeof document.startViewTransition === 'function') {
+  // Native document snapshots capture live video iframes too. Keep the player
+  // live and anchored by animating only the page surface while it is mounted.
+  const hasLivePlayer = Boolean(document.querySelector('.mixtape-floating-player'));
+  if (typeof document.startViewTransition === 'function' && !hasLivePlayer) {
     try {
       transition.view = document.startViewTransition(() => commit(transition));
       void transition.view.ready.catch(() => {});

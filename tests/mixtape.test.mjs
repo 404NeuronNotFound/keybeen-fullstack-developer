@@ -162,6 +162,8 @@ test('iframe sets referrer and media permissions before navigating with the real
     const url = new URL(result.src); assert.equal(url.hostname, 'www.youtube-nocookie.com');
     assert.equal(url.searchParams.get('origin'), 'http://127.0.0.1:5173');
     assert.equal(url.searchParams.get('enablejsapi'), '1');
+    assert.equal(url.searchParams.get('mute'), '1');
+    assert.equal(url.searchParams.get('autoplay'), '0');
     assert.throws(() => createYouTubeFrame('invalid', 'Title', 'http://127.0.0.1:5173'));
   } finally { if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument; }
 });
@@ -173,4 +175,72 @@ test('playback errors distinguish owner restrictions, unavailable videos, identi
   assert.match(youtubePlaybackError(100), /removed or made private/);
   assert.match(youtubePlaybackError(5), /could not start video playback/);
   assert.match(youtubePlaybackError(999), /error 999/);
+});
+
+test('page navigation keeps live players outside snapshot transitions and animates only content', () => {
+  const previousDocument = globalThis.document, previousWindow = globalThis.window;
+  let hasPlayer = true, snapshots = 0, changes = 0, animations = 0;
+  const surface = {}, livePlayer = { iframe: {} };
+  const originalFrame = livePlayer.iframe;
+  const preference = { matches: false, addEventListener() {}, removeEventListener() {} };
+  globalThis.window = { matchMedia: () => preference };
+  globalThis.document = {
+    documentElement: { dataset: {} }, visibilityState: 'visible',
+    querySelector(selector) {
+      if (selector === '#main-content') return {};
+      if (selector === '.mixtape-floating-player') return hasPlayer ? livePlayer : null;
+      if (selector === '.page-transition-surface') return surface;
+      return null;
+    },
+    startViewTransition(update) { snapshots++; update(); return { ready: Promise.resolve(), finished: new Promise(() => {}), skipTransition() {} }; },
+  };
+  const gsap = { fromTo(target, _from, to) { assert.equal(target, surface); animations++; return { progress() { to.onComplete(); } }; } };
+  const exports = {};
+  const source = ts.transpileModule(fs.readFileSync(path.resolve('src/utils/pageTransition.ts'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2023 } }).outputText;
+  new Function('require', 'exports', source)(name => name === 'react-dom' ? { flushSync: update => update() } : { gsap }, exports);
+  try {
+    for (let i = 0; i < 3; i++) exports.transitionPage(() => changes++);
+    assert.equal(changes, 3); assert.equal(snapshots, 0); assert.equal(animations, 3);
+    assert.equal(livePlayer.iframe, originalFrame);
+    exports.settlePageTransition();
+    assert.equal(document.documentElement.dataset.pageTransition, undefined);
+    hasPlayer = false;
+    exports.transitionPage(() => changes++); assert.equal(snapshots, 1); assert.equal(animations, 3);
+    exports.settlePageTransition();
+    hasPlayer = true; preference.matches = true;
+    exports.transitionPage(() => changes++); assert.equal(changes, 5); assert.equal(snapshots, 1); assert.equal(animations, 3);
+  } finally {
+    exports.settlePageTransition();
+    if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument;
+    if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
+  }
+});
+
+test('navbar mute immediately controls a ready player, honors late readiness, and unsubscribes', () => {
+  const { useSoundStore: sound } = load(path.resolve('src/store/soundStore.ts'));
+  const { bindPlayerMute } = load(path.resolve('src/utils/playerMute.ts'));
+  const calls = [];
+  sound.setState({ muted: true, musicOptedIn: false });
+  const release = bindPlayerMute({ mute: () => calls.push('mute'), unMute: () => calls.push('unmute') });
+  assert.deepEqual(calls, ['mute']);
+  sound.getState().toggleMuted(); assert.equal(calls.at(-1), 'unmute');
+  sound.getState().toggleMuted(); assert.equal(calls.at(-1), 'mute');
+  release(); const count = calls.length;
+  sound.getState().toggleMuted(); assert.equal(calls.length, count);
+  // A new iframe must read the current setting when ready, not an earlier render.
+  sound.setState({ muted: true, musicOptedIn: false });
+  const late = [];
+  const stopLate = bindPlayerMute({ mute: () => late.push('mute'), unMute: () => late.push('unmute') });
+  assert.deepEqual(late, ['mute']); stopLate();
+});
+
+test('selecting and advancing tracks preserve the global audio preference', () => {
+  const { useSoundStore: sound } = load(path.resolve('src/store/soundStore.ts'));
+  const { useMixtapePlayerStore: player } = load(path.resolve('src/store/mixtapePlayerStore.ts'));
+  const tracks = [{ videoId: video(70), title: 'One', artist: 'Artist' }, { videoId: video(71), title: 'Two', artist: 'Artist' }];
+  sound.setState({ muted: false, musicOptedIn: true });
+  player.getState().play(tracks[0], tracks); assert.equal(sound.getState().muted, false); assert.equal(sound.getState().musicOptedIn, true);
+  sound.getState().toggleMuted(); player.getState().next(); assert.equal(sound.getState().muted, true);
+  player.getState().play(tracks[0], tracks); assert.equal(sound.getState().muted, true);
+  player.getState().stop(); sound.setState({ muted: true, musicOptedIn: false });
 });

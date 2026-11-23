@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useSoundStore } from '../store/soundStore';
+import { useMixtapePlayerStore } from '../store/mixtapePlayerStore';
 
 interface YouTubePlayer {
   loadVideoById(options: { videoId: string; startSeconds: number }): void;
@@ -62,7 +63,7 @@ let request: { owner: symbol; videoId: string; seconds: number } | null = null;
 
 function allowed() {
   const { muted, musicOptedIn } = useSoundStore.getState();
-  return !muted && musicOptedIn;
+  return !muted && musicOptedIn && !useMixtapePlayerStore.getState().video;
 }
 
 function silence() {
@@ -139,6 +140,9 @@ function initialize() {
 }
 
 useSoundStore.subscribe(() => {
+  if (!allowed()) cancel();
+});
+useMixtapePlayerStore.subscribe(() => {
   if (!allowed()) cancel();
 });
 

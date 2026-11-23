@@ -1,8 +1,8 @@
-export interface YouTubePlayerInstance { destroy: () => void; playVideo: () => void }
+export interface YouTubePlayerInstance { destroy: () => void; playVideo: () => void; mute: () => void; unMute: () => void }
 interface PlayerOptions {
   width: string; height: string; videoId: string; host: string;
   playerVars: { autoplay: number; playsinline: number; origin: string; rel: number };
-  events: { onReady: (event: { target: YouTubePlayerInstance }) => void; onStateChange: (event: { data: number }) => void; onError: (event: { data: number }) => void; onAutoplayBlocked?: () => void };
+  events: { onReady: (event: { target: YouTubePlayerInstance }) => void; onStateChange: (event: { data: number; target: YouTubePlayerInstance }) => void; onError: (event: { data: number }) => void; onAutoplayBlocked?: () => void };
 }
 interface YouTubeApi { Player: new (element: HTMLElement, options: PlayerOptions) => YouTubePlayerInstance }
 type YouTubeWindow = Window & { YT?: YouTubeApi; onYouTubeIframeAPIReady?: () => void };
@@ -17,7 +17,8 @@ export function createYouTubeFrame(videoId: string, title: string, origin: strin
   iframe.referrerPolicy = 'strict-origin-when-cross-origin';
   iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
   iframe.allowFullscreen = true;
-  const params = new URLSearchParams({ enablejsapi: '1', autoplay: '1', playsinline: '1', origin: new URL(origin).origin, rel: '0' });
+  // Start only after onReady applies the master mute state, avoiding an audio flash.
+  const params = new URLSearchParams({ enablejsapi: '1', autoplay: '0', mute: '1', playsinline: '1', origin: new URL(origin).origin, rel: '0' });
   iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?${params}`;
   return iframe;
 }
