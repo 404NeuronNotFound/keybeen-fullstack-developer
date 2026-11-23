@@ -2,7 +2,7 @@
 import type { SectionId } from '../types';
 import { settlePageTransition, transitionPage } from '../utils/pageTransition';
 
-const SECTIONS: SectionId[] = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
+const SECTIONS: SectionId[] = ['home', 'about', 'skills', 'experience', 'projects', 'mixtape', 'contact'];
 const HISTORY_KEY = 'portfolioNavigation';
 type ScrollPositions = Partial<Record<SectionId, number>>;
 

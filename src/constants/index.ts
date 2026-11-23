@@ -1,4 +1,4 @@
-import { Home, User, Code2, Briefcase, LayoutGrid, Mail, type LucideIcon } from 'lucide-react';
+import { Home, User, Code2, Briefcase, LayoutGrid, Mail, ListMusic, type LucideIcon } from 'lucide-react';
 import type { SectionId, SiteConfig } from '../types';
 import { projects } from '../data/projects';
 
@@ -46,5 +46,6 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'skills',     icon: Code2,       label: 'Skills'     },
   { id: 'experience', icon: Briefcase,   label: 'Experience' },
   { id: 'projects',   icon: LayoutGrid,  label: 'Projects'   },
+  { id: 'mixtape',    icon: ListMusic,   label: 'Mixtape'    },
   { id: 'contact',    icon: Mail,        label: 'Contact'    },
 ];

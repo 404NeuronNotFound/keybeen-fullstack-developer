@@ -65,6 +65,7 @@ export type SectionId =
   | 'skills'
   | 'experience'
   | 'projects'
+  | 'mixtape'
   | 'contact';
 
 export interface NavItem {

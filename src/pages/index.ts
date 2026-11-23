@@ -4,3 +4,4 @@ export { SkillsPage }     from './SkillsPage';
 export { ExperiencePage } from './ExperiencePage';
 export { ProjectsPage }   from './ProjectsPage';
 export { ContactPage }    from './ContactPage';
+export { MixtapePage }    from './MixtapePage';

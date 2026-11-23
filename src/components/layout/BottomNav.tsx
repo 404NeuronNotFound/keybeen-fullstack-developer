@@ -1,5 +1,9 @@
 import { useNavStore } from '../../store';
 import { NAV_ITEMS }   from '../../constants';
+import { MoreHorizontal } from 'lucide-react';
+
+const primaryItems = NAV_ITEMS.filter(item => ['home', 'about', 'projects', 'mixtape'].includes(item.id));
+const moreItems = NAV_ITEMS.filter(item => !primaryItems.includes(item));
 
 export function BottomNav() {
   const navigate = useNavStore((s) => s.navigate);
@@ -18,7 +22,7 @@ export function BottomNav() {
         paddingRight:   'env(safe-area-inset-right, 0px)',
       }}
     >
-      {NAV_ITEMS.map((item) => {
+      {primaryItems.map((item) => {
         const Icon = item.icon;
         const isActive = active === item.id;
         return (
@@ -48,6 +52,11 @@ export function BottomNav() {
           </button>
         );
       })}
+      <button type="button" popoverTarget="mobile-navigation-more" aria-label="More pages" className="mobile-nav-more-trigger" data-active={moreItems.some(item => item.id === active)}><MoreHorizontal size={20} aria-hidden="true" /><span>More</span></button>
+      <div id="mobile-navigation-more" popover="auto" className="mobile-nav-more"><p>Explore</p>{moreItems.map(item => {
+        const Icon = item.icon;
+        return <button key={item.id} type="button" aria-current={active === item.id ? 'page' : undefined} onClick={event => { event.currentTarget.closest<HTMLElement>('[popover]')?.hidePopover(); navigate(item.id); }}><Icon size={18} aria-hidden="true" />{item.label}</button>;
+      })}</div>
     </nav>
   );
 }

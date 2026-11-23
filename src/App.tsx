@@ -8,6 +8,7 @@ import { useIsMobile }                                 from './hooks';
 import { Sidebar, Topbar, ProjectBar, BottomNav }      from './components/layout';
 import { ProjectOverview } from './components/ui/ProjectOverview';
 import { ToastViewport } from './components/ui/ToastViewport';
+import { MixtapePlayer } from './components/layout/MixtapePlayer';
 import {
   HomePage,
   AboutPage,
@@ -15,6 +16,7 @@ import {
   ExperiencePage,
   ProjectsPage,
   ContactPage,
+  MixtapePage,
 } from './pages';
 import type { SectionId } from './types';
 import type { JSX }       from 'react';
@@ -29,6 +31,7 @@ const PAGE_MAP: Record<SectionId, JSX.Element> = {
   experience: <ExperiencePage />,
   projects:   <ProjectsPage />,
   contact:    <ContactPage />,
+  mixtape:    <MixtapePage />,
 };
 
 // ─── App ───────────────────────────────────────────────────────────────────
@@ -82,6 +85,7 @@ export default function App() {
         </div>
         <ToastViewport />
         <ProjectOverview />
+        <MixtapePlayer />
       </div>
     </MotionConfig>
   );
