@@ -9,6 +9,7 @@ import { Sidebar, Topbar, ProjectBar, BottomNav }      from './components/layout
 import { ProjectOverview } from './components/ui/ProjectOverview';
 import { ToastViewport } from './components/ui/ToastViewport';
 import { MixtapePlayer } from './components/layout/MixtapePlayer';
+import { MIXTAPE_ENABLED } from './constants/mixtape';
 import {
   HomePage,
   AboutPage,
@@ -85,7 +86,7 @@ export default function App() {
         </div>
         <ToastViewport />
         <ProjectOverview />
-        <MixtapePlayer />
+        {MIXTAPE_ENABLED && <MixtapePlayer />}
       </div>
     </MotionConfig>
   );

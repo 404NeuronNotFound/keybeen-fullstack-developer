@@ -1,5 +1,7 @@
 # Visitor Mixtape
 
+The feature currently defaults to an **Under construction** overlay with two thin green lines forming an X over a blurred, inert preview of the actual playlist UI. It makes no playlist API requests and mounts no music player. Once Supabase is configured and the migration applied, set the public `VITE_MIXTAPE_ENABLED=true` flag in Vercel and rebuild/redeploy to enable the playlist. Leave it unset or `false` to keep the construction notice. This public boolean contains no credentials; all Supabase/YouTube keys remain server-only.
+
 The Mixtape page is at `/#/mixtape`. Visitors can add a YouTube video, supply an optional nickname, like tracks, filter the playlist, and play tracks in a visible YouTube player that stays mounted across page navigation. Playback starts only after a visitor selects Play. Closing the player stops playback. YouTube controls handle pause, seeking, and volume; the queue advances when a track finishes. Some videos may be restricted by their uploader, country, or YouTube; the player includes an external fallback link.
 
 While the player is mounted, navigation uses the content-only GSAP transition instead of native document snapshots. The fixed player and its live iframe remain untouched, avoiding video snapshot flashes. Native page morphs remain available when the player is closed.
