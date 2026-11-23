@@ -146,3 +146,31 @@ test('player queue stays global, moves between tracks, and closes cleanly', () =
   store.getState().next(); assert.equal(store.getState().video.title, 'Two'); store.getState().next(); assert.equal(store.getState().video.title, 'Two');
   store.getState().previous(); assert.equal(store.getState().video.title, 'One'); store.getState().stop(); assert.equal(store.getState().video, null);
 });
+
+test('iframe sets referrer and media permissions before navigating with the real site origin', () => {
+  const previousDocument = globalThis.document;
+  const assignments = [];
+  const frame = new Proxy({}, { set(target, property, value) { assignments.push(property); target[property] = value; return true; } });
+  globalThis.document = { createElement: tag => { assert.equal(tag, 'iframe'); return frame; } };
+  try {
+    const { createYouTubeFrame } = load(path.resolve('src/utils/youtubePlayer.ts'));
+    const result = createYouTubeFrame('abcdefghijk', 'A title', 'http://127.0.0.1:5173');
+    assert.equal(result.referrerPolicy, 'strict-origin-when-cross-origin');
+    assert.ok(result.allow.includes('autoplay')); assert.ok(result.allow.includes('encrypted-media'));
+    assert.ok(assignments.indexOf('referrerPolicy') < assignments.indexOf('src'));
+    assert.ok(assignments.indexOf('allow') < assignments.indexOf('src'));
+    const url = new URL(result.src); assert.equal(url.hostname, 'www.youtube-nocookie.com');
+    assert.equal(url.searchParams.get('origin'), 'http://127.0.0.1:5173');
+    assert.equal(url.searchParams.get('enablejsapi'), '1');
+    assert.throws(() => createYouTubeFrame('invalid', 'Title', 'http://127.0.0.1:5173'));
+  } finally { if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument; }
+});
+
+test('playback errors distinguish owner restrictions, unavailable videos, identity, and HTML5 failures', () => {
+  const { youtubePlaybackError } = load(path.resolve('src/utils/youtubePlayer.ts'));
+  for (const code of [101, 150]) { assert.match(youtubePlaybackError(code), /uploader does not allow/); assert.ok(youtubePlaybackError(code).includes(String(code))); }
+  assert.match(youtubePlaybackError(153), /identify this embedded player/);
+  assert.match(youtubePlaybackError(100), /removed or made private/);
+  assert.match(youtubePlaybackError(5), /could not start video playback/);
+  assert.match(youtubePlaybackError(999), /error 999/);
+});

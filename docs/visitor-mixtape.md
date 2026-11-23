@@ -2,6 +2,8 @@
 
 The Mixtape page is at `/#/mixtape`. Visitors can add a YouTube video, supply an optional nickname, like tracks, filter the playlist, and play tracks in a visible YouTube player that stays mounted across page navigation. Playback starts only after a visitor selects Play. Closing the player stops playback. YouTube controls handle pause, seeking, and volume; the queue advances when a track finishes. Some videos may be restricted by their uploader, country, or YouTube; the player includes an external fallback link.
 
+Playback errors show the actual YouTube code. `101` / `150` mean the uploader disabled embedding: use a permitted alternative upload or open the video on YouTube. `100` means removed/private; `153` indicates missing player identification; `5` indicates a playback/HTML5 failure. The iframe sets `strict-origin-when-cross-origin`, the actual site origin, and media permissions before navigation. Retry recreates the player; it does not bypass uploader restrictions. A successful oEmbed title lookup does not guarantee that the video will play in an embed. Use Preview before submitting a track if its availability is uncertain.
+
 ## Local development
 
 Run `npm run dev`. Vite serves the same `/api/mixtape` handler used in production. With no Supabase configuration, shared development data persists in `.data/mixtape.json`, with a private cookie signing key beside it. This folder is ignored by Git. Every browser connected to this server shares that playlist. No sample tracks are inserted.

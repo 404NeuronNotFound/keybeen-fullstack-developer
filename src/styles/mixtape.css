@@ -104,6 +104,7 @@
 .mixtape-player-actions { display: flex; align-items: center; justify-content: space-between; padding-inline: 7px; gap: 8px; }
 .mixtape-player-actions > span { text-align: center; color: var(--sp-gray); font-size: 9px; line-height: 1.6; }
 .mixtape-youtube-link { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 30px; padding-bottom: 8px; color: var(--sp-gray); font-size: 9px; text-decoration: none; }
+.mixtape-player-retry { display: flex; align-items: center; justify-content: center; gap: 7px; width: calc(100% - 28px); min-height: 36px; margin: 0 14px 6px; border: 1px solid var(--sp-line); border-radius: 6px; background: transparent; color: var(--sp-white); font-size: 11px; cursor: pointer; }
 .mixtape-loading-icon { animation: mixtape-loading 1s linear infinite; }
 @keyframes mixtape-loading { to { transform: rotate(360deg); } }
 @container mixtape (max-width: 740px) {
