@@ -36,6 +36,8 @@ Production deliberately returns an unavailable response if Supabase is missing. 
 
 ## Data and moderation
 
+If a deployed request returns plain-text `FUNCTION_INVOCATION_FAILED` (500), inspect Vercel runtime logs: this indicates a function startup/unhandled failure rather than the API's normal JSON error response. Server runtime imports use explicit `.js` extensions, and the root TypeScript configuration selects NodeNext because Vercel does not use project references to choose compiler settings. The cold-start test compiles/imports the server as native ESM and reproduces the old extensionless-import failure. Redeploy after changing these files. A subsequent structured 503 may mean the Supabase environment variables or SQL functions still need configuration.
+
 Tables enable row-level security and expose no anonymous/authenticated table access. Database functions execute only for the server's service role. The API returns public track details and like counts, not visitor/network hashes or private keys.
 
 Visitors get a signed, HTTP-only, SameSite cookie. This is an anonymous browser identity, not an account or verified person. Resetting cookies changes the identity. Per-network limits reduce abuse: three additions per hour, ten lookups per minute, thirty successful actions per minute. RPC locks make duplicates, limits, and like toggles consistent under concurrent submissions. The playlist allows 200 visible tracks. New additions appear when the page refreshes, every 30 seconds while visible, or immediately for the contributor.

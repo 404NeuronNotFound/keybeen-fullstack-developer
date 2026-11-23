@@ -2,7 +2,7 @@ import { mkdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import type { MixtapeTrack } from '../src/types/mixtape';
+import type { MixtapeTrack } from '../src/types/mixtape.js';
 
 export class MixtapeError extends Error {
   status: number;

@@ -2,9 +2,9 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import { createHmac, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { listTracks, MixtapeError, mutateTracks } from '../server/mixtapeStorage';
-import type { MixtapeConfig } from '../server/mixtapeStorage';
-import type { MixtapeVideo } from '../src/types/mixtape';
+import { listTracks, MixtapeError, mutateTracks } from '../server/mixtapeStorage.js';
+import type { MixtapeConfig } from '../server/mixtapeStorage.js';
+import type { MixtapeVideo } from '../src/types/mixtape.js';
 
 type Request = IncomingMessage & { body?: unknown };
 const videoFormat = /^[a-zA-Z0-9_-]{11}$/;

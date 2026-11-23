@@ -5,6 +5,7 @@ import { mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
 import fs from 'node:fs';
 import path from 'node:path';
 import { Readable } from 'node:stream';
+import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 
 const require = createRequire(import.meta.url);
@@ -15,7 +16,7 @@ function load(file) {
   const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2023 } }).outputText;
   new Function('require', 'exports', source)(name => {
     if (!name.startsWith('.')) return require(name);
-    const base = path.resolve(path.dirname(file), name);
+    const base = path.resolve(path.dirname(file), name.replace(/\.js$/, ''));
     return load(fs.existsSync(`${base}.ts`) ? `${base}.ts` : path.join(base, 'index.ts'));
   }, exports);
   return exports;
@@ -136,6 +137,34 @@ test('Supabase requests keep privileged keys server-side and map database errors
     await assert.rejects(mutateTracks({ supabaseUrl: 'https://example.supabase.co', supabaseKey: 'private-test-key' }, mutation(50)), error => error.status === 409);
   } finally { globalThis.fetch = originalFetch; }
 });
+
+test('compiled serverless ESM imports load on a cold start without Vite resolving paths', () => database(async config => {
+  const directory = path.dirname(config.localFile);
+  await mkdir(path.join(directory, 'api'), { recursive: true });
+  await mkdir(path.join(directory, 'server'), { recursive: true });
+  await fs.promises.writeFile(path.join(directory, 'package.json'), '{"type":"module"}');
+  const rootConfig = JSON.parse(fs.readFileSync('tsconfig.json', 'utf8'));
+  const options = ts.convertCompilerOptionsFromJson(rootConfig.compilerOptions, process.cwd()).options;
+  const program = ts.createProgram([path.resolve('api/mixtape.ts')], {
+    ...options, rootDir: process.cwd(), outDir: directory, types: ['node'], skipLibCheck: true, noEmitOnError: true,
+  });
+  const diagnostics = ts.getPreEmitDiagnostics(program).filter(item => item.category === ts.DiagnosticCategory.Error);
+  assert.equal(diagnostics.length, 0, diagnostics.map(item => ts.flattenDiagnosticMessageText(item.messageText, '\n')).join('\n'));
+  assert.equal(program.emit().emitSkipped, false);
+  // Reproduce the old deployment failure: Node ESM does not infer '.js'.
+  const compiledEntry = await readFile(path.join(directory, 'api/mixtape.js'), 'utf8');
+  const oldEntry = path.join(directory, 'api/mixtape-extensionless.js');
+  await fs.promises.writeFile(oldEntry, compiledEntry.replace('../server/mixtapeStorage.js', '../server/mixtapeStorage'));
+  await assert.rejects(import(pathToFileURL(oldEntry).href), error => error.code === 'ERR_MODULE_NOT_FOUND');
+  const api = await import(pathToFileURL(path.join(directory, 'api/mixtape.js')).href);
+  assert.equal(typeof api.default, 'function');
+  const req = Object.assign(Readable.from([]), { method: 'GET', url: '/api/mixtape', headers: { host: 'example.test' }, socket: { remoteAddress: '127.0.0.1' } });
+  const headers = {}; let body;
+  const res = { statusCode: 200, setHeader(key, value) { headers[key] = value; }, end(value) { body = JSON.parse(value); } };
+  await api.handleMixtape(req, res, {});
+  assert.equal(res.statusCode, 503); assert.equal(headers['Content-Type'], 'application/json');
+  assert.match(body.error, /not connected/);
+}));
 
 test('player queue stays global, moves between tracks, and closes cleanly', () => {
   const values = new Map();
